@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HMS Solution — 업무 효율화 솔루션</title>
-<meta name="description" content="도시계획 · 측량 · 건축 실무의 되풀이 작업을 자동화하는 업무 효율화 솔루션. Solution Center 하나만 설치하면 일곱 가지를 골라 씁니다.">
+<meta name="description" content="엔지니어링 실무의 되풀이 작업을 자동화합니다. Solution Center 하나만 설치하면 일곱 가지를 골라 씁니다.">
 <link rel="icon" type="image/png" href="favicon.png">
 
 <!-- 카카오톡·메신저에 주소를 붙일 때 보이는 미리보기 -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="HMS Solution — 업무 효율화 솔루션">
-<meta property="og:description" content="도시계획 · 측량 · 건축 실무의 되풀이 작업을 자동화하는 업무 효율화 솔루션. Solution Center 하나만 설치하면 일곱 가지를 골라 씁니다.">
+<meta property="og:description" content="엔지니어링 실무의 되풀이 작업을 자동화합니다. Solution Center 하나만 설치하면 일곱 가지를 골라 씁니다.">
 <meta property="og:url" content="https://72second72-bot.github.io/hms-solution/">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:image" content="https://72second72-bot.github.io/hms-solution/logo.png">
@@ -283,6 +283,13 @@
     transition: background .15s ease, border-color .15s ease;
   }
   .book-dl:hover { background: var(--soft); border-color: var(--soft-border); }
+  /* 잠시 내려 둔 안내서. 없는 것처럼 감추기보다 무슨 일인지 적어 두는 편이 낫다. */
+  .book-soon {
+    margin-top: 14px; display: inline-block; padding: 8px 14px; border-radius: var(--r-btn);
+    background: var(--surface-alt); border: 1px dashed var(--rule);
+    font-size: 13.5px; color: var(--muted);
+  }
+  .book-soon-row { display: block; padding: 7px 12px; font-size: 14px; color: var(--muted); }
   .book-list { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
   /* 목록이 일곱이라 한 줄로 세우면 카드만 길어진다. 넓게 쓸 때는 두 칸으로 벌린다. */
   .book-full { grid-column: 1 / -1; }
@@ -612,14 +619,14 @@
         <div class="book">
           <h4>업무 효율화 솔루션 안내서</h4>
           <p>일곱 솔루션을 한 권에. 무엇을 왜 만들었는지, 어떻게 쓰는지, 결과가 어떻게 나오는지까지.</p>
-          <div class="pg">24쪽 · 2026-08-27</div>
-          <a class="book-dl" href="guides/hms-solutions-guide.pdf">PDF 내려받기 (3.6MB)</a>
+          <div class="pg">24쪽</div>
+          <span class="book-soon">예시 도면을 다시 만드는 중입니다</span>
         </div>
         <div class="book book-full">
           <h4>솔루션별 안내서</h4>
           <p>솔루션마다 따로 한 권씩. 그 솔루션만 쓰시는 분께는 이쪽이 짧고 편합니다.</p>
           <ul class="book-list">
-            <li><a href="guides/solution-cad-cadastral.pdf">CAD 지적도 · 토지현황도 제작</a></li>
+            <li><span class="book-soon-row">CAD 지적도 · 토지현황도 제작 — 예시 도면을 다시 만드는 중</span></li>
             <li><a href="guides/solution-dxf-merge.pdf">CAD 도면 병합</a></li>
             <li><a href="guides/solution-coord-trans.pdf">AutoCAD 좌표변환</a></li>
             <li><a href="guides/solution-building-register.pdf">건축물대장 조서 작성</a></li>
