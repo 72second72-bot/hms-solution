@@ -51,7 +51,6 @@ releases/latest/download/HMS-Solution-Center-Setup.exe
 |---|---|
 | `hms-center-guide.pdf` | Solution Center 사용 안내서 |
 | `hms-solutions-guide.pdf` | 업무 효율화 솔루션 안내서 (7종 묶음) |
-| `hms-intro.pdf` | 솔루션 소개 |
 | `solution-cad-cadastral.pdf` | CAD 지적도 · 토지현황도 제작 |
 | `solution-dxf-merge.pdf` | CAD 도면 병합 |
 | `solution-coord-trans.pdf` | AutoCAD 좌표변환 |

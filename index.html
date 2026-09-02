@@ -284,6 +284,9 @@
   }
   .book-dl:hover { background: var(--soft); border-color: var(--soft-border); }
   .book-list { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+  /* 목록이 일곱이라 한 줄로 세우면 카드만 길어진다. 넓게 쓸 때는 두 칸으로 벌린다. */
+  .book-full { grid-column: 1 / -1; }
+  .book-full .book-list { grid-template-columns: repeat(2, 1fr); gap: 6px 16px; }
   .book-list a {
     display: block; padding: 7px 12px; border-radius: var(--r-btn);
     font-size: 14px; color: var(--ink-soft); text-decoration: none;
@@ -319,6 +322,7 @@
 
   @media (max-width: 900px) {
     .sheets, .books { grid-template-columns: 1fr; }
+    .book-full .book-list { grid-template-columns: 1fr; }
     .item { grid-template-columns: 1fr; gap: 6px; }
     header nav a { padding: 8px 10px; font-size: 13.5px; }
     .hero-in { padding: 64px 0 60px; }
@@ -611,7 +615,7 @@
           <div class="pg">24쪽 · 2026-08-27</div>
           <a class="book-dl" href="guides/hms-solutions-guide.pdf">PDF 내려받기 (3.6MB)</a>
         </div>
-        <div class="book">
+        <div class="book book-full">
           <h4>솔루션별 안내서</h4>
           <p>솔루션마다 따로 한 권씩. 그 솔루션만 쓰시는 분께는 이쪽이 짧고 편합니다.</p>
           <ul class="book-list">
@@ -623,12 +627,6 @@
             <li><a href="guides/solution-thematic-shp.pdf">주제도 SHP 속성 코드 입력</a></li>
             <li><a href="guides/solution-ppt-image.pdf">PPT 이미지 맞춰 넣기</a></li>
           </ul>
-        </div>
-        <div class="book">
-          <h4>솔루션 소개</h4>
-          <p>무엇을 하는 프로그램인지 짧게. 처음 보시는 분께 건네기 좋은 한 권입니다.</p>
-          <div class="pg">소개 · 2026-08-27</div>
-          <a class="book-dl" href="guides/hms-intro.pdf">PDF 내려받기 (1.5MB)</a>
         </div>
       </div>
     </div>
