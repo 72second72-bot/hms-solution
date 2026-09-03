@@ -401,7 +401,7 @@
       사람이 해야 할 판단이 아니라 손이 하던 일들을 프로그램에 맡깁니다.
     </p>
     <div class="dl-line">
-      <a class="dl" href="https://github.com/72second72-bot/hms-solution/releases/latest/download/HMS-Solution-Center-Setup.exe">
+      <a class="dl" href="https://github.com/72second72-bot/hms-solution/releases/latest/download/HMS-Solution-Center-Setup.exe" data-dl="center-setup">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
           <path d="M9 1.5v10M9 11.5 5 7.5M9 11.5l4-4M2 12.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5"
                 stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -573,7 +573,7 @@
       </div>
 
       <div class="dl-line" style="margin-top:34px">
-        <a class="dl" href="https://github.com/72second72-bot/hms-solution/releases/latest/download/HMS-Solution-Center-Setup.exe">
+        <a class="dl" href="https://github.com/72second72-bot/hms-solution/releases/latest/download/HMS-Solution-Center-Setup.exe" data-dl="center-setup">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
             <path d="M9 1.5v10M9 11.5 5 7.5M9 11.5l4-4M2 12.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5"
                   stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -607,25 +607,25 @@
           <h4>Solution Center 사용 안내서</h4>
           <p>설치부터 인증, 카드 읽는 법, 새 버전 받기까지. 회원가입 절차도 화면과 함께 담았습니다.</p>
           <div class="pg">11쪽 · 2026-09-02</div>
-          <a class="book-dl" href="guides/hms-center-guide.pdf">PDF 내려받기 (1.2MB)</a>
+          <a class="book-dl" href="guides/hms-center-guide.pdf" data-dl="guide-center">PDF 내려받기 (1.2MB)</a>
         </div>
         <div class="book">
           <h4>업무 효율화 솔루션 안내서</h4>
           <p>일곱 솔루션을 한 권에. 무엇을 왜 만들었는지, 어떻게 쓰는지, 결과가 어떻게 나오는지까지.</p>
           <div class="pg">24쪽 · 2026-09-02</div>
-          <a class="book-dl" href="guides/hms-solutions-guide.pdf">PDF 내려받기 (4.3MB)</a>
+          <a class="book-dl" href="guides/hms-solutions-guide.pdf" data-dl="guide-solutions">PDF 내려받기 (4.3MB)</a>
         </div>
         <div class="book book-full">
           <h4>솔루션별 안내서</h4>
           <p>솔루션마다 따로 한 권씩. 그 솔루션만 쓰시는 분께는 이쪽이 짧고 편합니다.</p>
           <ul class="book-list">
-            <li><a href="guides/solution-cad-cadastral.pdf">CAD 지적도 · 토지현황도 제작</a></li>
-            <li><a href="guides/solution-dxf-merge.pdf">CAD 도면 병합</a></li>
-            <li><a href="guides/solution-coord-trans.pdf">AutoCAD 좌표변환</a></li>
-            <li><a href="guides/solution-building-register.pdf">건축물대장 조서 작성</a></li>
-            <li><a href="guides/solution-realty-price.pdf">부동산 공시가격 조회 · 수집</a></li>
-            <li><a href="guides/solution-thematic-shp.pdf">주제도 SHP 속성 코드 입력</a></li>
-            <li><a href="guides/solution-ppt-image.pdf">PPT 이미지 맞춰 넣기</a></li>
+            <li><a href="guides/solution-cad-cadastral.pdf" data-dl="guide-cad-cadastral">CAD 지적도 · 토지현황도 제작</a></li>
+            <li><a href="guides/solution-dxf-merge.pdf" data-dl="guide-dxf-merge">CAD 도면 병합</a></li>
+            <li><a href="guides/solution-coord-trans.pdf" data-dl="guide-coord-trans">AutoCAD 좌표변환</a></li>
+            <li><a href="guides/solution-building-register.pdf" data-dl="guide-building">건축물대장 조서 작성</a></li>
+            <li><a href="guides/solution-realty-price.pdf" data-dl="guide-realty">부동산 공시가격 조회 · 수집</a></li>
+            <li><a href="guides/solution-thematic-shp.pdf" data-dl="guide-thematic">주제도 SHP 속성 코드 입력</a></li>
+            <li><a href="guides/solution-ppt-image.pdf" data-dl="guide-ppt">PPT 이미지 맞춰 넣기</a></li>
           </ul>
         </div>
       </div>
@@ -678,6 +678,31 @@
 </footer>
 
 <script>
+  /* 무엇을 받아 갔는지 세어 둔다.
+
+     파일은 GitHub 에서 그대로 받아 간다. 여기서는 '한 번 눌렸다' 만 서버에
+     알린다 — 서버가 멈춰 있어도 내려받기는 되고, 숫자만 놓친다. 링크를 서버로
+     돌리면 정확히 셀 수 있지만 서버가 죽는 순간 아무도 파일을 못 받는다.
+
+     sendBeacon 은 페이지를 떠나는 중에도 끝까지 보내 준다. 내려받기를 누르면
+     브라우저가 곧 다른 곳으로 가므로 보통 fetch 로는 중간에 끊긴다. */
+  (function () {
+    var URL_ = "https://novxbimaerfjszsxejlt.supabase.co/functions/v1/hms-catalog/api/download-hit";
+    document.addEventListener("click", function (e) {
+      var a = e.target && e.target.closest ? e.target.closest("[data-dl]") : null;
+      if (!a) return;
+      var body = JSON.stringify({ file: a.getAttribute("data-dl") });
+      try {
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon(URL_, new Blob([body], { type: "application/json" }));
+        } else {
+          fetch(URL_, { method: "POST", body: body, keepalive: true,
+                        headers: { "Content-Type": "application/json" } });
+        }
+      } catch (err) { /* 못 세도 내려받기는 그대로 간다 */ }
+    }, true);
+  })();
+
   /* 밝게 · 어둡게 고르기.
      아무것도 고르지 않으면 시스템 설정을 따른다. 고르면 그 선택이 이기고,
      이 브라우저에 적어 두어 다음에 와도 그대로다. */
