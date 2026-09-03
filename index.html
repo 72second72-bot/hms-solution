@@ -691,12 +691,18 @@
 
     function tell(key) {
       var body = JSON.stringify({ file: key });
+      /* text/plain 으로 보낸다.
+
+         application/json 으로 보내면 브라우저가 먼저 "보내도 되냐" 고 묻는데
+         (preflight), sendBeacon 은 그 물음에 답을 받을 수 없어 통째로 막힌다.
+         text/plain 은 묻지 않고 바로 가는 갈래라 그대로 서버에 닿는다.
+         서버는 붙은 이름표를 보지 않고 몸통만 읽으므로 받는 데 지장이 없다. */
       try {
         if (navigator.sendBeacon) {
-          navigator.sendBeacon(URL_, new Blob([body], { type: "application/json" }));
+          navigator.sendBeacon(URL_, new Blob([body], { type: "text/plain;charset=UTF-8" }));
         } else {
-          fetch(URL_, { method: "POST", body: body, keepalive: true,
-                        headers: { "Content-Type": "application/json" } });
+          fetch(URL_, { method: "POST", body: body, keepalive: true, mode: "no-cors",
+                        headers: { "Content-Type": "text/plain;charset=UTF-8" } });
         }
       } catch (err) { /* 못 세도 화면은 그대로 돈다 */ }
     }
