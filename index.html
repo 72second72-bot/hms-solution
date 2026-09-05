@@ -317,6 +317,43 @@
     color: var(--soft-text); font-size: 11.5px; font-weight: 700; vertical-align: 2px;
   }
 
+  /* ── 문의 ──────────────────────────────────────────────── */
+  /*
+    QR 과 글을 나란히 둔다. 폰으로 보는 사람은 QR 을 찍을 수 없으니(자기 화면이다)
+    바로 아래 링크가 함께 있어야 한다 — 둘 중 하나만 두면 절반은 못 쓴다.
+  */
+  .ask { margin-top: 44px; display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: start; }
+  .ask-qr {
+    /*
+      QR 은 어두운 테마에서도 흰 바탕에 검은 무늬여야 한다. 색을 뒤집으면 사람 눈에는
+      멀쩡해 보여도 카메라가 못 읽는다 — 대부분의 스캐너가 '밝은 바탕 · 어두운 무늬'
+      를 전제로 찾는다. 그래서 이 상자만 테마를 따르지 않고 흰 바탕으로 고정한다.
+    */
+    width: 168px; padding: 14px; border-radius: var(--r-card);
+    border: 1px solid var(--rule); box-shadow: var(--shadow);
+    background: #FFFFFF; color: #000000;
+  }
+  .ask-qr .cap { color: #6C778A; }
+  .ask-qr svg { display: block; width: 100%; height: auto; }
+  .ask-qr .cap { margin-top: 10px; text-align: center; font-size: 12.5px; }
+  .ask-ways { display: grid; gap: 18px; }
+  .ask-way {
+    padding: 22px 24px; background: var(--surface);
+    border: 1px solid var(--rule); border-radius: var(--r-card); box-shadow: var(--shadow);
+  }
+  .ask-way h4 { margin: 0 0 8px; font-size: 17px; font-weight: 700; }
+  .ask-way p { margin: 0; font-size: 14.5px; color: var(--ink-soft); }
+  .ask-way .go {
+    display: inline-block; margin-top: 12px; padding: 8px 16px; border-radius: var(--r-btn);
+    background: var(--soft); border: 1px solid var(--soft-border); color: var(--soft-text);
+    font-size: 14px; font-weight: 600; text-decoration: none;
+  }
+  .ask-way .go:hover { filter: brightness(0.97); }
+  @media (max-width: 720px) {
+    .ask { grid-template-columns: 1fr; gap: 22px; }
+    .ask-qr { width: 100%; max-width: 220px; margin: 0 auto; }
+  }
+
   /* ── 꼬리 ──────────────────────────────────────────────── */
   footer { padding: 44px 0 60px; color: var(--muted); font-size: 14.5px; }
   footer .row { display: flex; flex-wrap: wrap; gap: 10px 26px; align-items: baseline; }
@@ -382,6 +419,7 @@
       <a href="#get">받는 법</a>
       <a href="#guides">사용 안내서</a>
       <a href="#news">새 소식</a>
+      <a href="#ask">문의</a>
       <div class="theme-pick" role="group" aria-label="화면 밝기">
         <button type="button" data-theme-set="light" aria-pressed="false">밝게</button>
         <button type="button" data-theme-set="dark" aria-pressed="false">어둡게</button>
@@ -659,6 +697,46 @@
               함께 열린 여섯 가지 — CAD 지적도 · 토지현황도 제작, CAD 도면 병합, AutoCAD 좌표변환,
               건축물대장 조서 작성, 부동산 공시가격 조회 · 수집, 주제도 SHP 속성 코드 입력.
             </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ask">
+    <div class="wrap">
+      <div class="head">
+        <div class="tag">Support</div>
+        <h2>문의</h2>
+        <p>궁금한 것이나 잘 안 되는 것이 있으면 알려 주세요. 자세한 문의는 카카오톡 오픈채팅방으로 부탁드립니다.</p>
+      </div>
+
+      <div class="ask">
+        <div class="ask-qr">
+          <svg role="img" aria-label="카카오톡 오픈채팅 QR" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33"><path stroke="currentColor" d="M2 2.5h7m1 0h1m1 0h3m2 0h2m1 0h1m1 0h1m1 0h7m-29 1h1m5 0h1m1 0h3m1 0h1m3 0h2m1 0h1m2 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h2m3 0h2m2 0h2m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m2 0h1m3 0h2m1 0h2m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h2m4 0h3m1 0h2m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m3 0h1m4 0h2m3 0h1m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-19 1h1m2 0h1m1 0h2m-17 1h1m2 0h6m2 0h3m2 0h3m2 0h1m2 0h1m1 0h3m-29 1h1m7 0h1m2 0h1m1 0h1m2 0h4m4 0h1m1 0h2m-28 1h1m1 0h1m1 0h1m1 0h2m2 0h1m1 0h2m1 0h1m6 0h2m2 0h1m-25 1h3m3 0h1m3 0h2m2 0h2m1 0h1m5 0h1m2 0h1m-26 1h1m1 0h4m1 0h1m2 0h1m1 0h2m2 0h2m1 0h2m4 0h1m-29 1h3m2 0h1m1 0h1m5 0h2m3 0h1m3 0h7m-27 1h1m1 0h1m1 0h5m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m-29 1h1m1 0h1m1 0h2m3 0h4m3 0h1m2 0h1m1 0h1m1 0h2m1 0h1m1 0h1m-28 1h2m1 0h1m1 0h1m1 0h3m3 0h1m4 0h2m2 0h1m1 0h1m-26 1h1m1 0h3m2 0h1m1 0h1m1 0h1m1 0h3m2 0h2m4 0h1m1 0h2m-28 1h3m2 0h2m5 0h1m2 0h2m1 0h2m1 0h5m2 0h1m-29 1h4m1 0h1m1 0h1m6 0h1m1 0h1m4 0h1m2 0h3m-27 1h7m1 0h4m1 0h2m1 0h2m2 0h8m-20 1h3m3 0h1m2 0h2m1 0h1m3 0h2m-26 1h7m1 0h4m2 0h3m1 0h3m1 0h1m1 0h2m-26 1h1m5 0h1m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h2m3 0h1m2 0h2m-29 1h1m1 0h3m1 0h1m1 0h1m4 0h4m2 0h7m1 0h2m-29 1h1m1 0h3m1 0h1m1 0h1m3 0h1m3 0h2m2 0h2m1 0h1m4 0h1m-29 1h1m1 0h3m1 0h1m3 0h6m2 0h2m1 0h1m1 0h2m1 0h3m-29 1h1m5 0h1m2 0h1m3 0h2m3 0h1m4 0h1m1 0h2m1 0h1m-29 1h7m1 0h1m1 0h1m2 0h2m2 0h1m1 0h2m1 0h1"/></svg>
+          <div class="cap">카카오톡으로 찍어 주세요</div>
+        </div>
+
+        <div class="ask-ways">
+          <div class="ask-way">
+            <h4>카카오톡 오픈채팅 — 자세한 문의</h4>
+            <p>화면을 캡처해 보내 주시면 가장 빠릅니다. 오류 창이 떴다면 그 창까지 함께 담아 주세요.
+               쓰시는 솔루션 이름과 하려던 일을 적어 주시면 더 좋습니다.</p>
+            <a class="go" href="https://open.kakao.com/o/gkkxMGLi" target="_blank" rel="noopener"
+               data-dl="ask-kakao">오픈채팅방 열기</a>
+          </div>
+
+          <div class="ask-way">
+            <h4>Solution Center 안에서 — 간단한 문의</h4>
+            <p>로그인한 상태라면 Center 오른쪽 위 <b>우편봉투</b> 아이콘으로 바로 보낼 수 있습니다.
+               누가 보냈는지와 쓰고 있는 버전이 함께 전해져, 따로 설명하지 않으셔도 됩니다.
+               답은 같은 자리에서 확인하실 수 있습니다.</p>
+          </div>
+
+          <div class="ask-way">
+            <h4>메일</h4>
+            <p>급하지 않은 이야기나 파일을 함께 보내실 때 쓰시면 됩니다.</p>
+            <a class="go" href="mailto:72second@naver.com" data-dl="ask-mail">72second@naver.com</a>
           </div>
         </div>
       </div>
