@@ -134,7 +134,19 @@
   /* 이름을 누르면 맨 위로 돌아온다. 긴 페이지에서 가장 자주 쓰게 되는 길이다. */
   .brand {
     display: inline-flex; align-items: center; gap: 10px;
-    text-decoration: none; border-radius: var(--r-btn); padding: 4px 8px; margin-left: -8px;
+    text-decoration: none; border-radius: var(--r-btn);
+    /*
+      왼쪽 여백만 3px 인 까닭.
+
+      logo.png 은 128px 네모 안에 그림이 84px 만 그려져 있고 좌우로 22px 씩이 비어 있다.
+      30px 로 줄여 놓으면 그 빈 자리가 5.2px 이다. 그래서 좌우를 똑같이 8px 로 주면
+      눈에는 왼쪽이 13px, 오른쪽이 8px 로 보인다 — 마우스를 올렸을 때 생기는 상자가
+      한쪽으로 쏠려 보이던 까닭이다.
+
+      3 + 5.2 = 8.2 로 오른쪽 8 과 맞춘다. 마이너스 여백은 그대로 -8 인데,
+      그러면 그림의 '보이는 왼쪽 끝' 이 아래 글과 같은 세로줄에 선다.
+    */
+    padding: 4px 8px 4px 3px; margin-left: -8px;
     transition: background .15s ease;
   }
   .brand:hover { background: var(--soft); }
