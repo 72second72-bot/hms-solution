@@ -223,40 +223,48 @@
 
 
   /* ── 화면 미리보기 ─────────────────────────────────────── */
-  .shots { margin-top: 36px; display: grid; gap: 22px 18px; grid-template-columns: repeat(2, 1fr); }
-  .shot { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-card);
-          box-shadow: var(--shadow); overflow: hidden; }
-  .shot img { display: block; width: 100%; height: auto; border-bottom: 1px solid var(--rule); }
-  .shot figcaption { padding: 12px 16px 14px; font-size: 14px; color: var(--muted); }
-  .shot figcaption b { color: var(--ink); font-weight: 700; margin-right: 6px; }
-  .shot.wide { grid-column: 1 / -1; }
-  .shot img { cursor: zoom-in; }
-  /* 여러 장을 옆으로 넘기는 그림. 장마다 높이가 달라도 첫 장 기준으로 자리를 잡고 넘길 때 맞춘다. */
-  .shot.slides { position: relative; }
-  .shot.slides .track { display: flex; transition: transform .35s ease; will-change: transform; }
-  .shot.slides .track img { flex: 0 0 100%; width: 100%; }
-  .shot.slides .nav { position: absolute; top: 40%; width: 40px; height: 40px; border-radius: 50%;
-                      border: 1px solid var(--rule); background: var(--surface); color: var(--ink);
-                      font-size: 26px; line-height: 1; cursor: pointer; box-shadow: var(--shadow); opacity: .92; }
-  .shot.slides .nav:hover { opacity: 1; }
-  .shot.slides .prev { left: 10px; }
-  .shot.slides .next { right: 10px; }
-  .shot.slides .dots { position: absolute; left: 0; right: 0; top: calc(100% - 64px); display: flex; gap: 6px;
-                       justify-content: center; pointer-events: none; }
-  .shot.slides .dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(120,130,150,.45); }
-  .shot.slides .dots i.on { background: var(--accent, #2f6bff); }
-  .shot.slides figcaption { position: relative; z-index: 1; background: var(--surface); }
-  .shot.slides .track { overflow: hidden; }
-  .shot.slides .viewport { overflow: hidden; }
-  /* 누르면 크게. 화면을 덮는 어두운 바탕 위에 원본 크기에 가깝게 띄운다. */
+  /* 왼쪽 목록에서 솔루션을 고르면 오른쪽에 그 화면이 뜬다. 솔루션이 늘어도 길이가 늘지 않는다. */
+  .viewer { margin-top: 32px; display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 20px; align-items: start; }
+  .picker { display: flex; flex-direction: column; gap: 4px; position: sticky; top: 84px; }
+  .picker button { text-align: left; padding: 10px 14px; border-radius: 10px; border: 1px solid transparent;
+                   background: none; color: var(--ink-soft); font: inherit; font-size: 14.5px; cursor: pointer; }
+  .picker button:hover { background: var(--soft); color: var(--ink); }
+  .picker button.on { background: var(--surface); border-color: var(--rule); color: var(--ink); font-weight: 700; box-shadow: var(--shadow); }
+  .picker button small { display: block; font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+  .stage { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-card);
+           box-shadow: var(--shadow); overflow: hidden; }
+  .stage .frame { position: relative; background: var(--soft); min-height: 200px; }
+  .stage .frame img { display: block; width: 100%; height: auto; cursor: zoom-in; border-bottom: 1px solid var(--rule); }
+  .stage .nav, .lightbox .nav { position: absolute; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 50%;
+               border: 1px solid var(--rule); background: var(--surface); color: var(--ink);
+               font-size: 28px; line-height: 1; cursor: pointer; box-shadow: var(--shadow); opacity: .92; }
+  .stage .nav:hover, .lightbox .nav:hover { opacity: 1; }
+  .stage .prev, .lightbox .prev { left: 12px; }
+  .stage .next, .lightbox .next { right: 12px; }
+  .stage .nav[hidden], .lightbox .nav[hidden] { display: none; }
+  .stage figcaption { padding: 12px 16px 14px; font-size: 14px; color: var(--muted); display: flex; gap: 8px 10px; align-items: baseline; flex-wrap: wrap; }
+  .stage figcaption b { color: var(--ink); font-weight: 700; }
+  .stage .dots { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+  .stage .dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(120,130,150,.4); }
+  .stage .dots i.on { background: var(--accent, #2f6bff); }
+  .stage .dots[hidden] { display: none; }
+  /* 누르면 크게. 화면을 덮는 어두운 바탕 위에 원본 크기에 가깝게 띄우고, 여기서도 화살표로 넘긴다. */
   .lightbox { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center;
-              background: rgba(10, 14, 22, .82); padding: 28px; cursor: zoom-out; }
+              background: rgba(10, 14, 22, .84); padding: 28px 64px; cursor: zoom-out; }
   .lightbox.on { display: flex; }
-  .lightbox img { max-width: min(96vw, 1600px); max-height: 92vh; width: auto; height: auto; border-radius: 10px;
-                  box-shadow: 0 24px 80px rgba(0,0,0,.5); background: #fff; }
+  .lightbox img { max-width: min(96vw, 1700px); max-height: 90vh; width: auto; height: auto; border-radius: 10px;
+                  box-shadow: 0 24px 80px rgba(0,0,0,.5); background: #fff; cursor: default; }
   .lightbox figcaption { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; color: #e6ebf3; font-size: 14px; }
   .lightbox .close { position: absolute; top: 14px; right: 18px; color: #fff; font-size: 30px; line-height: 1; background: none; border: 0; cursor: pointer; }
-  @media (max-width: 900px) { .shots { grid-template-columns: 1fr; } }
+  .lightbox .nav { background: rgba(255,255,255,.92); }
+  @media (max-width: 900px) {
+    .viewer { grid-template-columns: 1fr; }
+    .picker { position: static; flex-direction: row; overflow-x: auto; gap: 6px; padding-bottom: 4px; }
+    .picker button { white-space: nowrap; padding: 8px 12px; }
+    .picker button small { display: none; }
+    .lightbox { padding: 16px 48px; }
+  }
+
   /* ── 솔루션 카드 ───────────────────────────────────────── */
   .sheets { margin-top: 44px; display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
   .sheet {
@@ -645,82 +653,100 @@
   <section id="screens">
     <div class="wrap">
       <h2>실제 사용화면입니다</h2>
-      <p class="sub">가상의 사업지(성수2지구 지구단위계획) 자료를 넣어 찍은 화면입니다. 어느 솔루션을 열어도 생김새와 쓰는 순서가 같아서, 하나만 익히면 나머지도 바로 쓰실 수 있습니다. 화면을 누르면 크게 보이고, 화면이 여럿인 솔루션은 화살표로 넘겨 보실 수 있습니다.</p>
-      <div class="shots">
-        <figure class="shot wide"><img src="shots/center.png?v=b427e241" alt="Solution Center 화면" loading="lazy">
-          <figcaption><b>Solution Center</b>설치 · 인증 · 업데이트 · 실행을 한곳에서. 여기서 모든 솔루션을 엽니다.</figcaption></figure>
-        <figure class="shot"><img src="shots/vworld.png?v=789ac4b8" alt="브이월드 공간정보 내려받기 화면" loading="lazy">
-          <figcaption><b>브이월드 공간정보 내려받기</b>지역과 주제도를 담고 [받기] 한 번.</figcaption></figure>
-        <figure class="shot slides" data-n="3"><div class="track">
-            <img src="shots/cadastral_1.png?v=c079fe5c" alt="CAD 지적도·토지현황도 제작 — 1단계 자료 넣기" loading="lazy">
-            <img src="shots/cadastral_2.png?v=23944f81" alt="CAD 지적도·토지현황도 제작 — 2단계 지적도 설정" loading="lazy">
-            <img src="shots/cadastral_3.png?v=a795e90a" alt="CAD 지적도·토지현황도 제작 — 2단계 토지현황도 설정" loading="lazy">
-          </div><button class="nav prev" type="button" aria-label="이전 화면">&#8249;</button><button class="nav next" type="button" aria-label="다음 화면">&#8250;</button><div class="dots"></div>
-          <figcaption><b>CAD 지적도·토지현황도 제작</b><span class="cap" data-caps="1단계 · 지적 SHP 를 넣고 지번 칸을 정합니다|2단계 · 지적도를 어떻게 그릴지 정합니다|2단계 · 속성으로 색을 입힌 토지현황도 설정">1단계 · 지적 SHP 를 넣고 지번 칸을 정합니다</span></figcaption></figure>
-        <figure class="shot"><img src="shots/building.png?v=1f4c3b09" alt="건축물대장 조서 작성 화면" loading="lazy">
-          <figcaption><b>건축물대장 조서 작성</b>대장 PDF 를 끌어다 놓고 실행하면 엑셀 조서로.</figcaption></figure>
-        <figure class="shot"><img src="shots/dxf.png?v=11aa8bde" alt="CAD 도면 병합 화면" loading="lazy">
-          <figcaption><b>CAD 도면 병합</b>도곽으로 나뉜 수치지형도를 한 장으로.</figcaption></figure>
-        <figure class="shot"><img src="shots/thematic.png?v=740e54d9" alt="주제도 SHP 속성 코드 입력 화면" loading="lazy">
-          <figcaption><b>주제도 SHP 속성 코드 입력</b>연속주제도에 코드·코드명을 채워 넣습니다.</figcaption></figure>
-        <figure class="shot slides" data-n="3"><div class="track">
-            <img src="shots/realty_1.png?v=0473cf8b" alt="부동산 공시가격 조회·수집 — 개별공시지가 지번별 조회" loading="lazy">
-            <img src="shots/realty_2.png?v=1b9be108" alt="부동산 공시가격 조회·수집 — 개별공시지가 엑셀 조서 작성" loading="lazy">
-            <img src="shots/realty_3.png?v=6984f53f" alt="부동산 공시가격 조회·수집 — 공동주택가격 단지별 전체 조회" loading="lazy">
-          </div><button class="nav prev" type="button" aria-label="이전 화면">&#8249;</button><button class="nav next" type="button" aria-label="다음 화면">&#8250;</button><div class="dots"></div>
-          <figcaption><b>부동산 공시가격 조회·수집</b><span class="cap" data-caps="지번 하나의 최근 3년 개별공시지가|편입토지조서에 3년치 공시지가를 채웁니다|공동주택 한 단지의 세대별 가격 전체">지번 하나의 최근 3년 개별공시지가</span></figcaption></figure>
-        <figure class="shot"><img src="shots/ppt.png?v=f6026943" alt="PPT 이미지 맞춰 넣기 화면" loading="lazy">
-          <figcaption><b>PPT 이미지 맞춰 넣기</b>기준 그림 하나에 맞춰 이미지를 슬라이드마다.</figcaption></figure>
+      <p class="sub">가상의 사업지(성수2지구 지구단위계획) 자료를 넣어 찍은 화면입니다. 어느 솔루션을 열어도 생김새와 쓰는 순서가 같아서, 하나만 익히면 나머지도 바로 쓰실 수 있습니다. 왼쪽에서 솔루션을 고르면 그 화면이 뜹니다. 그림을 누르면 크게 보이고, 화면이 여럿인 솔루션은 화살표로 넘겨 보실 수 있습니다.</p>
+      <div class="viewer">
+        <nav class="picker" id="picker" aria-label="솔루션 고르기"></nav>
+        <figure class="stage">
+          <div class="frame">
+            <img id="stage-img" alt="">
+            <button class="nav prev" type="button" aria-label="이전 화면" hidden>&#8249;</button>
+            <button class="nav next" type="button" aria-label="다음 화면" hidden>&#8250;</button>
+          </div>
+          <figcaption><b id="stage-name"></b><span id="stage-cap"></span><span class="dots" id="stage-dots" hidden></span></figcaption>
+        </figure>
       </div>
     </div>
   </section>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-label="화면 크게 보기">
     <button class="close" type="button" aria-label="닫기">&times;</button>
+    <button class="nav prev" type="button" aria-label="이전 화면" hidden>&#8249;</button>
     <img alt="">
+    <button class="nav next" type="button" aria-label="다음 화면" hidden>&#8250;</button>
     <figcaption></figcaption>
   </div>
   <script>
-    /* 화면 그림을 누르면 크게 띄운다. 바탕이나 × 를 누르거나 Esc 를 누르면 닫힌다. */
+    /* 화면 절. 왼쪽 목록에서 고르면 오른쪽에 그 솔루션의 화면이 뜬다. 화면이 여럿이면
+       화살표·점으로 넘기고, 그림을 누르면 크게 뜬다(거기서도 넘길 수 있다). */
     (function () {
-      var box = document.getElementById("lightbox");
-      var img = box.querySelector("img"), cap = box.querySelector("figcaption");
-      /* 여러 장 그림: 화살표·점으로 넘긴다. 손가락으로 옆으로 밀어도 넘어간다. */
-      document.querySelectorAll(".shot.slides").forEach(function (fig) {
-        var track = fig.querySelector(".track"), imgs = track.querySelectorAll("img");
-        var dots = fig.querySelector(".dots"), cap = fig.querySelector(".cap");
-        var caps = cap && cap.dataset.caps ? cap.dataset.caps.split("|") : [];
-        var at = 0, x0 = null;
-        imgs.forEach(function (_, i) { var d = document.createElement("i"); if (!i) d.className = "on"; dots.appendChild(d); });
-        function go(n) {
-          at = (n + imgs.length) % imgs.length;
-          track.style.transform = "translateX(" + (-100 * at) + "%)";
-          track.style.height = imgs[at].getBoundingClientRect().height + "px";
-          dots.querySelectorAll("i").forEach(function (d, i) { d.className = i === at ? "on" : ""; });
-          if (cap && caps[at]) cap.textContent = caps[at];
-        }
-        fig.querySelector(".prev").addEventListener("click", function (e) { e.stopPropagation(); go(at - 1); });
-        fig.querySelector(".next").addEventListener("click", function (e) { e.stopPropagation(); go(at + 1); });
-        track.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
-        track.addEventListener("touchend", function (e) {
+      var SHOTS = [{"key": "center", "name": "Solution Center", "sub": "설치 · 인증 · 업데이트", "shots": [{"src": "shots/center.png?v=b427e241", "cap": "설치 · 인증 · 업데이트 · 실행을 한곳에서. 여기서 모든 솔루션을 엽니다."}]}, {"key": "vworld", "name": "브이월드 공간정보 내려받기", "sub": "SHP 한 번에 받기", "shots": [{"src": "shots/vworld.png?v=789ac4b8", "cap": "지역과 주제도를 담고 [받기] 한 번. 시·군·구 하나가 20~30초."}]}, {"key": "cadastral", "name": "CAD 지적도 · 토지현황도 제작", "sub": "1단계 · 2단계", "shots": [{"src": "shots/cadastral_1.png?v=c61a964e", "cap": "1단계 · 지적 SHP(ZIP)를 넣고 지번 칸을 정합니다."}, {"src": "shots/cadastral_2.png?v=23944f81", "cap": "2단계 · 지적도를 어떻게 그릴지 정합니다. 지번 크기·회전은 필지에 맞춰 자동."}, {"src": "shots/cadastral_3.png?v=a795e90a", "cap": "2단계 · 토지현황도. 편입토지조서를 붙여 속성으로 색을 입힙니다."}]}, {"key": "building", "name": "건축물대장 조서 작성", "sub": "PDF → 엑셀", "shots": [{"src": "shots/building.png?v=1f4c3b09", "cap": "대장 PDF 를 끌어다 놓고 실행하면 엑셀 조서로."}]}, {"key": "dxf", "name": "CAD 도면 병합", "sub": "도곽 합치기", "shots": [{"src": "shots/dxf.png?v=11aa8bde", "cap": "도곽으로 나뉜 수치지형도를 한 장으로."}]}, {"key": "thematic", "name": "주제도 SHP 속성 코드 입력", "sub": "코드 · 코드명 채우기", "shots": [{"src": "shots/thematic.png?v=740e54d9", "cap": "연속주제도에 코드·코드명을 채워 넣습니다."}]}, {"key": "realty", "name": "부동산 공시가격 조회 · 수집", "sub": "세 가지 기능", "shots": [{"src": "shots/realty_1.png?v=0473cf8b", "cap": "지번 하나의 최근 3년 개별공시지가를 바로 봅니다."}, {"src": "shots/realty_2.png?v=1b9be108", "cap": "편입토지조서에 3년치 공시지가를 채웁니다."}, {"src": "shots/realty_3.png?v=6984f53f", "cap": "공동주택 한 단지의 세대별 가격을 전부 받습니다."}]}, {"key": "ppt", "name": "PPT 이미지 맞춰 넣기", "sub": "슬라이드마다 자동", "shots": [{"src": "shots/ppt.png?v=dd03eca2", "cap": "기준 그림 하나에 맞춰 이미지를 슬라이드마다."}]}];
+      var picker = document.getElementById("picker");
+      var img = document.getElementById("stage-img"), name = document.getElementById("stage-name");
+      var cap = document.getElementById("stage-cap"), dots = document.getElementById("stage-dots");
+      var stage = img.closest(".frame");
+      var box = document.getElementById("lightbox"), big = box.querySelector("img"), bigCap = box.querySelector("figcaption");
+      var sel = 0, at = 0;
+
+      SHOTS.forEach(function (s, i) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.innerHTML = s.name + "<small>" + s.sub + (s.shots.length > 1 ? " · 화면 " + s.shots.length + "장" : "") + "</small>";
+        b.addEventListener("click", function () { pick(i); });
+        picker.appendChild(b);
+      });
+
+      function pick(i) {
+        sel = i; at = 0;
+        picker.querySelectorAll("button").forEach(function (b, j) { b.className = j === i ? "on" : ""; });
+        // 이 솔루션의 다른 장을 미리 받아 둔다. 넘길 때 비어 보이지 않게.
+        SHOTS[i].shots.forEach(function (s) { var p = new Image(); p.src = s.src; });
+        show();
+      }
+      function show() {
+        var s = SHOTS[sel], shot = s.shots[at], many = s.shots.length > 1;
+        img.src = shot.src; img.alt = s.name + " 화면";
+        name.textContent = s.name; cap.textContent = shot.cap;
+        stage.querySelector(".prev").hidden = stage.querySelector(".next").hidden = !many;
+        dots.hidden = !many; dots.innerHTML = "";
+        if (many) s.shots.forEach(function (_, j) { var d = document.createElement("i"); if (j === at) d.className = "on"; dots.appendChild(d); });
+        if (box.classList.contains("on")) fill();
+      }
+      function go(n) { var k = SHOTS[sel].shots.length; at = (n + k) % k; show(); }
+      stage.querySelector(".prev").addEventListener("click", function () { go(at - 1); });
+      stage.querySelector(".next").addEventListener("click", function () { go(at + 1); });
+
+      /* 손가락으로 옆으로 밀어도 넘어간다 */
+      function swipe(el) {
+        var x0 = null;
+        el.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+        el.addEventListener("touchend", function (e) {
           if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; x0 = null;
-          if (Math.abs(dx) > 40) go(dx < 0 ? at + 1 : at - 1);
+          if (Math.abs(dx) > 40 && SHOTS[sel].shots.length > 1) go(dx < 0 ? at + 1 : at - 1);
         });
-        imgs[0].addEventListener("load", function () { go(0); });
-        window.addEventListener("resize", function () { go(at); });
-        go(0);
+      }
+      swipe(stage); swipe(box);
+
+      /* 크게 보기 */
+      function fill() {
+        var s = SHOTS[sel], shot = s.shots[at], many = s.shots.length > 1;
+        big.src = shot.src; big.alt = img.alt;
+        bigCap.textContent = s.name + " · " + shot.cap + (many ? "  (" + (at + 1) + "/" + s.shots.length + ")" : "");
+        box.querySelector(".prev").hidden = box.querySelector(".next").hidden = !many;
+      }
+      function open() { fill(); box.classList.add("on"); document.body.style.overflow = "hidden"; }
+      function close() { box.classList.remove("on"); document.body.style.overflow = ""; big.src = ""; }
+      img.addEventListener("click", open);
+      box.addEventListener("click", function (e) { if (e.target === box || e.target.classList.contains("close")) close(); });
+      box.querySelector(".prev").addEventListener("click", function (e) { e.stopPropagation(); go(at - 1); });
+      box.querySelector(".next").addEventListener("click", function (e) { e.stopPropagation(); go(at + 1); });
+      document.addEventListener("keydown", function (e) {
+        if (!box.classList.contains("on")) return;
+        if (e.key === "Escape") close();
+        else if (e.key === "ArrowLeft") go(at - 1);
+        else if (e.key === "ArrowRight") go(at + 1);
       });
-      document.querySelectorAll(".shot img").forEach(function (el) {
-        el.addEventListener("click", function () {
-          img.src = el.src; img.alt = el.alt;
-          var fc = el.parentElement.querySelector("figcaption");
-          cap.textContent = fc ? fc.textContent : "";
-          box.classList.add("on"); document.body.style.overflow = "hidden";
-        });
-      });
-      function close() { box.classList.remove("on"); document.body.style.overflow = ""; img.src = ""; }
-      box.addEventListener("click", close);
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+
+      pick(0);
     })();
   </script>
 
