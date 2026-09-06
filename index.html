@@ -230,6 +230,15 @@
   .shot figcaption { padding: 12px 16px 14px; font-size: 14px; color: var(--muted); }
   .shot figcaption b { color: var(--ink); font-weight: 700; margin-right: 6px; }
   .shot.wide { grid-column: 1 / -1; }
+  .shot img { cursor: zoom-in; }
+  /* 누르면 크게. 화면을 덮는 어두운 바탕 위에 원본 크기에 가깝게 띄운다. */
+  .lightbox { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center;
+              background: rgba(10, 14, 22, .82); padding: 28px; cursor: zoom-out; }
+  .lightbox.on { display: flex; }
+  .lightbox img { max-width: min(96vw, 1600px); max-height: 92vh; width: auto; height: auto; border-radius: 10px;
+                  box-shadow: 0 24px 80px rgba(0,0,0,.5); background: #fff; }
+  .lightbox figcaption { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; color: #e6ebf3; font-size: 14px; }
+  .lightbox .close { position: absolute; top: 14px; right: 18px; color: #fff; font-size: 30px; line-height: 1; background: none; border: 0; cursor: pointer; }
   @media (max-width: 900px) { .shots { grid-template-columns: 1fr; } }
   /* ── 솔루션 카드 ───────────────────────────────────────── */
   .sheets { margin-top: 44px; display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
@@ -438,10 +447,10 @@
     </a>
     <nav>
       <a href="#solutions">솔루션</a>
+      <a href="#screens">화면</a>
       <a href="#get">받는 법</a>
       <a href="#guides">사용 안내서</a>
       <a href="#news">새 소식</a>
-      <a href="#screens">화면</a>
       <a href="#ask">문의</a>
       <div class="theme-pick" role="group" aria-label="화면 밝기">
         <button type="button" data-theme-set="light" aria-pressed="false">밝게</button>
@@ -618,8 +627,8 @@
 
   <section id="screens">
     <div class="wrap">
-      <h2>실제 화면입니다</h2>
-      <p class="sub">가상의 사업지(성수2지구 지구단위계획) 자료를 넣어 찍은 화면입니다. 모든 프로그램이 같은 생김새를 씁니다.</p>
+      <h2>실제 사용화면입니다</h2>
+      <p class="sub">가상의 사업지(성수2지구 지구단위계획) 자료를 넣어 찍은 화면입니다. 모든 프로그램이 동일한 UI/UX를 적용하며 쉽게 사용하실 수 있습니다. 화면을 누르면 크게 보실 수 있습니다.</p>
       <div class="shots">
         <figure class="shot wide"><img src="shots/center.png" alt="Solution Center 화면" loading="lazy">
           <figcaption><b>Solution Center</b>설치 · 인증 · 업데이트 · 실행을 한곳에서. 여기서 모든 솔루션을 엽니다.</figcaption></figure>
@@ -640,6 +649,30 @@
       </div>
     </div>
   </section>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-label="화면 크게 보기">
+    <button class="close" type="button" aria-label="닫기">&times;</button>
+    <img alt="">
+    <figcaption></figcaption>
+  </div>
+  <script>
+    /* 화면 그림을 누르면 크게 띄운다. 바탕이나 × 를 누르거나 Esc 를 누르면 닫힌다. */
+    (function () {
+      var box = document.getElementById("lightbox");
+      var img = box.querySelector("img"), cap = box.querySelector("figcaption");
+      document.querySelectorAll(".shot img").forEach(function (el) {
+        el.addEventListener("click", function () {
+          img.src = el.src; img.alt = el.alt;
+          var fc = el.parentElement.querySelector("figcaption");
+          cap.textContent = fc ? fc.textContent : "";
+          box.classList.add("on"); document.body.style.overflow = "hidden";
+        });
+      });
+      function close() { box.classList.remove("on"); document.body.style.overflow = ""; img.src = ""; }
+      box.addEventListener("click", close);
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+    })();
+  </script>
 
   <section id="get">
     <div class="wrap">
