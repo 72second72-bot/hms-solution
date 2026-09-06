@@ -231,6 +231,23 @@
   .shot figcaption b { color: var(--ink); font-weight: 700; margin-right: 6px; }
   .shot.wide { grid-column: 1 / -1; }
   .shot img { cursor: zoom-in; }
+  /* 여러 장을 옆으로 넘기는 그림. 장마다 높이가 달라도 첫 장 기준으로 자리를 잡고 넘길 때 맞춘다. */
+  .shot.slides { position: relative; }
+  .shot.slides .track { display: flex; transition: transform .35s ease; will-change: transform; }
+  .shot.slides .track img { flex: 0 0 100%; width: 100%; }
+  .shot.slides .nav { position: absolute; top: 40%; width: 40px; height: 40px; border-radius: 50%;
+                      border: 1px solid var(--rule); background: var(--surface); color: var(--ink);
+                      font-size: 26px; line-height: 1; cursor: pointer; box-shadow: var(--shadow); opacity: .92; }
+  .shot.slides .nav:hover { opacity: 1; }
+  .shot.slides .prev { left: 10px; }
+  .shot.slides .next { right: 10px; }
+  .shot.slides .dots { position: absolute; left: 0; right: 0; top: calc(100% - 64px); display: flex; gap: 6px;
+                       justify-content: center; pointer-events: none; }
+  .shot.slides .dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(120,130,150,.45); }
+  .shot.slides .dots i.on { background: var(--accent, #2f6bff); }
+  .shot.slides figcaption { position: relative; z-index: 1; background: var(--surface); }
+  .shot.slides .track { overflow: hidden; }
+  .shot.slides .viewport { overflow: hidden; }
   /* 누르면 크게. 화면을 덮는 어두운 바탕 위에 원본 크기에 가깝게 띄운다. */
   .lightbox { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center;
               background: rgba(10, 14, 22, .82); padding: 28px; cursor: zoom-out; }
@@ -505,7 +522,7 @@
           <h3>AutoCAD 좌표변환</h3>
           <p class="why">캐드 내에서 도면을 열어 둔 채로 명령어를 입력하여 간편하게 원하는 객체의 좌표계를 변경합니다. 해치와 그리기 순서를 지키고, 잠긴 도면층도 함께 옮깁니다.</p>
           <div class="meta">
-            <span class="ver">v5.18</span>
+            <span class="ver">v5.20</span>
             <span class="need">AutoCAD 2016, 2019~2027 · 명령어 HMSCRS</span>
           </div>
           <div class="flow">
@@ -519,7 +536,7 @@
           <h3>CAD 지적도 · 토지현황도 제작</h3>
           <p class="why">지적 SHP 에서 지번이 들어간 도면을, 속성으로 색을 입힌 토지현황도까지 만듭니다.</p>
           <div class="meta">
-            <span class="ver">v2.5</span>
+            <span class="ver">v2.6</span>
             <span class="need">AutoCAD (토지현황도는 Map 3D 권장)</span>
           </div>
           <div class="flow">
@@ -533,7 +550,7 @@
           <h3>CAD 도면 병합</h3>
           <p class="why">도곽으로 나뉜 수치지형도 등 여러 도면을 하나로 합칩니다. 경계에서 겹친 것은 하나만 남깁니다.</p>
           <div class="meta">
-            <span class="ver">v2.4</span>
+            <span class="ver">v2.5</span>
             <span class="need">DWG 를 합칠 때만 AutoCAD</span>
           </div>
           <div class="flow">
@@ -547,7 +564,7 @@
           <h3>건축물대장 조서 작성</h3>
           <p class="why">건축물대장 PDF 여러 건을 엑셀 조서 한 장으로 정리합니다. 대장 종류별로 시트가 나뉩니다.</p>
           <div class="meta">
-            <span class="ver">v4.4</span>
+            <span class="ver">v4.5</span>
             <span class="need">개수 제한 없음</span>
           </div>
           <div class="flow">
@@ -561,7 +578,7 @@
           <h3>부동산 공시가격 조회 · 수집</h3>
           <p class="why">개별공시지가와 공동주택가격을 찾아 엑셀로 정리합니다. 최근 3년치가 함께 붙습니다.</p>
           <div class="meta">
-            <span class="ver">v4.10</span>
+            <span class="ver">v4.11</span>
             <span class="need">인터넷 연결 · Chrome</span>
           </div>
           <div class="flow">
@@ -575,7 +592,7 @@
           <h3>주제도 SHP 속성 코드 입력</h3>
           <p class="why">DBF 의 MNUM 을 읽어 표준분류코드와 코드명을 자동으로 채웁니다.</p>
           <div class="meta">
-            <span class="ver">v6.4</span>
+            <span class="ver">v6.5</span>
             <span class="need">파일 개수 제한 없음</span>
           </div>
           <div class="flow">
@@ -589,7 +606,7 @@
           <h3>PPT 이미지 맞춰 넣기</h3>
           <p class="why">슬라이드에 둔 그림 하나를 기준 삼아, 고른 이미지를 슬라이드마다 같은 자리 · 같은 크기로 넣습니다.</p>
           <div class="meta">
-            <span class="ver">v1.4</span>
+            <span class="ver">v1.6</span>
             <span class="need">Microsoft PowerPoint · 12장에 4초</span>
           </div>
           <div class="flow">
@@ -603,7 +620,7 @@
           <h3>브이월드 공간정보 내려받기</h3>
           <p class="why">용도지역 · 지구 · 구역, 도시계획시설 등의 연속주제도부터 연속지적도 · 토지특성 · 토지소유, 행정구역 경계까지 — 공간정보 SHP을 행정구역 단위 또는 대상지에 맞춰 한 번에 받습니다. 브이월드에서 한 종류씩 신청하던 것을 골라서 받습니다.</p>
           <div class="meta">
-            <span class="ver">v1.1</span>
+            <span class="ver">v1.3</span>
             <span class="need">인터넷 연결 · 28종 · 수원시 4개 구 26초</span>
           </div>
           <div class="flow">
@@ -628,23 +645,31 @@
   <section id="screens">
     <div class="wrap">
       <h2>실제 사용화면입니다</h2>
-      <p class="sub">가상의 사업지(성수2지구 지구단위계획) 자료를 넣어 찍은 화면입니다. 모든 프로그램이 동일한 UI/UX를 적용하며 쉽게 사용하실 수 있습니다. 화면을 누르면 크게 보실 수 있습니다.</p>
+      <p class="sub">가상의 사업지(성수2지구 지구단위계획) 자료를 넣어 찍은 화면입니다. 어느 솔루션을 열어도 생김새와 쓰는 순서가 같아서, 하나만 익히면 나머지도 바로 쓰실 수 있습니다. 화면을 누르면 크게 보이고, 화면이 여럿인 솔루션은 화살표로 넘겨 보실 수 있습니다.</p>
       <div class="shots">
         <figure class="shot wide"><img src="shots/center.png?v=b427e241" alt="Solution Center 화면" loading="lazy">
           <figcaption><b>Solution Center</b>설치 · 인증 · 업데이트 · 실행을 한곳에서. 여기서 모든 솔루션을 엽니다.</figcaption></figure>
-        <figure class="shot"><img src="shots/vworld.png?v=9af84e6c" alt="브이월드 공간정보 내려받기 화면" loading="lazy">
+        <figure class="shot"><img src="shots/vworld.png?v=789ac4b8" alt="브이월드 공간정보 내려받기 화면" loading="lazy">
           <figcaption><b>브이월드 공간정보 내려받기</b>지역과 주제도를 담고 [받기] 한 번.</figcaption></figure>
-        <figure class="shot"><img src="shots/cadastral.png?v=53db127c" alt="CAD 지적도·토지현황도 제작 화면" loading="lazy">
-          <figcaption><b>CAD 지적도·토지현황도 제작</b>지적 SHP 를 넣고 지번 칸을 정하면 도면이 나옵니다.</figcaption></figure>
-        <figure class="shot"><img src="shots/building.png?v=68790b1f" alt="건축물대장 조서 작성 화면" loading="lazy">
+        <figure class="shot slides" data-n="3"><div class="track">
+            <img src="shots/cadastral_1.png?v=c079fe5c" alt="CAD 지적도·토지현황도 제작 — 1단계 자료 넣기" loading="lazy">
+            <img src="shots/cadastral_2.png?v=23944f81" alt="CAD 지적도·토지현황도 제작 — 2단계 지적도 설정" loading="lazy">
+            <img src="shots/cadastral_3.png?v=a795e90a" alt="CAD 지적도·토지현황도 제작 — 2단계 토지현황도 설정" loading="lazy">
+          </div><button class="nav prev" type="button" aria-label="이전 화면">&#8249;</button><button class="nav next" type="button" aria-label="다음 화면">&#8250;</button><div class="dots"></div>
+          <figcaption><b>CAD 지적도·토지현황도 제작</b><span class="cap" data-caps="1단계 · 지적 SHP 를 넣고 지번 칸을 정합니다|2단계 · 지적도를 어떻게 그릴지 정합니다|2단계 · 속성으로 색을 입힌 토지현황도 설정">1단계 · 지적 SHP 를 넣고 지번 칸을 정합니다</span></figcaption></figure>
+        <figure class="shot"><img src="shots/building.png?v=1f4c3b09" alt="건축물대장 조서 작성 화면" loading="lazy">
           <figcaption><b>건축물대장 조서 작성</b>대장 PDF 를 끌어다 놓고 실행하면 엑셀 조서로.</figcaption></figure>
-        <figure class="shot"><img src="shots/dxf.png?v=7c82d4d0" alt="CAD 도면 병합 화면" loading="lazy">
+        <figure class="shot"><img src="shots/dxf.png?v=11aa8bde" alt="CAD 도면 병합 화면" loading="lazy">
           <figcaption><b>CAD 도면 병합</b>도곽으로 나뉜 수치지형도를 한 장으로.</figcaption></figure>
-        <figure class="shot"><img src="shots/thematic.png?v=65d4c196" alt="주제도 SHP 속성 코드 입력 화면" loading="lazy">
+        <figure class="shot"><img src="shots/thematic.png?v=740e54d9" alt="주제도 SHP 속성 코드 입력 화면" loading="lazy">
           <figcaption><b>주제도 SHP 속성 코드 입력</b>연속주제도에 코드·코드명을 채워 넣습니다.</figcaption></figure>
-        <figure class="shot"><img src="shots/realty.png?v=67fb06d1" alt="부동산 공시가격 조회·수집 화면" loading="lazy">
-          <figcaption><b>부동산 공시가격 조회·수집</b>편입토지조서에 3년치 공시지가를 채웁니다.</figcaption></figure>
-        <figure class="shot"><img src="shots/ppt.png?v=5c1d8e2c" alt="PPT 이미지 맞춰 넣기 화면" loading="lazy">
+        <figure class="shot slides" data-n="3"><div class="track">
+            <img src="shots/realty_1.png?v=0473cf8b" alt="부동산 공시가격 조회·수집 — 개별공시지가 지번별 조회" loading="lazy">
+            <img src="shots/realty_2.png?v=1b9be108" alt="부동산 공시가격 조회·수집 — 개별공시지가 엑셀 조서 작성" loading="lazy">
+            <img src="shots/realty_3.png?v=6984f53f" alt="부동산 공시가격 조회·수집 — 공동주택가격 단지별 전체 조회" loading="lazy">
+          </div><button class="nav prev" type="button" aria-label="이전 화면">&#8249;</button><button class="nav next" type="button" aria-label="다음 화면">&#8250;</button><div class="dots"></div>
+          <figcaption><b>부동산 공시가격 조회·수집</b><span class="cap" data-caps="지번 하나의 최근 3년 개별공시지가|편입토지조서에 3년치 공시지가를 채웁니다|공동주택 한 단지의 세대별 가격 전체">지번 하나의 최근 3년 개별공시지가</span></figcaption></figure>
+        <figure class="shot"><img src="shots/ppt.png?v=f6026943" alt="PPT 이미지 맞춰 넣기 화면" loading="lazy">
           <figcaption><b>PPT 이미지 맞춰 넣기</b>기준 그림 하나에 맞춰 이미지를 슬라이드마다.</figcaption></figure>
       </div>
     </div>
@@ -660,6 +685,31 @@
     (function () {
       var box = document.getElementById("lightbox");
       var img = box.querySelector("img"), cap = box.querySelector("figcaption");
+      /* 여러 장 그림: 화살표·점으로 넘긴다. 손가락으로 옆으로 밀어도 넘어간다. */
+      document.querySelectorAll(".shot.slides").forEach(function (fig) {
+        var track = fig.querySelector(".track"), imgs = track.querySelectorAll("img");
+        var dots = fig.querySelector(".dots"), cap = fig.querySelector(".cap");
+        var caps = cap && cap.dataset.caps ? cap.dataset.caps.split("|") : [];
+        var at = 0, x0 = null;
+        imgs.forEach(function (_, i) { var d = document.createElement("i"); if (!i) d.className = "on"; dots.appendChild(d); });
+        function go(n) {
+          at = (n + imgs.length) % imgs.length;
+          track.style.transform = "translateX(" + (-100 * at) + "%)";
+          track.style.height = imgs[at].getBoundingClientRect().height + "px";
+          dots.querySelectorAll("i").forEach(function (d, i) { d.className = i === at ? "on" : ""; });
+          if (cap && caps[at]) cap.textContent = caps[at];
+        }
+        fig.querySelector(".prev").addEventListener("click", function (e) { e.stopPropagation(); go(at - 1); });
+        fig.querySelector(".next").addEventListener("click", function (e) { e.stopPropagation(); go(at + 1); });
+        track.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+        track.addEventListener("touchend", function (e) {
+          if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; x0 = null;
+          if (Math.abs(dx) > 40) go(dx < 0 ? at + 1 : at - 1);
+        });
+        imgs[0].addEventListener("load", function () { go(0); });
+        window.addEventListener("resize", function () { go(at); });
+        go(0);
+      });
       document.querySelectorAll(".shot img").forEach(function (el) {
         el.addEventListener("click", function () {
           img.src = el.src; img.alt = el.alt;
