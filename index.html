@@ -530,7 +530,7 @@
           <h3>AutoCAD 좌표변환</h3>
           <p class="why">캐드 내에서 도면을 열어 둔 채로 명령어를 입력하여 간편하게 원하는 객체의 좌표계를 변경합니다. 해치와 그리기 순서를 지키고, 잠긴 도면층도 함께 옮깁니다.</p>
           <div class="meta">
-            <span class="ver">v5.20</span>
+            <span class="ver">v5.21</span>
             <span class="need">AutoCAD 2016, 2019~2027 · 명령어 HMSCRS</span>
           </div>
           <div class="flow">
@@ -586,7 +586,7 @@
           <h3>부동산 공시가격 조회 · 수집</h3>
           <p class="why">개별공시지가와 공동주택가격을 찾아 엑셀로 정리합니다. 최근 1 · 3 · 5 · 10년 중 골라 연도별로 붙습니다.</p>
           <div class="meta">
-            <span class="ver">v4.12</span>
+            <span class="ver">v4.13</span>
             <span class="need">인터넷 연결 · Chrome</span>
           </div>
           <div class="flow">
@@ -628,7 +628,7 @@
           <h3>브이월드 공간정보 내려받기</h3>
           <p class="why">용도지역 · 지구 · 구역, 도시계획시설 등의 연속주제도부터 연속지적도 · 토지특성 · 토지소유, 행정구역 경계까지 — 공간정보 SHP을 행정구역 단위 또는 대상지에 맞춰 한 번에 받습니다. 브이월드에서 한 종류씩 신청하던 것을 골라서 받습니다.</p>
           <div class="meta">
-            <span class="ver">v1.3</span>
+            <span class="ver">v1.5</span>
             <span class="need">인터넷 연결 · 45종 · 시·군 하나에 20~30초</span>
           </div>
           <div class="flow">
@@ -693,7 +693,7 @@
     /* 화면 절. 왼쪽 목록에서 고르면 오른쪽에 그 솔루션의 화면이 뜬다. 화면이 여럿이면
        화살표·점으로 넘기고, 그림을 누르면 크게 뜬다(거기서도 넘길 수 있다). */
     (function () {
-      var SHOTS = [{"key": "center", "name": "Solution Center", "sub": "설치 · 인증 · 업데이트", "shots": [{"src": "shots/center.png?v=b427e241", "cap": "설치 · 인증 · 업데이트 · 실행을 한곳에서. 여기서 모든 솔루션을 엽니다."}]}, {"key": "vworld", "name": "브이월드 공간정보 내려받기", "sub": "SHP 한 번에 받기", "shots": [{"src": "shots/vworld.png?v=789ac4b8", "cap": "지역과 주제도를 담고 [받기] 한 번. 시·군·구 하나가 20~30초."}]}, {"key": "geocoder", "name": "지오코딩 (지번·주소·좌표 변환)", "sub": "주소 · PNU · 좌표 채우기", "shots": [{"src": "shots/geocoder.png?v=95ce4d5b", "cap": "엑셀이나 SHP 를 넣으면 주소 · PNU · 좌표를 채우고 필지 SHP 와 DXF 지적도까지."}]}, {"key": "cadastral", "name": "CAD 지적도·현황도·토지조서 제작", "sub": "1단계 · 2단계 · 조서", "shots": [{"src": "shots/cadastral_1.png?v=d9c25673", "cap": "1단계 · 지적 SHP 를 넣거나 구역계로 브이월드 연속지적도를 받습니다. 편입토지조서도 여기서."}, {"src": "shots/cadastral_2.png?v=eb7b7e80", "cap": "2단계 · 지적도를 어떻게 그릴지 정합니다. 지번 크기·회전은 필지에 맞춰 자동."}, {"src": "shots/cadastral_3.png?v=2846747f", "cap": "2단계 · 토지현황도. 편입토지조서를 붙여 속성으로 색을 입힙니다."}]}, {"key": "building", "name": "건축물대장 조서 작성", "sub": "PDF → 엑셀", "shots": [{"src": "shots/building.png?v=1f4c3b09", "cap": "대장 PDF 를 끌어다 놓고 실행하면 엑셀 조서로."}]}, {"key": "dxf", "name": "CAD 도면 병합", "sub": "도곽 합치기", "shots": [{"src": "shots/dxf.png?v=11aa8bde", "cap": "도곽으로 나뉜 수치지형도를 한 장으로."}]}, {"key": "thematic", "name": "주제도 SHP 속성 코드 입력", "sub": "코드 · 코드명 채우기", "shots": [{"src": "shots/thematic.png?v=740e54d9", "cap": "연속주제도에 코드·코드명을 채워 넣습니다."}]}, {"key": "realty", "name": "부동산 공시가격 조회 · 수집", "sub": "세 가지 기능", "shots": [{"src": "shots/realty_1.png?v=0473cf8b", "cap": "지번 하나의 최근 3년 개별공시지가를 바로 봅니다."}, {"src": "shots/realty_2.png?v=1b9be108", "cap": "편입토지조서에 3년치 공시지가를 채웁니다."}, {"src": "shots/realty_3.png?v=6984f53f", "cap": "공동주택 한 단지의 세대별 가격을 전부 받습니다."}]}, {"key": "ppt", "name": "PPT 이미지 맞춰 넣기", "sub": "슬라이드마다 자동", "shots": [{"src": "shots/ppt.png?v=dd03eca2", "cap": "기준 그림 하나에 맞춰 이미지를 슬라이드마다."}]}];
+      var SHOTS = [{"key": "center", "name": "Solution Center", "sub": "설치 · 인증 · 업데이트", "shots": [{"src": "shots/center.png?v=b427e241", "cap": "설치 · 인증 · 업데이트 · 실행을 한곳에서. 여기서 모든 솔루션을 엽니다."}]}, {"key": "vworld", "name": "브이월드 공간정보 내려받기", "sub": "SHP 한 번에 받기", "shots": [{"src": "shots/vworld.png?v=789ac4b8", "cap": "지역과 주제도를 담고 [받기] 한 번. 시·군·구 하나가 20~30초."}]}, {"key": "geocoder", "name": "지오코딩 (지번·주소·좌표 변환)", "sub": "주소 · PNU · 좌표 채우기", "shots": [{"src": "shots/geocoder.png?v=95ce4d5b", "cap": "엑셀이나 SHP 를 넣으면 주소 · PNU · 좌표를 채우고 필지 SHP 와 DXF 지적도까지."}]}, {"key": "cadastral", "name": "CAD 지적도·현황도·토지조서 제작", "sub": "1단계 · 2단계 · 조서", "shots": [{"src": "shots/cadastral_1.png?v=d9c25673", "cap": "1단계 · 지적 SHP 를 넣거나 구역계로 브이월드 연속지적도를 받습니다. 편입토지조서도 여기서."}, {"src": "shots/cadastral_2.png?v=eb7b7e80", "cap": "2단계 · 지적도를 어떻게 그릴지 정합니다. 지번 크기·회전은 필지에 맞춰 자동."}, {"src": "shots/cadastral_3.png?v=2846747f", "cap": "2단계 · 토지현황도. 편입토지조서를 붙여 속성으로 색을 입힙니다."}]}, {"key": "coord", "name": "AutoCAD 좌표변환", "sub": "AutoCAD 안에서", "shots": [{"src": "shots/coord.png?v=10766f50", "cap": "원본과 변환 좌표계를 고르고 [좌표변환 실행]. AutoCAD 2016 · 2019~2027 에서 씁니다."}]}, {"key": "building", "name": "건축물대장 조서 작성", "sub": "PDF → 엑셀", "shots": [{"src": "shots/building.png?v=1f4c3b09", "cap": "대장 PDF 를 끌어다 놓고 실행하면 엑셀 조서로."}]}, {"key": "dxf", "name": "CAD 도면 병합", "sub": "도곽 합치기", "shots": [{"src": "shots/dxf.png?v=11aa8bde", "cap": "도곽으로 나뉜 수치지형도를 한 장으로."}]}, {"key": "thematic", "name": "주제도 SHP 속성 코드 입력", "sub": "코드 · 코드명 채우기", "shots": [{"src": "shots/thematic.png?v=740e54d9", "cap": "연속주제도에 코드·코드명을 채워 넣습니다."}]}, {"key": "realty", "name": "부동산 공시가격 조회 · 수집", "sub": "세 가지 기능", "shots": [{"src": "shots/realty_1.png?v=0473cf8b", "cap": "지번 하나의 최근 3년 개별공시지가를 바로 봅니다."}, {"src": "shots/realty_2.png?v=1b9be108", "cap": "편입토지조서에 3년치 공시지가를 채웁니다."}, {"src": "shots/realty_3.png?v=6984f53f", "cap": "공동주택 한 단지의 세대별 가격을 전부 받습니다."}]}, {"key": "ppt", "name": "PPT 이미지 맞춰 넣기", "sub": "슬라이드마다 자동", "shots": [{"src": "shots/ppt.png?v=dd03eca2", "cap": "기준 그림 하나에 맞춰 이미지를 슬라이드마다."}]}];
       var picker = document.getElementById("picker");
       var img = document.getElementById("stage-img"), name = document.getElementById("stage-name");
       var cap = document.getElementById("stage-cap"), dots = document.getElementById("stage-dots");
