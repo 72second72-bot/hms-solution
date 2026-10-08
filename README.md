@@ -3,7 +3,14 @@
 엔지니어링 실무를 위한 업무 자동화. 이 저장소에는 **홈페이지와 배포용 파일만** 있습니다.
 프로그램 소스는 들어 있지 않습니다.
 
-**주소** — https://72second72-bot.github.io/hms-solution/
+**주소** — https://hms-eng-solution.vercel.app/
+
+한 사이트에 들어오는 문이 둘입니다. 같은 저장소를 두 곳이 내보이므로 내용은 늘 같습니다.
+
+| 문 | 주소 | 비고 |
+|---|---|---|
+| Vercel | https://hms-eng-solution.vercel.app/ | 알려 드리는 짧은 주소 |
+| GitHub Pages | https://72second72-bot.github.io/hms-solution/ | 전에 쓰던 주소 · 그대로 쓰실 수 있습니다 |
 
 | 무엇 | 어디 |
 |---|---|
