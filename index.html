@@ -418,6 +418,73 @@
   footer a { color: var(--blue); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
 
+  /* ── 만든 사람 ────────────────────────────────────────────
+     아래쪽 '문의 — 황민수' 의 이름을 누르면 열린다. 누르는 자리라는 것을 점선 밑줄로
+     알린다 - 링크처럼 파랗게 칠하면 메일 주소 링크와 구별이 안 된다.
+
+     창은 <dialog> 다. 열려 있는 동안 뒤쪽을 누를 수 없고, Esc 로 닫히며, 키보드
+     초점이 창 안에 머문다 - 이것을 손으로 만들면 반드시 한두 가지를 빠뜨린다.
+
+     흐린 뒷면(::backdrop)은 색을 직접 적는다. 이 자리는 페이지의 색 변수를 물려받지
+     못하는 브라우저가 아직 있다. 밝은 · 어두운 화면 모두 같은 반투명 먹색이 맞다. */
+  footer .who {
+    font: inherit; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer;
+    text-decoration: underline dotted; text-decoration-color: var(--muted); text-underline-offset: 4px;
+  }
+  footer .who:hover { color: var(--blue); text-decoration-color: currentColor; }
+  footer .who:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
+
+  .profile {
+    width: min(460px, calc(100% - 32px)); max-height: calc(100% - 32px); padding: 0;
+    border: 1px solid var(--rule); border-radius: var(--r-card);
+    background: var(--surface); color: var(--ink); box-shadow: var(--shadow-lift);
+  }
+  .profile::backdrop { background: rgba(10, 14, 22, .58); }
+  /* <dialog> 를 모르는 옛 브라우저(iOS 15.4 이전 등)는 닫힌 창을 감추는 기본 규칙도 없다.
+     없으면 창이 처음부터 꼬리 아래에 늘 펼쳐져 있었다. 아는 브라우저에서는 원래 그렇게 된다. */
+  .profile:not([open]) { display: none; }
+  .profile-in { position: relative; padding: 26px 26px 24px; }
+  .profile .x {
+    position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%;
+    border: 0; background: none; color: var(--muted); font-size: 24px; line-height: 1; cursor: pointer;
+  }
+  .profile .x:hover { background: var(--surface-alt); color: var(--ink); }
+  .profile .x:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+  .profile-top { display: grid; grid-template-columns: 112px 1fr; gap: 20px; align-items: center; }
+  /* 증명사진은 흰 바탕이다. 어두운 화면에서도 테두리 한 줄로 사진 자리를 또렷이 한다. */
+  .profile-top img {
+    display: block; width: 112px; height: 140px; object-fit: cover;
+    border-radius: 10px; border: 1px solid var(--rule); background: #FFFFFF;
+  }
+  .profile .eyebrow { font-size: 12.5px; font-weight: 700; color: var(--soft-text); letter-spacing: .02em; }
+  .profile h3 { margin: 4px 0 4px; font-size: 25px; font-weight: 700; line-height: 1.25; }
+  .profile .role { margin: 0; font-size: 14.5px; color: var(--ink-soft); }
+  .profile dl {
+    margin: 22px 0 0; padding-top: 18px; border-top: 1px solid var(--rule);
+    display: grid; grid-template-columns: 44px 1fr; gap: 10px 14px; font-size: 14.5px;
+  }
+  .profile dt { color: var(--muted); }
+  .profile dd { margin: 0; color: var(--ink); word-break: keep-all; }
+  .profile dd span { display: block; }
+  .profile-acts { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .profile-acts .go {
+    display: inline-block; padding: 8px 16px; border-radius: var(--r-btn);
+    background: var(--soft); border: 1px solid var(--soft-border); color: var(--soft-text);
+    font-size: 14px; font-weight: 600; text-decoration: none;
+  }
+  .profile-acts .go:hover { filter: brightness(0.97); }
+  .profile-acts .go:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  /* 폰에서는 '학력 · 현재' 를 내용 위에 얹는다. 옆에 두면 석사 줄이 "(석사)" 만 남기고 꺾였다. */
+  @media (max-width: 420px) {
+    .profile-in { padding: 22px 18px 20px; }
+    .profile-top { grid-template-columns: 88px 1fr; gap: 14px; }
+    .profile-top img { width: 88px; height: 110px; }
+    .profile h3 { font-size: 22px; }
+    .profile dl { grid-template-columns: 1fr; gap: 2px; }
+    .profile dt { margin-top: 8px; font-size: 13px; }
+    .profile dt:first-child { margin-top: 0; }
+  }
+
   /* 머리가 붙어 있어 앵커로 뛰면 제목이 가린다. 그만큼 미리 띄운다. */
   section[id] { scroll-margin-top: 76px; }
 
@@ -939,7 +1006,7 @@
           <div class="ask-way">
             <h4>메일</h4>
             <p>급하지 않은 이야기나 파일을 함께 보내실 때 쓰시면 됩니다.</p>
-            <a class="go" href="mailto:72second@naver.com" data-dl="ask-mail">72second@naver.com</a>
+            <a class="go" href="mailto:72second@naver.com" data-dl="ask-mail">황민수 · 72second@naver.com</a>
           </div>
         </div>
       </div>
@@ -952,13 +1019,74 @@
     <div class="row">
       <b>HMS Solution</b>
       <span>업무 효율화 솔루션</span>
-      <span>문의 — <a href="mailto:72second@naver.com">72second@naver.com</a></span>
+      <span>문의 — <button type="button" class="who" aria-haspopup="dialog" title="만든 사람 소개 보기">황민수</button>
+        (<a href="mailto:72second@naver.com">72second@naver.com</a>)</span>
       <span>카카오톡 오픈채팅 — <a href="https://open.kakao.com/o/gkkxMGLi" target="_blank" rel="noopener">바로 가기</a></span>
       <span><a href="privacy.html">개인정보처리방침</a></span>
       <span><a href="opensource.html">오픈소스 라이선스</a></span>
     </div>
   </div>
 </footer>
+
+<!-- 만든 사람 소개. 아래쪽 이름을 누르면 열린다. 내용은 민수님이 정해 주신 그대로다(2026-11-03). -->
+<dialog class="profile" id="profile" aria-labelledby="profile-name">
+  <div class="profile-in">
+    <button type="button" class="x" aria-label="닫기">&times;</button>
+    <div class="profile-top">
+      <img src="profile.jpg" width="112" height="140" alt="황민수 사진">
+      <div>
+        <div class="eyebrow">만든 사람</div>
+        <h3 id="profile-name">황민수</h3>
+        <p class="role">HMS Solution 개발 · 총괄 관리</p>
+      </div>
+    </div>
+    <dl>
+      <dt>학력</dt>
+      <dd><span>홍익대학교 도시공학과 졸업(학사)</span><span>홍익대학교 대학원 도시계획과 졸업(석사)</span></dd>
+      <dt>현재</dt>
+      <dd>(주)케이지엔지니어링종합건축사사무소 재직 중</dd>
+      <dt>문의</dt>
+      <dd><a href="mailto:72second@naver.com">72second@naver.com</a></dd>
+    </dl>
+    <div class="profile-acts">
+      <a class="go" href="mailto:72second@naver.com">메일 보내기</a>
+      <a class="go" href="https://open.kakao.com/o/gkkxMGLi" target="_blank" rel="noopener">카카오톡 오픈채팅</a>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  /* 만든 사람 소개 창을 열고 닫는다.
+
+     <dialog> 를 못 여는 아주 옛 브라우저에서는 open 표시만 붙여 그 자리에 펼친다 -
+     뒤가 흐려지지는 않아도 내용은 읽힌다.
+
+     창 바깥(흐린 뒷면)을 눌러도 닫는다. 창은 안쪽 틀(.profile-in)이 꽉 채우고 있어,
+     눌린 것이 창 그 자체라면 곧 틀 바깥 - 뒷면을 누른 것이다.
+
+     단, 누르기 시작한 자리도 뒷면이어야 한다. 메일 주소를 긁어 복사하다 손이 창 밖에서
+     떨어지면 브라우저는 그것도 '창 자체를 누른 것' 으로 알려 와, 창이 닫히고 고른 글자도
+     사라졌다(2026-11-03 검토에서 재현). */
+  (function () {
+    var box = document.getElementById("profile");
+    var who = document.querySelector("footer .who");
+    if (!box || !who) return;
+    function open() {
+      if (typeof box.showModal === "function") box.showModal(); else box.setAttribute("open", "");
+    }
+    function close() {
+      if (typeof box.close === "function") box.close(); else box.removeAttribute("open");
+    }
+    who.addEventListener("click", open);
+    box.querySelector(".x").addEventListener("click", close);
+    var pressedOutside = false;
+    box.addEventListener("pointerdown", function (e) { pressedOutside = e.target === box; });
+    box.addEventListener("click", function (e) {
+      if (e.target === box && pressedOutside) close();
+      pressedOutside = false;
+    });
+  })();
+</script>
 
 <script>
   /* 하단 'HMS Solution' 을 다섯 번 잇따라 누르면 관리자 화면으로 간다.
