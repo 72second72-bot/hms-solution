@@ -1030,8 +1030,9 @@
     <div class="row">
       <b>HMS Solution</b>
       <span>업무 효율화 솔루션</span>
+      <!-- 이름 · 메일은 서버의 만든 사람 소개를 따라 바뀐다(아래 스크립트의 applyContact). -->
       <span>문의 — <button type="button" class="who" aria-haspopup="dialog" title="만든 사람 소개 보기">황민수</button>
-        (<a href="mailto:72second@naver.com">72second@naver.com</a>)</span>
+        <span class="who-mail-wrap">(<a class="who-mail" href="mailto:72second@naver.com">72second@naver.com</a>)</span></span>
       <span>카카오톡 오픈채팅 — <a href="https://open.kakao.com/o/gkkxMGLi" target="_blank" rel="noopener">바로 가기</a></span>
       <span><a href="privacy.html">개인정보처리방침</a></span>
       <span><a href="opensource.html">오픈소스 라이선스</a></span>
@@ -1084,8 +1085,11 @@
      떨어지면 브라우저는 그것도 '창 자체를 누른 것' 으로 알려 와, 창이 닫히고 고른 글자도
      사라졌다(2026-11-03 검토에서 재현).
 
-     내용은 처음 열 때 한 번 서버에서 받는다. 페이지를 열 때마다 받지 않는다 - 소개를 여는
-     사람은 드물고, 사진까지 실려 있어 매번 받으면 서버 전송량만 는다.
+     내용은 한 번만 서버에서 받는다. 받는 때는 꼬리나 문의 칸이 화면에 들어올 때, 또는 창을
+     열 때다. 페이지를 열자마자 받지 않는다 - 아래까지 내려오지 않는 사람이 많고, 소개에는
+     사진까지 실려 있어 매번 받으면 서버 전송량만 는다.
+     받은 소개의 이름 · 메일로 꼬리의 '문의 — 이름 (메일)' 과 문의 칸의 메일 단추도 바꾼다
+     (2026-11-03 민수님). 개인정보처리방침의 '보호책임자' 줄은 법으로 정한 자리라 따라 바꾸지 않는다.
      받은 글은 글자로만 넣는다(innerHTML 을 쓰지 않는다). 관리자 계정이 털려도 이 페이지에
      스크립트를 심을 수 없게 하려는 것이다. 사진도 data:image 꼴만 받는다. */
   (function () {
@@ -1152,15 +1156,52 @@
       }
     }
 
+    /* 꼬리 '문의 — 이름 (메일)' 과 문의 칸의 메일 단추를 소개에 맞춘다.
+       이름이 비었으면 아무것도 바꾸지 않는다. 메일을 비워 저장했으면 메일 자리를 감춘다 -
+       옛 주소로 보내는 단추가 남으면 받는 사람이 없는 곳으로 문의가 간다. */
+    function applyContact(p) {
+      var name = clean(p && p.name);
+      if (!name) return;
+      var mail = clean(p.email);
+      var hasMail = looksLikeMail(mail);
+      Array.prototype.forEach.call(document.querySelectorAll("footer .who"), function (b) { b.textContent = name; });
+      Array.prototype.forEach.call(document.querySelectorAll("footer .who-mail-wrap"), function (w) {
+        w.style.display = hasMail ? "" : "none";
+        var a = w.querySelector(".who-mail");
+        if (a && hasMail) { a.href = "mailto:" + mail; a.textContent = mail; }
+      });
+      var ask = document.querySelector("#ask a[data-dl='ask-mail']");
+      if (ask) {
+        var card = ask.closest ? ask.closest(".ask-way") : null;
+        if (card) card.style.display = hasMail ? "" : "none";
+        if (hasMail) { ask.href = "mailto:" + mail; ask.textContent = name + " · " + mail; }
+      }
+    }
+
     function load() {
       if (asked || !window.fetch) return;
       asked = true;
-      /* 받지 못하면(망 · 서버 오류) 다음에 열 때 다시 받는다. 받았으면 다시 묻지 않는다. */
+      /* 받지 못하면(망 · 서버 오류) 다음 기회(창을 열 때 등)에 다시 받는다. 받았으면 다시 묻지 않는다. */
       fetch(SOURCE).then(function (r) { if (!r.ok) { asked = false; return null; } return r.json(); }).then(function (rec) {
         /* 이 열쇠를 모르는 옛 서버는 '공지사항' 을 대신 돌려준다. 그것을 소개로 읽지 않는다. */
         if (!rec || rec.contentKey !== "creator_profile" || !rec.body) return;
-        fill(JSON.parse(rec.body));
+        var p = JSON.parse(rec.body);
+        applyContact(p);
+        fill(p);
       }).catch(function () { asked = false; /* 못 받으면 처음 내용 그대로 */ });
+    }
+
+    /* 꼬리나 문의 칸이 화면 가까이 오면 받는다. 이를 모르는 옛 브라우저는 다 그린 뒤에 받는다. */
+    var seen = [document.querySelector("footer"), document.getElementById("ask")].filter(Boolean);
+    if ("IntersectionObserver" in window) {
+      var watch = new IntersectionObserver(function (entries) {
+        if (!entries.some(function (e) { return e.isIntersecting; })) return;
+        load();
+        if (asked) watch.disconnect();
+      }, { rootMargin: "300px 0px" });
+      seen.forEach(function (node) { watch.observe(node); });
+    } else {
+      window.addEventListener("load", load);
     }
 
     function open() {
