@@ -405,6 +405,8 @@
     font-size: 14px; font-weight: 600; text-decoration: none;
   }
   .ask-way .go:hover { filter: brightness(0.97); }
+  .ask-way button.go { font-family: inherit; line-height: inherit; cursor: pointer; }
+  .ask-way .go:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
   @media (max-width: 720px) {
     .ask { grid-template-columns: 1fr; gap: 22px; }
     .ask-qr { width: 100%; max-width: 220px; margin: 0 auto; }
@@ -459,9 +461,12 @@
   .profile .eyebrow { font-size: 12.5px; font-weight: 700; color: var(--soft-text); letter-spacing: .02em; }
   .profile h3 { margin: 4px 0 4px; font-size: 25px; font-weight: 700; line-height: 1.25; }
   .profile .role { margin: 0; font-size: 14.5px; color: var(--ink-soft); }
+  /* 소개글. 매니저에서 적은 줄바꿈을 그대로 살린다. */
+  .profile .intro { margin: 18px 0 0; font-size: 15px; color: var(--ink); white-space: pre-line; word-break: keep-all; }
   .profile dl {
     margin: 22px 0 0; padding-top: 18px; border-top: 1px solid var(--rule);
-    display: grid; grid-template-columns: 44px 1fr; gap: 10px 14px; font-size: 14.5px;
+    /* 항목 이름은 매니저에서 고치므로 길이가 정해져 있지 않다. 이름만큼 넓히되 9em 을 넘으면 줄을 바꾼다. */
+    display: grid; grid-template-columns: fit-content(9em) 1fr; gap: 10px 14px; font-size: 14.5px;
   }
   .profile dt { color: var(--muted); }
   .profile dd { margin: 0; color: var(--ink); word-break: keep-all; }
@@ -571,7 +576,7 @@
         </svg>
         Solution Center 내려받기
       </a>
-      <span class="dl-note">v2.1.5 · 200MB · Windows 10 / 11</span>
+      <span class="dl-note">v2.1.6 · 200MB · Windows 10 / 11</span>
     </div>
     <p class="dl-sub">
       설치 후 회원가입 및 승인이 완료되면 아홉 솔루션을 모두 사용하실 수 있습니다.
@@ -872,7 +877,7 @@
           </svg>
           Solution Center 내려받기
         </a>
-        <span class="dl-note">v2.1.5 · 200MB · Windows 10 / 11</span>
+        <span class="dl-note">v2.1.6 · 200MB · Windows 10 / 11</span>
       </div>
 
       <div class="callout" style="margin-top:26px">
@@ -1008,6 +1013,12 @@
             <p>급하지 않은 이야기나 파일을 함께 보내실 때 쓰시면 됩니다.</p>
             <a class="go" href="mailto:72second@naver.com" data-dl="ask-mail">황민수 · 72second@naver.com</a>
           </div>
+
+          <div class="ask-way">
+            <h4>만든 사람</h4>
+            <p>HMS Solution 을 기획하고 만들었습니다. 보내 주신 문의는 직접 읽고 답해 드립니다.</p>
+            <button type="button" class="go" data-open-profile aria-haspopup="dialog">만든 사람 소개</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1028,7 +1039,11 @@
   </div>
 </footer>
 
-<!-- 만든 사람 소개. 아래쪽 이름을 누르면 열린다. 내용은 민수님이 정해 주신 그대로다(2026-11-03). -->
+<!--
+  만든 사람 소개. 아래쪽 이름 · 문의 칸의 [만든 사람 소개] 를 누르면 열린다.
+  여기 적힌 것은 처음 내용이다. 창을 열 때 서버의 소개(매니저의 [만든 사람 소개 고치기] 가 고친 것)를
+  받아 바꿔 채운다 - 못 받으면 이대로 보인다.
+-->
 <dialog class="profile" id="profile" aria-labelledby="profile-name">
   <div class="profile-in">
     <button type="button" class="x" aria-label="닫기">&times;</button>
@@ -1040,6 +1055,7 @@
         <p class="role">HMS Solution 개발 · 총괄 관리</p>
       </div>
     </div>
+    <p class="intro" hidden></p>
     <dl>
       <dt>학력</dt>
       <dd><span>홍익대학교 도시공학과 졸업(학사)</span><span>홍익대학교 대학원 도시계획과 졸업(석사)</span></dd>
@@ -1066,18 +1082,95 @@
 
      단, 누르기 시작한 자리도 뒷면이어야 한다. 메일 주소를 긁어 복사하다 손이 창 밖에서
      떨어지면 브라우저는 그것도 '창 자체를 누른 것' 으로 알려 와, 창이 닫히고 고른 글자도
-     사라졌다(2026-11-03 검토에서 재현). */
+     사라졌다(2026-11-03 검토에서 재현).
+
+     내용은 처음 열 때 한 번 서버에서 받는다. 페이지를 열 때마다 받지 않는다 - 소개를 여는
+     사람은 드물고, 사진까지 실려 있어 매번 받으면 서버 전송량만 는다.
+     받은 글은 글자로만 넣는다(innerHTML 을 쓰지 않는다). 관리자 계정이 털려도 이 페이지에
+     스크립트를 심을 수 없게 하려는 것이다. 사진도 data:image 꼴만 받는다. */
   (function () {
     var box = document.getElementById("profile");
-    var who = document.querySelector("footer .who");
-    if (!box || !who) return;
+    var triggers = document.querySelectorAll("footer .who, [data-open-profile]");
+    if (!box || !triggers.length) return;
+    var SOURCE = "https://novxbimaerfjszsxejlt.supabase.co/functions/v1/hms-catalog/api/content?key=creator_profile";
+    var asked = false;
+
+    /* 받아들이는 한도. 매니저 쪽 CreatorProfile.MaxItems 들과 같다. */
+    var MAX_ITEMS = 20, MAX_LINES = 30, MAX_LINE = 300, MAX_INTRO = 1000;
+    function clean(v, max) { var t = typeof v === "string" ? v.trim() : ""; return t.slice(0, max || MAX_LINE); }
+    function looksLikeMail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+    /* 서버의 소개로 창을 채운다. 이름이 없거나, 소개글도 항목도 없으면 손대지 않는다. */
+    function fill(p) {
+      var name = clean(p && p.name);
+      var intro = clean(p && typeof p.intro === "string" ? p.intro.replace(/\r\n?/g, "\n") : "", MAX_INTRO);
+      var items = (p && Array.isArray(p.items) ? p.items : []).map(function (x) {
+        var lines = (x && Array.isArray(x.lines) ? x.lines : [])
+          .map(function (l) { return clean(l); }).filter(Boolean).slice(0, MAX_LINES);
+        return { label: clean(x && x.label), lines: lines };
+      }).filter(function (x) { return x.label && x.lines.length; }).slice(0, MAX_ITEMS);
+      if (!name || (!items.length && !intro)) return;
+
+      var introNode = box.querySelector(".intro");
+      introNode.textContent = intro;
+      introNode.hidden = !intro;
+
+      box.querySelector("#profile-name").textContent = name;
+      var role = box.querySelector(".role");
+      role.textContent = clean(p.role);
+      role.hidden = !role.textContent;
+      var img = box.querySelector(".profile-top img");
+      img.alt = name + " 사진";
+      /* 사진은 글 한 줄 한도(300자)로 자르면 안 된다. 사진 한도(CreatorProfile.MaxPhotoChars)를 넘으면 받지 않는다. */
+      var photo = typeof p.photo === "string" ? p.photo.trim() : "";
+      if (photo.length <= 400000 && /^data:image\/(jpeg|png);base64,[A-Za-z0-9+\/=]+$/.test(photo)) img.src = photo;
+
+      var dl = box.querySelector("dl");
+      while (dl.firstChild) dl.removeChild(dl.firstChild);
+      function row(label, node) {
+        var dt = document.createElement("dt"); dt.textContent = label;
+        var dd = document.createElement("dd"); dd.appendChild(node);
+        dl.appendChild(dt); dl.appendChild(dd);
+      }
+      items.forEach(function (x) {
+        var frag = document.createDocumentFragment();
+        x.lines.forEach(function (line) {
+          var s = document.createElement("span"); s.textContent = line; frag.appendChild(s);
+        });
+        row(x.label, frag);
+      });
+      var mail = clean(p.email);
+      var mailButton = box.querySelector(".profile-acts a[href^='mailto:']");
+      if (looksLikeMail(mail)) {
+        var a = document.createElement("a"); a.href = "mailto:" + mail; a.textContent = mail;
+        row("문의", a);
+        mailButton.href = "mailto:" + mail;
+        mailButton.style.display = "";
+      } else {
+        /* 메일을 비워 저장했으면 옛 주소로 가는 단추를 남기지 않는다. */
+        mailButton.style.display = "none";
+      }
+    }
+
+    function load() {
+      if (asked || !window.fetch) return;
+      asked = true;
+      /* 받지 못하면(망 · 서버 오류) 다음에 열 때 다시 받는다. 받았으면 다시 묻지 않는다. */
+      fetch(SOURCE).then(function (r) { if (!r.ok) { asked = false; return null; } return r.json(); }).then(function (rec) {
+        /* 이 열쇠를 모르는 옛 서버는 '공지사항' 을 대신 돌려준다. 그것을 소개로 읽지 않는다. */
+        if (!rec || rec.contentKey !== "creator_profile" || !rec.body) return;
+        fill(JSON.parse(rec.body));
+      }).catch(function () { asked = false; /* 못 받으면 처음 내용 그대로 */ });
+    }
+
     function open() {
+      load();
       if (typeof box.showModal === "function") box.showModal(); else box.setAttribute("open", "");
     }
     function close() {
       if (typeof box.close === "function") box.close(); else box.removeAttribute("open");
     }
-    who.addEventListener("click", open);
+    Array.prototype.forEach.call(triggers, function (t) { t.addEventListener("click", open); });
     box.querySelector(".x").addEventListener("click", close);
     var pressedOutside = false;
     box.addEventListener("pointerdown", function (e) { pressedOutside = e.target === box; });
