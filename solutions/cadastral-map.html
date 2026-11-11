@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>지적도·토지현황도·토지조서 만들기 — 연속지적도 DXF 변환 | HMS Solution</title>
-<meta name="description" content="지적 SHP 나 구역계를 넣으면 지번이 필지에 맞춰 놓인 CAD 지적도와 색을 입힌 토지현황도, 편입토지조서 엑셀을 만듭니다. 구역계만 있으면 연속지적도를 브이월드에서 받아 씁니다.">
+<meta name="description" content="연속지적도 SHP 나 구역계를 넣으면 지번이 필지에 맞춰 놓인 캐드 지적도(DXF)와 지목별로 칠한 토지현황도, 편입토지조서 엑셀을 만듭니다. 구역계만 있으면 필지를 브이월드에서 받아 씁니다.">
 <link rel="canonical" href="https://hms-eng-solution.vercel.app/solutions/cadastral-map.html">
 <link rel="icon" type="image/png" href="../favicon.png">
 
@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="HMS Solution">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:title" content="지적도·토지현황도·토지조서 만들기 — 연속지적도 DXF 변환">
-<meta property="og:description" content="지적 SHP 나 구역계를 넣으면 지번이 필지에 맞춰 놓인 CAD 지적도와 색을 입힌 토지현황도, 편입토지조서 엑셀을 만듭니다. 구역계만 있으면 연속지적도를 브이월드에서 받아 씁니다.">
+<meta property="og:description" content="연속지적도 SHP 나 구역계를 넣으면 지번이 필지에 맞춰 놓인 캐드 지적도(DXF)와 지목별로 칠한 토지현황도, 편입토지조서 엑셀을 만듭니다. 구역계만 있으면 필지를 브이월드에서 받아 씁니다.">
 <meta property="og:url" content="https://hms-eng-solution.vercel.app/solutions/cadastral-map.html">
 <meta property="og:image" content="https://hms-eng-solution.vercel.app/og.png">
 <meta property="og:image:alt" content="HMS Solution">
@@ -35,7 +35,7 @@
       "@id": "https://hms-eng-solution.vercel.app/solutions/cadastral-map.html#software",
       "name": "지적도·토지현황도·토지조서 만들기",
       "alternateName": "HMS Cadastral and Land Status Map Builder",
-      "description": "지적 SHP 나 구역계를 넣으면 지번이 필지에 맞춰 놓인 CAD 지적도와 색을 입힌 토지현황도, 편입토지조서 엑셀을 만듭니다. 구역계만 있으면 연속지적도를 브이월드에서 받아 씁니다.",
+      "description": "연속지적도 SHP 나 구역계를 넣으면 지번이 필지에 맞춰 놓인 캐드 지적도(DXF)와 지목별로 칠한 토지현황도, 편입토지조서 엑셀을 만듭니다. 구역계만 있으면 필지를 브이월드에서 받아 씁니다.",
       "url": "https://hms-eng-solution.vercel.app/solutions/cadastral-map.html",
       "applicationCategory": "DesignApplication",
       "operatingSystem": "Windows 10, Windows 11",
@@ -59,8 +59,9 @@
     {
       "@type": "FAQPage",
       "mainEntity": [
-        { "@type": "Question", "name": "연속지적도 SHP 를 CAD 지적도 DXF 로 바꿀 수 있나요?", "acceptedAnswer": { "@type": "Answer", "text": "네. 지적 SHP 나 ZIP 을 넣으시면 필지 경계와 지번이 레이어로 나뉜 DXF 가 나옵니다. 기본인 폴리선 방식은 캐드를 띄우지 않고 바로 만들어 100필지에 약 1초, 10,000필지에 약 2분이 걸립니다." } },
-        { "@type": "Question", "name": "필지 하나를 객체 하나로 만들 수 있나요?", "acceptedAnswer": { "@type": "Answer", "text": "만드는 방식에서 MPOLYGON 방식을 고르시면 필지 하나가 객체 하나로 만들어집니다. 이 방식은 AutoCAD Map 3D 가 있어야 하며 100필지에 약 30초가 걸립니다. 도면은 두 방식 모두 DXF 로 저장합니다." } },
+        { "@type": "Question", "name": "연속지적도 SHP 를 CAD 지적도 DXF 로 변환할 수 있나요?", "acceptedAnswer": { "@type": "Answer", "text": "네. 지적 SHP 나 ZIP 을 넣으시면 필지 경계와 지번이 레이어로 나뉜 DXF 가 나옵니다. 기본인 폴리선 방식은 캐드를 띄우지 않고 바로 만들어 100필지에 약 1초, 10,000필지에 약 2분이 걸립니다." } },
+        { "@type": "Question", "name": "필지 하나를 객체 하나로 만들 수 있나요?", "acceptedAnswer": { "@type": "Answer", "text": "만드는 방식에서 MPOLYGON 방식을 고르시면 필지 하나가 객체 하나로 만들어집니다. 이 방식은 AutoCAD Map 3D 가 있어야 하며 100필지에 약 30초가 걸립니다. 도면은 두 방식 모두 DXF 로 나오며, DWG 가 필요하시면 AutoCAD 에서 열어 다른 이름으로 저장하시면 됩니다." } },
+        { "@type": "Question", "name": "토지이용현황도를 만들 때도 쓸 수 있나요?", "acceptedAnswer": { "@type": "Answer", "text": "네. 토지현황도의 구분 기준을 지목별로 고르시면 갈래마다 색을 달리 칠하고 범례까지 그린 도면이 나옵니다. 편입토지조서를 먼저 만드시면 이용상황 칸이 든 필지 SHP 도 생기므로, 그 파일을 붙여 이 칸으로 나누실 수도 있습니다." } },
         { "@type": "Question", "name": "편입토지조서에 소유자 이름도 들어가나요?", "acceptedAnswer": { "@type": "Answer", "text": "소유자 성명은 공개 자료에 없어 소유구분까지만 채웁니다. 소유자처럼 도형에 없는 값은 가지고 계신 대장 엑셀을 붙여 색을 나누는 기준으로 쓰실 수 있습니다." } },
         { "@type": "Question", "name": "브이월드에서 받은 필지로 만든 지적도는 얼마나 정확한가요?", "acceptedAnswer": { "@type": "Answer", "text": "연속지적도는 도해 자료라 측량으로 정한 실제 경계와 다를 수 있고, 면적도 참고값입니다. 지방자치단체나 한국국토정보공사(LX)에서 받으신 지적 파일이 있으시면 그것을 넣으시는 편이 가장 정확합니다." } }
       ]
@@ -104,7 +105,7 @@
     <div class="hero-text">
       <div class="tag">S-02 · HMS Cadastral and Land Status Map Builder</div>
       <h1><span style="white-space: nowrap">지적도·토지현황도·</span><wbr>토지조서 만들기</h1>
-      <p class="lead">필지 경계와 지번을 레이어로 나눠 그린 지적도, 지목 · 소유별로 칠한 토지현황도, 편입면적까지 적은 토지조서를 한 창에서 만듭니다.</p>
+      <p class="lead">HMS 지적도는 필지 경계와 지번을 레이어로 나눠 그린 캐드 도면, 지목 · 소유별로 칠한 토지현황도, 편입면적까지 적은 토지조서를 한 창에서 만듭니다.</p>
       <div class="dl-line">
         <a class="dl" href="https://github.com/72second72-bot/hms-solution/releases/latest/download/HMS-Solution-Center-Setup.exe" data-dl="center-setup">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
@@ -146,14 +147,14 @@
       <div class="uses">
         <article class="use">
           <h3>지적 자료를 캐드 도면으로 옮길 때</h3>
-          <p>지번 글자는 필지의 모양과 기울기를 재어 그 안에 들어가는 크기로, 필지가 누운 방향에 맞춰 놓입니다. 큰 필지는 크게, 작은 필지는 작게 들어가 도면만 보고도 크기를 가늠할 수 있습니다.</p>
+          <p>지번은 리습 없이 자동으로 입력됩니다. 필지의 모양과 기울기를 재어 그 안에 들어가는 크기로, 필지가 누운 방향에 맞춰 놓이므로 도면만 보고도 땅의 넓고 좁음을 가늠할 수 있습니다.</p>
         </article>
         <article class="use">
           <h3>구역계만 있고 지적 파일이 없을 때</h3>
           <p>구역계를 넣고 [브이월드에서 지적 공간정보 가져오기]를 누르시면 구역에 걸치는 연속지적도를 받아 입력 파일로 넣습니다. 캐드에서 선과 호를 이어 그린 구역계도 면으로 이어 읽습니다.</p>
         </article>
         <article class="use">
-          <h3>편입토지조서 엑셀을 만들 때</h3>
+          <h3>편입토지조서(용지조서)를 작성할 때</h3>
           <p>필지마다 PNU 로 지목 · 대장면적 · 소유구분 · 개별공시지가 · 용도지역 · 이용상황을 받아 조서 양식의 엑셀로 정리합니다. 면적은 대장면적 · 구적면적 · 편입면적 · 보정면적 넷을 적습니다.</p>
         </article>
         <article class="use">
@@ -213,6 +214,7 @@
     <div class="wrap">
       <div class="head">
         <h2>필요한 것</h2>
+        <p lang="en">HMS Cadastral and Land Status Map Builder converts Korean cadastral maps from SHP to DXF, placing each lot number inside its parcel, and can fetch the continuous cadastral map from VWorld when you only have a project boundary. It also draws land status maps colored by land category and builds a land acquisition schedule in Excel. It runs on Windows, and its screens are in Korean.</p>
       </div>
       <dl class="needs">
         <dt>운영체제</dt>
@@ -260,12 +262,16 @@
       </div>
       <div class="faq">
         <div class="qa">
-          <h3>연속지적도 SHP 를 CAD 지적도 DXF 로 바꿀 수 있나요?</h3>
+          <h3>연속지적도 SHP 를 CAD 지적도 DXF 로 변환할 수 있나요?</h3>
           <p>네. 지적 SHP 나 ZIP 을 넣으시면 필지 경계와 지번이 레이어로 나뉜 DXF 가 나옵니다. 기본인 폴리선 방식은 캐드를 띄우지 않고 바로 만들어 100필지에 약 1초, 10,000필지에 약 2분이 걸립니다.</p>
         </div>
         <div class="qa">
           <h3>필지 하나를 객체 하나로 만들 수 있나요?</h3>
-          <p>만드는 방식에서 MPOLYGON 방식을 고르시면 필지 하나가 객체 하나로 만들어집니다. 이 방식은 AutoCAD Map 3D 가 있어야 하며 100필지에 약 30초가 걸립니다. 도면은 두 방식 모두 DXF 로 저장합니다.</p>
+          <p>만드는 방식에서 MPOLYGON 방식을 고르시면 필지 하나가 객체 하나로 만들어집니다. 이 방식은 AutoCAD Map 3D 가 있어야 하며 100필지에 약 30초가 걸립니다. 도면은 두 방식 모두 DXF 로 나오며, DWG 가 필요하시면 AutoCAD 에서 열어 다른 이름으로 저장하시면 됩니다.</p>
+        </div>
+        <div class="qa">
+          <h3>토지이용현황도를 만들 때도 쓸 수 있나요?</h3>
+          <p>네. 토지현황도의 구분 기준을 지목별로 고르시면 갈래마다 색을 달리 칠하고 범례까지 그린 도면이 나옵니다. 편입토지조서를 먼저 만드시면 이용상황 칸이 든 필지 SHP 도 생기므로, 그 파일을 붙여 이 칸으로 나누실 수도 있습니다.</p>
         </div>
         <div class="qa">
           <h3>편입토지조서에 소유자 이름도 들어가나요?</h3>

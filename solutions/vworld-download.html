@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>브이월드 공간정보 내려받기 — 연속주제도 SHP 다운로드 | HMS Solution</title>
-<meta name="description" content="브이월드의 용도지역 · 용도지구 같은 연속주제도와 연속지적도 · 토지특성정보 · 행정구역 경계를 골라 SHP 파일로 한 번에 내려받습니다. 받을 범위는 행정구역이나 대상지 구역계로 정합니다.">
+<title>브이월드 공간정보 내려받기 — 용도지역 SHP 일괄 다운로드 | HMS Solution</title>
+<meta name="description" content="브이월드에서 용도지역 같은 연속주제도와 연속지적도, 시군구 경계를 골라 SHP 파일로 일괄 다운로드합니다. 받을 범위는 행정구역이나 대상지 구역계로 정하고, 고르신 자료는 한 폴더에 모아 저장합니다.">
 <link rel="canonical" href="https://hms-eng-solution.vercel.app/solutions/vworld-download.html">
 <link rel="icon" type="image/png" href="../favicon.png">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="HMS Solution">
 <meta property="og:locale" content="ko_KR">
-<meta property="og:title" content="브이월드 공간정보 내려받기 — 연속주제도 SHP 다운로드">
-<meta property="og:description" content="브이월드의 용도지역 · 용도지구 같은 연속주제도와 연속지적도 · 토지특성정보 · 행정구역 경계를 골라 SHP 파일로 한 번에 내려받습니다. 받을 범위는 행정구역이나 대상지 구역계로 정합니다.">
+<meta property="og:title" content="브이월드 공간정보 내려받기 — 용도지역 SHP 일괄 다운로드">
+<meta property="og:description" content="브이월드에서 용도지역 같은 연속주제도와 연속지적도, 시군구 경계를 골라 SHP 파일로 일괄 다운로드합니다. 받을 범위는 행정구역이나 대상지 구역계로 정하고, 고르신 자료는 한 폴더에 모아 저장합니다.">
 <meta property="og:url" content="https://hms-eng-solution.vercel.app/solutions/vworld-download.html">
 <meta property="og:image" content="https://hms-eng-solution.vercel.app/og.png">
 <meta property="og:image:alt" content="HMS Solution">
@@ -35,7 +35,7 @@
       "@id": "https://hms-eng-solution.vercel.app/solutions/vworld-download.html#software",
       "name": "브이월드 공간정보 내려받기",
       "alternateName": "HMS V-World Downloader",
-      "description": "브이월드의 용도지역 · 용도지구 같은 연속주제도와 연속지적도 · 토지특성정보 · 행정구역 경계를 골라 SHP 파일로 한 번에 내려받습니다. 받을 범위는 행정구역이나 대상지 구역계로 정합니다.",
+      "description": "브이월드에서 용도지역 같은 연속주제도와 연속지적도, 시군구 경계를 골라 SHP 파일로 일괄 다운로드합니다. 받을 범위는 행정구역이나 대상지 구역계로 정하고, 고르신 자료는 한 폴더에 모아 저장합니다.",
       "url": "https://hms-eng-solution.vercel.app/solutions/vworld-download.html",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Windows 10, Windows 11",
@@ -59,7 +59,7 @@
     {
       "@type": "FAQPage",
       "mainEntity": [
-        { "@type": "Question", "name": "브이월드 연속주제도를 다운로드하려면 한 종류씩 신청해야 하나요?", "acceptedAnswer": { "@type": "Answer", "text": "아닙니다. 용도지역 · 용도지구 · 도시계획시설 같은 연속주제도를 여러 개 골라 [받기]를 한 번 누르시면, 고르신 것을 한 폴더에 모아 저장합니다." } },
+        { "@type": "Question", "name": "브이월드 연속주제도를 한 종류씩 신청하지 않고 일괄 다운로드할 수 있나요?", "acceptedAnswer": { "@type": "Answer", "text": "네. 받으실 주제도를 목록에서 여러 개 골라 [받기]를 한 번 누르시면, 고르신 것을 한 폴더에 모아 저장합니다." } },
         { "@type": "Question", "name": "받은 용도지역 SHP 에 코드명도 들어 있나요?", "acceptedAnswer": { "@type": "Answer", "text": "표준분류코드가 있는 자료에는 코드와 코드명이 채워져 있어, 코드를 따로 입력하지 않으셔도 됩니다. 칸 이름과 뜻은 함께 저장되는 설명 엑셀에서 보실 수 있습니다." } },
         { "@type": "Question", "name": "좌표계는 무엇으로 받을 수 있나요?", "acceptedAnswer": { "@type": "Answer", "text": "EPSG:5186(GRS80 중부원점)과 EPSG:5174(베셀 중부원점) 가운데 고르시거나 둘 다 받으실 수 있습니다. EPSG:5174 는 국토정보플랫폼 배포본과 같은 방식으로 옮겨 담으므로, 그 파일과 위치가 맞습니다." } },
         { "@type": "Question", "name": "받는 데 시간이 얼마나 걸리나요?", "acceptedAnswer": { "@type": "Answer", "text": "시·군 하나에 20~30초쯤입니다. 연속지적도 · 토지특성정보처럼 필지마다 한 줄인 자료는 15분 넘게 걸리기도 하며, 도중에 끊기면 [이어서 받기]로 남은 것만 받으실 수 있습니다." } },
@@ -105,7 +105,7 @@
     <div class="hero-text">
       <div class="tag">S-08 · HMS V-World Downloader</div>
       <h1>브이월드 공간정보 내려받기</h1>
-      <p class="lead">브이월드에서 한 종류씩 받던 공간정보를 여러 개 골라, 시·군·구 단위나 대상지 범위에 맞춰 한 폴더에 한꺼번에 받습니다.</p>
+      <p class="lead">HMS 브이월드는 한 종류씩 신청해 받던 공간정보를 여러 개 골라, 시·군·구 단위나 대상지 범위에 맞춰 한 폴더에 한꺼번에 받습니다.</p>
       <div class="dl-line">
         <a class="dl" href="https://github.com/72second72-bot/hms-solution/releases/latest/download/HMS-Solution-Center-Setup.exe" data-dl="center-setup">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
@@ -154,7 +154,7 @@
           <p>구역계 SHP 나 도면에서 뽑은 DXF 를 넣으시면 그 범위에 걸치는 것만 받습니다. 경계에 걸친 것이 잘리지 않도록 주변 1km · 5km 까지 넓혀 받으실 수도 있습니다.</p>
         </article>
         <article class="use">
-          <h3>연속지적도와 토지특성정보가 필요할 때</h3>
+          <h3>연속지적도 SHP 와 토지특성정보가 필요할 때</h3>
           <p>필지마다 한 줄인 토지 자료도 같은 화면에서 받습니다. 양이 많아 오래 걸리는 자료를 고르시면 받기 전에 미리 알려 드립니다.</p>
         </article>
         <article class="use">
@@ -211,6 +211,7 @@
     <div class="wrap">
       <div class="head">
         <h2>필요한 것</h2>
+        <p lang="en">HMS V-World Downloader bulk-downloads zoning and other thematic maps from VWorld, Korea's national open spatial data platform, along with the continuous cadastral map and administrative boundaries, and saves them as shapefiles in one folder. You can limit the area to an administrative district or to the boundary of your project site, and receive the files in EPSG:5186, EPSG:5174 or both. It runs on Windows, and its screens are in Korean.</p>
       </div>
       <dl class="needs">
         <dt>운영체제</dt>
@@ -248,8 +249,8 @@
       </div>
       <div class="faq">
         <div class="qa">
-          <h3>브이월드 연속주제도를 다운로드하려면 한 종류씩 신청해야 하나요?</h3>
-          <p>아닙니다. 용도지역 · 용도지구 · 도시계획시설 같은 연속주제도를 여러 개 골라 [받기]를 한 번 누르시면, 고르신 것을 한 폴더에 모아 저장합니다.</p>
+          <h3>브이월드 연속주제도를 한 종류씩 신청하지 않고 일괄 다운로드할 수 있나요?</h3>
+          <p>네. 받으실 주제도를 목록에서 여러 개 골라 [받기]를 한 번 누르시면, 고르신 것을 한 폴더에 모아 저장합니다.</p>
         </div>
         <div class="qa">
           <h3>받은 용도지역 SHP 에 코드명도 들어 있나요?</h3>

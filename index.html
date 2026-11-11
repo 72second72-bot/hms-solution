@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HMS Solution(HMS 솔루션) — 캐드 좌표변환 · 도면 병합 · 수치지형도 · 연속주제도 업무 자동화</title>
-<meta name="description" content="엔지니어링 실무의 되풀이 작업을 자동화하는 HMS 솔루션입니다. AutoCAD 좌표변환, 수치지형도 CAD 도면 병합, 지적도 · 토지조서 만들기, 건축물대장 조서, 공시가격 조회, 연속주제도 내려받기와 코드 입력 등 아홉 솔루션을 Solution Center 에서 골라 설치합니다.">
+<title>HMS 솔루션 — 캐드 · 지적 · 토지 업무 자동화 프로그램 | HMS Solution</title>
+<meta name="description" content="HMS 솔루션은 캐드 · 지적 · 토지 실무의 되풀이 작업을 자동화하는 Windows 프로그램입니다. HMS Solution Center 하나로 도시계획과 토지 업무에 필요한 아홉 솔루션을 골라 설치합니다.">
 <!--
   검색 등록(2026-11-10). 이 페이지의 대표 주소는 Vercel 쪽 하나로 정한다. 같은 내용이
   GitHub Pages 주소에도 뜨지만, 아래 canonical 이 있어 검색엔진은 두 곳을 한 페이지로 본다.
@@ -18,8 +18,8 @@
 <!-- 카카오톡·메신저에 주소를 붙일 때 보이는 미리보기 -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="HMS Solution">
-<meta property="og:title" content="HMS Solution(HMS 솔루션) — 캐드 좌표변환 · 도면 병합 · 수치지형도 · 연속주제도 업무 자동화">
-<meta property="og:description" content="엔지니어링 실무의 되풀이 작업을 자동화하는 HMS 솔루션입니다. AutoCAD 좌표변환, 수치지형도 CAD 도면 병합, 지적도 · 토지조서 만들기, 건축물대장 조서, 공시가격 조회, 연속주제도 내려받기와 코드 입력 등 아홉 솔루션을 Solution Center 에서 골라 설치합니다.">
+<meta property="og:title" content="HMS 솔루션 — 캐드 · 지적 · 토지 업무 자동화 프로그램">
+<meta property="og:description" content="HMS 솔루션은 캐드 · 지적 · 토지 실무의 되풀이 작업을 자동화하는 Windows 프로그램입니다. HMS Solution Center 하나로 도시계획과 토지 업무에 필요한 아홉 솔루션을 골라 설치합니다.">
 <meta property="og:url" content="https://hms-eng-solution.vercel.app/">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:image" content="https://hms-eng-solution.vercel.app/og.png">
@@ -56,6 +56,7 @@
       "@type": "SoftwareApplication",
       "@id": "https://hms-eng-solution.vercel.app/#center",
       "name": "HMS Solution Center",
+      "alternateName": ["HMS 솔루션 센터"],
       "description": "솔루션을 하나씩 받지 않고 한자리에서 골라 쓰도록 만든 프로그램입니다. 설치와 갱신, 사용자 인증을 모두 여기서 합니다.",
       "url": "https://hms-eng-solution.vercel.app/",
       "downloadUrl": "https://github.com/72second72-bot/hms-solution/releases/latest/download/HMS-Solution-Center-Setup.exe",
@@ -345,6 +346,13 @@
   .sheet:hover { box-shadow: var(--shadow-lift); transform: translateY(-2px); border-color: var(--soft-border); }
   .sheet-no { font-size: 12.5px; font-weight: 700; color: var(--muted); letter-spacing: .05em; }
   .sheet h3 { margin: 8px 0 0; font-size: 18.5px; font-weight: 700; }
+  /* 카드 이름도 소개 페이지로 가는 링크다(오른쪽 위 '자세히 보기' 와 같은 주소).
+     검색엔진에 솔루션 이름이 링크 글로 전해진다. 제목 색은 그대로 두고 밑줄은 마우스를 올릴 때만 긋는다.
+     링크를 h3 바깥에 두는 까닭: scripts/update-home-versions.py 가 '<h3>이름</h3>' 그대로를 찾아 판을 고친다. */
+  .sheet-name { display: block; width: fit-content; margin-top: 8px; color: inherit; text-decoration: none; border-radius: 4px; }
+  .sheet-name h3 { margin: 0; }
+  .sheet-name:hover h3 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  .sheet-name:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
   .sheet .why { margin: 12px 0 0; color: var(--ink-soft); font-size: 15px; }
 
   .meta { margin-top: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -402,6 +410,8 @@
   }
   .callout b { color: var(--soft-text); }
   .callout p { margin: 0; font-size: 15px; color: var(--ink-soft); }
+  /* 영어로 찾아오신 분께 드리는 한 단락. 프로그램 화면이 한국어라는 것을 미리 알린다. */
+  .en-note { margin: 24px 0 0; max-width: 860px; font-size: 14.5px; line-height: 1.6; color: var(--ink-soft); letter-spacing: 0; }
 
   /* ── 안내서 ────────────────────────────────────────────── */
   .books { margin-top: 44px; display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
@@ -646,8 +656,8 @@
     <div class="tag">엔지니어링 실무를 위한 업무 자동화</div>
     <h1>손으로 하던 되풀이를<br><em>한 번 누르면</em> 끝나게</h1>
     <p class="lead">
-      지적도에 지번을 내리고, 도곽으로 나뉜 도면을 합치고, 건축물대장 수십 건을 조서 한 장으로 옮기는 일.<br>
-      사람이 해야 할 판단이 아니라 손이 하던 일들을 프로그램에 맡깁니다.
+      HMS 솔루션(HMS Solution)은 도시계획과 토지 실무에서 되풀이되는 캐드 도면 · 지적도 · 토지조서 작업을 자동으로 처리하는 Windows 프로그램입니다.<br>
+      도곽으로 나뉜 도면을 합치고 건축물대장 수십 건을 조서 한 장으로 옮기는 일처럼, 사람의 판단이 아니라 손이 하던 일을 대신합니다.
     </p>
     <div class="dl-line">
       <a class="dl" href="https://github.com/72second72-bot/hms-solution/releases/latest/download/HMS-Solution-Center-Setup.exe" data-dl="center-setup">
@@ -681,7 +691,7 @@
       <div class="sheets">
         <article class="sheet">
           <div class="sheet-no">S-01</div>
-          <h3>AutoCAD 좌표변환</h3>
+          <a class="sheet-name" href="solutions/cad-coord-trans.html"><h3>AutoCAD 좌표변환</h3></a>
           <p class="why">AutoCAD 도면에 그려진 객체의 좌표를 다른 좌표계로 바꿉니다. 해치와 그리기 순서를 유지하며, 잠긴 도면층의 객체도 함께 바꿉니다.</p>
           <div class="meta">
             <span class="ver">v6.2</span>
@@ -696,7 +706,7 @@
         </article>
         <article class="sheet">
           <div class="sheet-no">S-02</div>
-          <h3>지적도·토지현황도·토지조서 만들기</h3>
+          <a class="sheet-name" href="solutions/cadastral-map.html"><h3>지적도·토지현황도·토지조서 만들기</h3></a>
           <p class="why">지적 파일이나 구역계로 지적도 · 토지현황도 CAD 도면과 편입토지조서 엑셀을 만듭니다. 구역계만 넣으시면 필요한 연속지적도를 브이월드에서 받아 사용합니다.</p>
           <div class="meta">
             <span class="ver">v4.4</span>
@@ -711,7 +721,7 @@
         </article>
         <article class="sheet">
           <div class="sheet-no">S-03</div>
-          <h3>CAD 도면 병합</h3>
+          <a class="sheet-name" href="solutions/dxf-merge.html"><h3>CAD 도면 병합</h3></a>
           <p class="why">도곽별로 나뉜 수치지형도 등 여러 CAD 도면(DXF · DWG)을 DXF 파일 하나로 합칩니다. 도곽 경계에서 겹친 객체는 하나만 남깁니다.</p>
           <div class="meta">
             <span class="ver">v2.9</span>
@@ -726,7 +736,7 @@
         </article>
         <article class="sheet">
           <div class="sheet-no">S-04</div>
-          <h3>건축물대장 조서 작성</h3>
+          <a class="sheet-name" href="solutions/building-register.html"><h3>건축물대장 조서 작성</h3></a>
           <p class="why">여러 건의 건축물대장 PDF를 읽어 엑셀 파일 하나로 정리합니다. 대장 종류별로 시트가 나뉩니다.</p>
           <div class="meta">
             <span class="ver">v4.11</span>
@@ -741,7 +751,7 @@
         </article>
         <article class="sheet">
           <div class="sheet-no">S-05</div>
-          <h3>부동산 공시가격 조회 · 수집</h3>
+          <a class="sheet-name" href="solutions/realty-price.html"><h3>부동산 공시가격 조회 · 수집</h3></a>
           <p class="why">개별공시지가와 공동주택가격을 지번 · 단지별로 찾아 엑셀로 정리합니다. 최근 1 · 3 · 5 · 10년 가운데 고르신 기간의 가격이 연도별로 담깁니다.</p>
           <div class="meta">
             <span class="ver">v4.17</span>
@@ -756,7 +766,7 @@
         </article>
         <article class="sheet">
           <div class="sheet-no">S-06</div>
-          <h3>주제도 SHP 속성 코드 입력</h3>
+          <a class="sheet-name" href="solutions/thematic-attribute.html"><h3>주제도 SHP 속성 코드 입력</h3></a>
           <p class="why">연속주제도 SHP · DBF · ZIP 파일에 표준분류코드와 코드명을 채워 SHP 세트로 저장합니다.</p>
           <div class="meta">
             <span class="ver">v6.9</span>
@@ -771,7 +781,7 @@
         </article>
         <article class="sheet">
           <div class="sheet-no">S-07</div>
-          <h3>PPT 이미지 맞춰 넣기</h3>
+          <a class="sheet-name" href="solutions/ppt-image.html"><h3>PPT 이미지 맞춰 넣기</h3></a>
           <p class="why">여러 그림을 기준 그림이나 도형과 같은 자리 · 같은 크기로 슬라이드에 넣습니다. 열어 두신 파워포인트 문서에 바로 넣습니다.</p>
           <div class="meta">
             <span class="ver">v1.12</span>
@@ -786,7 +796,7 @@
         </article>
         <article class="sheet">
           <div class="sheet-no">S-08</div>
-          <h3>브이월드 공간정보 내려받기</h3>
+          <a class="sheet-name" href="solutions/vworld-download.html"><h3>브이월드 공간정보 내려받기</h3></a>
           <p class="why">지역과 공간정보를 골라 SHP 파일로 내려받습니다. 용도지역 · 지구 · 구역, 도시계획시설 등의 연속주제도와 연속지적도 · 토지특성 · 토지소유, 행정구역 경계를 행정구역 단위나 대상지에 맞춰 한 번에 받습니다.</p>
           <div class="meta">
             <span class="ver">v3.3</span>
@@ -802,7 +812,7 @@
 
         <article class="sheet">
           <div class="sheet-no">S-09</div>
-          <h3>지오코딩 (PNU·주소·좌표 변환)</h3>
+          <a class="sheet-name" href="solutions/geocoder.html"><h3>지오코딩 (PNU·주소·좌표 변환)</h3></a>
           <p class="why">엑셀이나 SHP에 담긴 주소 · PNU · 좌표 가운데 하나로 나머지 값을 채우고, 필지를 SHP와 CAD 도면으로도 저장합니다.</p>
           <div class="meta">
             <span class="ver">v1.8</span>
@@ -819,8 +829,8 @@
         <article class="sheet" style="border-style: dashed;">
           <div class="sheet-no" style="color: var(--muted);">준비 중</div>
           <h3 style="color: var(--ink-soft);">다음에 나올 것들</h3>
-          <p class="why">
-            과업 공정표 작성 및 수정 · CAD 도시 · 군관리계획도 제작 · 기술인 등급별 · 공종별 투입인력 계산
+          <p class="why" style="word-break: keep-all;">
+            지금 시험하고 있는 솔루션입니다. <span style="white-space: nowrap;">수치지형도·정사영상 받기</span> · <span style="white-space: nowrap;">도시·군관리계획도 만들기</span> · <span style="white-space: nowrap;">대지분석 다이어그램</span>
           </p>
         </article>
       </div>
@@ -932,7 +942,7 @@
       <div class="head">
         <div class="tag">How to get</div>
         <h2>받는 법</h2>
-        <p>솔루션을 하나씩 받지 않습니다. Solution Center 를 한 번 설치하면 그 안에서 골라 씁니다.</p>
+        <p>HMS Solution Center(HMS 솔루션 센터)를 한 번 설치하시면 솔루션을 하나씩 받지 않고 그 안에서 골라 쓰실 수 있습니다.</p>
       </div>
 
       <div class="steps">
@@ -978,6 +988,8 @@
           Solution Center 가 스스로 작은 업데이트(3MB 남짓)를 받아 갱신합니다.
         </p>
       </div>
+
+      <p class="en-note" lang="en">HMS Solution Center is a desktop program that brings together tools for automating repetitive CAD, cadastral and land-related tasks in urban planning work in Korea. After you sign up and your account is approved, you can install any of the nine solutions from it: HMS CAD Coordinate Transformer, HMS Cadastral and Land Status Map Builder, HMS CAD Drawing Merger, HMS Building Register Organizer, HMS Realty Price Collector, HMS Thematic Map Attribute Mapper, HMS PPT Image Placer, HMS V-World Downloader and HMS Geocoder. It runs on Windows 10 and 11, and its screens are in Korean.</p>
     </div>
   </section>
 
@@ -1024,10 +1036,18 @@
       <div class="head">
         <div class="tag">Changelog</div>
         <h2>새 소식</h2>
-        <p>솔루션이 새로 나오거나 크게 달라진 날입니다. 작은 개선은 프로그램 안에서 자동으로 갱신됩니다.</p>
+        <p>솔루션이 새로 나오거나 크게 달라진 날입니다. 홈페이지 소식도 함께 적습니다. 작은 개선은 프로그램 안에서 자동으로 갱신됩니다.</p>
       </div>
 
       <div class="news">
+        <div class="item">
+          <time datetime="2026-11-11">2026-11-11</time>
+          <div>
+            <h4>솔루션별 소개 페이지 공개<span class="new">구글 · 네이버 검색 등록</span></h4>
+            <p>아홉 솔루션마다 무엇을 넣으면 무엇이 나오는지, 쓰는 순서와 자주 묻는 질문을 한 페이지에 담았습니다.
+               위 솔루션 카드에서 이름을 누르시면 열립니다. 구글과 네이버 검색에도 이 사이트를 등록했습니다.</p>
+          </div>
+        </div>
         <div class="item">
           <time datetime="2026-09-06">2026-09-06</time>
           <div>
