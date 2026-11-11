@@ -16,7 +16,7 @@
 |---|---|
 | 홈페이지 | `index.html` 한 장 |
 | 로고 · 아이콘 | `logo.png` · `favicon.png` |
-| 사용 안내서 | `guides/` 안에 PDF 10권 |
+| 사용 안내서 | `guides/` 안에 PDF 9권 |
 | 설치 파일 | [Releases](../../releases) 에 올려 둡니다 |
 
 ---
@@ -57,7 +57,7 @@ releases/latest/download/HMS-Solution-Center-Setup.exe
 | 파일 이름 | 무엇 |
 |---|---|
 | `hms-center-guide.pdf` | Solution Center 사용 안내서 |
-| `hms-solutions-guide.pdf` | 업무 효율화 솔루션 안내서 (7종 묶음) |
+| `hms-solutions-guide.pdf` | 업무 효율화 솔루션 안내서 (9종 묶음) |
 | `solution-cad-cadastral.pdf` | CAD 지적도 · 토지현황도 제작 |
 | `solution-dxf-merge.pdf` | CAD 도면 병합 |
 | `solution-coord-trans.pdf` | AutoCAD 좌표변환 |
