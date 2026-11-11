@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>부동산 공시가격 조회 · 수집 — 개별공시지가 엑셀 일괄 조회 | HMS Solution</title>
+<meta name="description" content="지번 목록이나 편입토지조서 엑셀을 넣으면 개별공시지가를 한꺼번에 조회해 연도별 칸으로 붙여 드립니다. 공동주택가격은 단지의 동 · 호 전체를 받아 정리하며, 기간은 최근 1 · 3 · 5 · 10년 가운데 고릅니다.">
+<link rel="canonical" href="https://hms-eng-solution.vercel.app/solutions/realty-price.html">
+<link rel="icon" type="image/png" href="../favicon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="HMS Solution">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="부동산 공시가격 조회 · 수집 — 개별공시지가 엑셀 일괄 조회">
+<meta property="og:description" content="지번 목록이나 편입토지조서 엑셀을 넣으면 개별공시지가를 한꺼번에 조회해 연도별 칸으로 붙여 드립니다. 공동주택가격은 단지의 동 · 호 전체를 받아 정리하며, 기간은 최근 1 · 3 · 5 · 10년 가운데 고릅니다.">
+<meta property="og:url" content="https://hms-eng-solution.vercel.app/solutions/realty-price.html">
+<meta property="og:image" content="https://hms-eng-solution.vercel.app/og.png">
+<meta property="og:image:alt" content="HMS Solution">
+<meta name="twitter:card" content="summary_large_image">
+
+<script>try{var t=localStorage.getItem("hms-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="solution.css">
+<script src="solution.js" defer></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://hms-eng-solution.vercel.app/solutions/realty-price.html#software",
+      "name": "부동산 공시가격 조회 · 수집",
+      "description": "지번 목록이나 편입토지조서 엑셀을 넣으면 개별공시지가를 한꺼번에 조회해 연도별 칸으로 붙여 드립니다. 공동주택가격은 단지의 동 · 호 전체를 받아 정리하며, 기간은 최근 1 · 3 · 5 · 10년 가운데 고릅니다.",
+      "url": "https://hms-eng-solution.vercel.app/solutions/realty-price.html",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Windows 10, Windows 11",
+      "inLanguage": "ko",
+      "screenshot": "https://hms-eng-solution.vercel.app/shots/realty_1.png",
+      "publisher": {
+        "@type": "Organization",
+        "name": "HMS Solution",
+        "url": "https://hms-eng-solution.vercel.app/",
+        "logo": "https://hms-eng-solution.vercel.app/logo.png"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://hms-eng-solution.vercel.app/" },
+        { "@type": "ListItem", "position": 2, "name": "솔루션", "item": "https://hms-eng-solution.vercel.app/#solutions" },
+        { "@type": "ListItem", "position": 3, "name": "부동산 공시가격 조회 · 수집", "item": "https://hms-eng-solution.vercel.app/solutions/realty-price.html" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "공시지가를 몇 년치까지 한 번에 받을 수 있나요?", "acceptedAnswer": { "@type": "Answer", "text": "최근 1 · 3 · 5 · 10년 가운데 고르실 수 있습니다. 개별공시지가는 2000년부터, 공동주택가격은 2006년(또는 준공한 해)부터 사이트에 있는 해만큼 받아 옵니다." } },
+        { "@type": "Question", "name": "조회되지 않은 지번은 어떻게 알 수 있나요?", "acceptedAnswer": { "@type": "Answer", "text": "결과 파일의 조회상태 칸에 OK 또는 실패 이유가 적히고, 조회가 끝나면 못 찾은 지번을 목록으로 알려 드립니다. 지번 표기가 다르거나 폐쇄된 필지일 수 있으니 그 줄만 골라 확인해 주시기 바랍니다." } },
+        { "@type": "Question", "name": "합계 줄이나 병합된 칸이 있는 조서도 넣을 수 있나요?", "acceptedAnswer": { "@type": "Answer", "text": "넣으실 수 있습니다. 합계 · 소계 줄과 ※ 로 시작하는 주석 줄은 조회하지 않고 대상 아님으로 표시하며, 소재지 칸을 세로로 병합했거나 상동으로 적은 줄은 바로 위 줄의 소재지로 읽습니다." } },
+        { "@type": "Question", "name": "Chrome 이 꼭 있어야 하나요?", "acceptedAnswer": { "@type": "Answer", "text": "있어야 합니다. 부동산 공시가격 알리미 사이트를 Chrome 으로 열어 값을 읽어 오기 때문입니다." } }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body id="top">
+<header>
+  <div class="bar">
+    <a class="brand" href="../" aria-label="HMS Solution 홈으로">
+      <img src="../logo.png" alt="" width="30" height="30">
+      <span class="brand-name">HMS <b>Solution</b></span>
+    </a>
+    <nav aria-label="홈페이지 메뉴">
+      <a href="../#solutions">솔루션</a>
+      <a href="../#get">받는 법</a>
+      <a href="../#guides">사용 안내서</a>
+      <a href="../#ask">문의</a>
+      <div class="theme-pick" role="group" aria-label="화면 밝기">
+        <button type="button" data-theme-set="light" aria-pressed="false">밝게</button>
+        <button type="button" data-theme-set="dark" aria-pressed="false">어둡게</button>
+        <button type="button" data-theme-set="system" aria-pressed="true">시스템</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <canvas id="plots" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <nav class="crumbs" aria-label="현재 위치">
+      <ol>
+        <li><a href="../">홈</a></li>
+        <li><a href="../#solutions">솔루션</a></li>
+        <li><span aria-current="page">부동산 공시가격 조회 · 수집</span></li>
+      </ol>
+    </nav>
+
+    <div class="hero-text">
+      <div class="tag">S-05</div>
+      <h1>부동산 공시가격 조회 · 수집</h1>
+      <p class="lead">공시가격을 필지마다 사이트에서 찾아 옮겨 적던 일을 대신합니다. 목록만 주시면 공시지가를 찾아, 쓰시던 조서 오른쪽에 연도별 가격을 붙여 드립니다.</p>
+      <div class="dl-line">
+        <a class="dl" href="https://github.com/72second72-bot/hms-solution/releases/latest/download/HMS-Solution-Center-Setup.exe" data-dl="center-setup">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M9 1.5v10M9 11.5 5 7.5M9 11.5l4-4M2 12.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5"
+                  stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Solution Center 내려받기
+        </a>
+        <a class="ghost" href="../guides/solution-realty-price.pdf" data-dl="guide-realty">사용 안내서 PDF</a>
+      </div>
+    </div>
+
+    <section class="io" aria-labelledby="io-title">
+      <div class="sheet-no">S-05</div>
+      <h2 id="io-title">무엇을 넣으면 무엇이 나오나</h2>
+      <div class="io-grid">
+        <div>
+          <div class="k">넣는 것</div>
+          <div class="v">소재지 · 지번 또는 엑셀</div>
+          <p class="n">지번 하나를 직접 적거나, 소재지와 지번이 든 엑셀 목록을 넣습니다. 어느 칸이 소재지인지는 알아서 찾습니다.</p>
+        </div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div>
+          <div class="k">나오는 것</div>
+          <div class="v">연도별 공시가격이 붙은 엑셀</div>
+          <p class="n">넣으신 칸은 그대로 두고, 오른쪽에 연도별 가격 칸과 조회상태 칸이 덧붙습니다.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<main>
+  <section id="uses">
+    <div class="wrap">
+      <div class="head">
+        <h2>이런 일에 씁니다</h2>
+      </div>
+      <div class="uses">
+        <article class="use">
+          <h3>편입토지조서에 공시지가 채우기</h3>
+          <p>수백 필지의 조서를 넣으면 필지마다 고르신 기간의 가격을 연도별로 채웁니다. 한 필지씩 조회하면 며칠이 걸리던 일입니다.</p>
+        </article>
+        <article class="use">
+          <h3>정리된 자료가 나오기 전의 조회</h3>
+          <p>공시가격이 공개되는 4월 직후부터 6~7월까지는 그해 것이 정리된 자료로 나오기 전이라 사이트에서 하나씩 조회해야 합니다. 그 기간에도 목록째로 모으실 수 있습니다.</p>
+        </article>
+        <article class="use">
+          <h3>단지 전체의 공동주택가격 조회</h3>
+          <p>단지 단위 자료는 구할 수 있어도 호별 가격은 따로 정리된 것을 구하기 어렵습니다. 소재지와 지번으로 단지를 정하면 단지 전체 동 · 호의 가격을 받아 한 파일에 담습니다.</p>
+        </article>
+        <article class="use">
+          <h3>연도별 공시지가 흐름 보기</h3>
+          <p>최근 1 · 3 · 5 · 10년 가운데 고르시면 그 기간의 가격이 한 줄에 나란히 놓입니다. 보상이나 감정평가 검토에서 값이 어떻게 움직였는지 한 장으로 보실 수 있습니다.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="head">
+        <h2>쓰는 순서</h2>
+      </div>
+      <ol class="steps">
+        <li class="step">
+          <span class="n">01</span>
+          <div>
+            <h3>조회 방법을 고릅니다</h3>
+            <p>개별공시지가 지번별 조회 · 개별공시지가 엑셀 조서 작성 · 공동주택가격 단지별 전체 조회 세 탭 가운데 하나를 고르십니다.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="n">02</span>
+          <div>
+            <h3>소재지와 지번을 넣거나 엑셀을 고릅니다</h3>
+            <p>시/도 · 시/군/구 · 읍/면/동을 고르고 본번 · 부번을 적거나, 소재지와 지번이 든 목록 파일을 고르십니다.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="n">03</span>
+          <div>
+            <h3>조회 옵션을 정합니다</h3>
+            <p>조회 기간을 고르고, 사이트가 붐빌 때는 조회 간격을 늘리시면 실패가 줄어듭니다. [브라우저 숨김 실행]을 켜면 창이 뜨지 않습니다.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="n">04</span>
+          <div>
+            <h3>조회를 시작합니다</h3>
+            <p>중간에 [일시중지] · [다시실행] · [중단]을 쓰실 수 있고, 멈추셔도 그때까지 모은 것은 저장됩니다.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="n">05</span>
+          <div>
+            <h3>결과를 확인합니다</h3>
+            <p>끝나면 몇 건을 찾았는지와 못 찾은 지번이 무엇인지 보여 드립니다.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="needs">
+    <div class="wrap">
+      <div class="head">
+        <h2>필요한 것</h2>
+      </div>
+      <dl class="needs">
+        <dt>운영체제</dt>
+        <dd>Windows 10 · Windows 11</dd>
+        <dt>함께 필요한 프로그램</dt>
+        <dd>Chrome (공시가격 사이트를 브라우저로 열어 읽습니다)</dd>
+        <dt>인터넷 연결</dt>
+        <dd>필요합니다</dd>
+        <dt>넣을 수 있는 파일</dt>
+        <dd>엑셀 (.xlsx · .xls)</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="screen">
+    <div class="wrap">
+      <div class="head">
+        <h2>실제 화면</h2>
+        <p>가상의 사업지(성수2지구 지구단위계획) 자료를 넣어 찍은 화면입니다.</p>
+      </div>
+      <div class="shots">
+        <figure class="shot">
+          <img src="../shots/realty_1.png" width="760" height="838" loading="lazy" decoding="async"
+               alt="개별공시지가 지번별 조회 탭. 시/도 · 시/군/구 · 읍/면/동과 본번 · 부번을 고르는 칸 아래에 한 필지의 최근 3년 공시지가가 연도별로 나와 있습니다.">
+          <figcaption>지번 하나의 최근 3년 개별공시지가를 바로 봅니다.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="../shots/realty_2.png" width="760" height="838" loading="lazy" decoding="async"
+               alt="개별공시지가 엑셀 조서 작성 탭. 편입토지조서 엑셀과 결과 엑셀을 고르는 칸, 조회 옵션, 엑셀 일괄 조회 실행 단추가 보입니다.">
+          <figcaption>편입토지조서에 3년치 공시지가를 채웁니다.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="../shots/realty_3.png" width="760" height="838" loading="lazy" decoding="async"
+               alt="공동주택가격 단지별 전체 조회 탭. 단지의 소재지와 지번을 넣고 수집하면 동 · 호별 전용면적과 가격이 차례로 나옵니다.">
+          <figcaption>공동주택 한 단지의 세대별 가격을 전부 받습니다.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <div class="head">
+        <h2>자주 묻는 질문</h2>
+      </div>
+      <div class="faq">
+        <div class="qa">
+          <h3>공시지가를 몇 년치까지 한 번에 받을 수 있나요?</h3>
+          <p>최근 1 · 3 · 5 · 10년 가운데 고르실 수 있습니다. 개별공시지가는 2000년부터, 공동주택가격은 2006년(또는 준공한 해)부터 사이트에 있는 해만큼 받아 옵니다.</p>
+        </div>
+        <div class="qa">
+          <h3>조회되지 않은 지번은 어떻게 알 수 있나요?</h3>
+          <p>결과 파일의 조회상태 칸에 OK 또는 실패 이유가 적히고, 조회가 끝나면 못 찾은 지번을 목록으로 알려 드립니다. 지번 표기가 다르거나 폐쇄된 필지일 수 있으니 그 줄만 골라 확인해 주시기 바랍니다.</p>
+        </div>
+        <div class="qa">
+          <h3>합계 줄이나 병합된 칸이 있는 조서도 넣을 수 있나요?</h3>
+          <p>넣으실 수 있습니다. 합계 · 소계 줄과 ※ 로 시작하는 주석 줄은 조회하지 않고 대상 아님으로 표시하며, 소재지 칸을 세로로 병합했거나 상동으로 적은 줄은 바로 위 줄의 소재지로 읽습니다.</p>
+        </div>
+        <div class="qa">
+          <h3>Chrome 이 꼭 있어야 하나요?</h3>
+          <p>있어야 합니다. 부동산 공시가격 알리미 사이트를 Chrome 으로 열어 값을 읽어 오기 때문입니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="guide">
+    <div class="wrap">
+      <div class="head">
+        <h2>사용 안내서</h2>
+        <p>화면을 그대로 담아 번호를 붙였습니다. 처음 쓰시는 분이 순서대로 따라오시면 됩니다.</p>
+      </div>
+      <div class="books">
+        <div class="book">
+          <h3>부동산 공시가격 조회 · 수집 사용 안내서</h3>
+          <p>세 가지 조회 방법을 화면에 번호를 붙여 설명하고, 결과 엑셀에서 연도별 칸과 조회상태 칸을 읽는 법을 담았습니다.</p>
+          <a class="book-dl" href="../guides/solution-realty-price.pdf" data-dl="guide-realty">PDF 내려받기</a>
+        </div>
+        <div class="book">
+          <h3>Solution Center 사용 안내서</h3>
+          <p>설치부터 인증, 카드 읽는 법, 새 버전 받기까지. 회원가입 절차도 화면과 함께 담았습니다.</p>
+          <a class="book-dl" href="../guides/hms-center-guide.pdf" data-dl="guide-center">PDF 내려받기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="get">
+    <div class="wrap">
+      <div class="head">
+        <h2>받는 법</h2>
+        <p>솔루션을 하나씩 받지 않습니다. Solution Center 를 한 번 설치하면 그 안에서 골라 설치합니다.</p>
+      </div>
+      <ol class="steps">
+        <li class="step">
+          <span class="n">01</span>
+          <div>
+            <h3>Solution Center 를 설치합니다</h3>
+            <p>파이썬 같은 실행환경까지 함께 들어 있어, 쓰시는 컴퓨터에 따로 준비하실 것이 없습니다.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="n">02</span>
+          <div>
+            <h3>회원가입하고 인증을 신청합니다</h3>
+            <p>소속은 회사명 · 학교명 · 기관명을 정확히 적어 주셔야 승인됩니다.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="n">03</span>
+          <div>
+            <h3>필요한 솔루션에서 [설치]를 누릅니다</h3>
+            <p>내려받기부터 설치까지 한 번에 끝납니다. 새 버전이 나오면 카드가 알려 줍니다.</p>
+          </div>
+        </li>
+      </ol>
+      <div class="dl-line">
+        <a class="dl" href="https://github.com/72second72-bot/hms-solution/releases/latest/download/HMS-Solution-Center-Setup.exe" data-dl="center-setup">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M9 1.5v10M9 11.5 5 7.5M9 11.5l4-4M2 12.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5"
+                  stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Solution Center 내려받기
+        </a>
+        <a class="ghost" href="../#get">받는 법 자세히 보기</a>
+        <span class="dl-note">Windows 10 / 11</span>
+      </div>
+      <div class="callout">
+        <p><b>쓰시다가 막히면</b> 화면을 캡처해 카카오톡 오픈채팅이나 메일로 보내 주세요. 오류 창이 떴다면 그 창까지 함께 담아 주시면 가장 빠릅니다. 문의하는 곳은 <a href="../#ask">홈페이지 문의 칸</a>에 모아 두었습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="more">
+    <div class="wrap">
+      <div class="head">
+        <h2>다른 솔루션</h2>
+        <p>모두 같은 Solution Center 안에서 골라 설치합니다.</p>
+      </div>
+      <ul class="others">
+        <li><a href="cad-coord-trans.html"><span class="o-no">S-01</span><span class="o-name">AutoCAD 좌표변환</span><span class="o-flow">AutoCAD 도면 → 좌표계가 바뀐 같은 도면</span></a></li>
+        <li><a href="cadastral-map.html"><span class="o-no">S-02</span><span class="o-name">지적도·토지현황도·토지조서 만들기</span><span class="o-flow">지적 SHP 또는 구역계 → DXF 도면과 편입토지조서 엑셀</span></a></li>
+        <li><a href="dxf-merge.html"><span class="o-no">S-03</span><span class="o-name">CAD 도면 병합</span><span class="o-flow">도곽별 DXF · DWG → 하나로 합쳐진 DXF</span></a></li>
+        <li><a href="building-register.html"><span class="o-no">S-04</span><span class="o-name">건축물대장 조서 작성</span><span class="o-flow">건축물대장 PDF → 시트가 나뉜 엑셀 한 장</span></a></li>
+        <li><span class="cur" aria-current="page"><span class="o-no">S-05</span><span class="o-name">부동산 공시가격 조회 · 수집</span><span class="o-flow">소재지 · 지번 또는 엑셀 → 연도별 공시가격이 붙은 엑셀</span></span></li>
+        <li><a href="thematic-attribute.html"><span class="o-no">S-06</span><span class="o-name">주제도 SHP 속성 코드 입력</span><span class="o-flow">연속주제도 DBF · SHP → 코드가 채워진 SHP 세트</span></a></li>
+        <li><a href="ppt-image.html"><span class="o-no">S-07</span><span class="o-name">PPT 이미지 맞춰 넣기</span><span class="o-flow">이미지 파일 → 열어 둔 파워포인트에 같은 자리 · 같은 크기로</span></a></li>
+        <li><a href="vworld-download.html"><span class="o-no">S-08</span><span class="o-name">브이월드 공간정보 내려받기</span><span class="o-flow">행정구역 또는 구역계 → 코드까지 채워진 SHP</span></a></li>
+        <li><a href="geocoder.html"><span class="o-no">S-09</span><span class="o-name">지오코딩 (PNU·주소·좌표 변환)</span><span class="o-flow">주소 · PNU · 좌표가 든 엑셀 → 채워진 엑셀과 필지 SHP · DXF</span></a></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <b>HMS Solution</b>
+      <span>HMS 솔루션 · 엔지니어링 업무 효율화</span>
+      <span>문의 — <a class="who" href="../#ask">황민수</a> (<a href="mailto:72second@naver.com">72second@naver.com</a>)</span>
+      <span>카카오톡 오픈채팅 — <a href="https://open.kakao.com/o/gkkxMGLi" target="_blank" rel="noopener">바로 가기</a></span>
+      <span><a href="../privacy.html">개인정보처리방침</a></span>
+      <span><a href="../opensource.html">오픈소스 라이선스</a></span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

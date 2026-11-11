@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  검색엔진에 알리는 페이지 목록. 정본은 소스 저장소의 docs\홈페이지\sitemap.xml 이고,
+  publish-home.ps1 이 사이트 저장소로 옮긴다.
+  솔루션이 새로 공개되면 solutions\ 의 소개 페이지 · 홈페이지 JSON-LD 의 ItemList · 이 목록을 함께 고친다.
+  lastmod 는 그 페이지를 실제로 고친 날로 적는다.
+  안내서 PDF 와 privacy.html 은 일부러 넣지 않았다(README.md 의 '검색 등록' 참고).
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://hms-eng-solution.vercel.app/</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://hms-eng-solution.vercel.app/solutions/cad-coord-trans.html</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://hms-eng-solution.vercel.app/solutions/cadastral-map.html</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://hms-eng-solution.vercel.app/solutions/dxf-merge.html</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://hms-eng-solution.vercel.app/solutions/building-register.html</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://hms-eng-solution.vercel.app/solutions/realty-price.html</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://hms-eng-solution.vercel.app/solutions/thematic-attribute.html</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://hms-eng-solution.vercel.app/solutions/ppt-image.html</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://hms-eng-solution.vercel.app/solutions/vworld-download.html</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://hms-eng-solution.vercel.app/solutions/geocoder.html</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://hms-eng-solution.vercel.app/opensource.html</loc><lastmod>2026-09-07</lastmod></url>
+</urlset>

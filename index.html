@@ -3,18 +3,88 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HMS Solution — 업무 효율화 솔루션</title>
-<meta name="description" content="엔지니어링 실무의 되풀이 작업을 자동화합니다. Solution Center 하나만 설치하면 여덟 가지를 골라 씁니다.">
+<title>HMS Solution(HMS 솔루션) — 캐드 좌표변환 · 도면 병합 · 수치지형도 · 연속주제도 업무 자동화</title>
+<meta name="description" content="엔지니어링 실무의 되풀이 작업을 자동화하는 HMS 솔루션입니다. AutoCAD 좌표변환, 수치지형도 CAD 도면 병합, 지적도 · 토지조서 만들기, 건축물대장 조서, 공시가격 조회, 연속주제도 내려받기와 코드 입력 등 아홉 솔루션을 Solution Center 에서 골라 설치합니다.">
+<!--
+  검색 등록(2026-11-10). 이 페이지의 대표 주소는 Vercel 쪽 하나로 정한다. 같은 내용이
+  GitHub Pages 주소에도 뜨지만, 아래 canonical 이 있어 검색엔진은 두 곳을 한 페이지로 본다.
+  솔루션마다의 소개 페이지는 solutions/ 아래에 있고, 목록은 sitemap.xml 에 있다.
+-->
+<link rel="canonical" href="https://hms-eng-solution.vercel.app/">
+<!-- google-site-verification · naver-site-verification 자리: 민수님 계정에서 받은 값으로 채움.
+     HTML 파일 방식으로 확인하면 이 자리는 비워 둔다(파일을 이 폴더에 두면 publish-home.ps1 이 함께 올린다). -->
 <link rel="icon" type="image/png" href="favicon.png">
 
 <!-- 카카오톡·메신저에 주소를 붙일 때 보이는 미리보기 -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="HMS Solution — 업무 효율화 솔루션">
-<meta property="og:description" content="엔지니어링 실무의 되풀이 작업을 자동화합니다. Solution Center 하나만 설치하면 여덟 가지를 골라 씁니다.">
+<meta property="og:site_name" content="HMS Solution">
+<meta property="og:title" content="HMS Solution(HMS 솔루션) — 캐드 좌표변환 · 도면 병합 · 수치지형도 · 연속주제도 업무 자동화">
+<meta property="og:description" content="엔지니어링 실무의 되풀이 작업을 자동화하는 HMS 솔루션입니다. AutoCAD 좌표변환, 수치지형도 CAD 도면 병합, 지적도 · 토지조서 만들기, 건축물대장 조서, 공시가격 조회, 연속주제도 내려받기와 코드 입력 등 아홉 솔루션을 Solution Center 에서 골라 설치합니다.">
 <meta property="og:url" content="https://hms-eng-solution.vercel.app/">
 <meta property="og:locale" content="ko_KR">
-<meta property="og:image" content="https://hms-eng-solution.vercel.app/logo.png">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://hms-eng-solution.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMS Solution — 엔지니어링 실무를 위한 업무 자동화">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- 검색엔진이 읽는 이 사이트의 설명. 사람에게는 보이지 않는다.
+     솔루션이 새로 공개되면 아래 ItemList 와 sitemap.xml, solutions/ 의 소개 페이지를 함께 고친다. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://hms-eng-solution.vercel.app/#organization",
+      "name": "HMS Solution",
+      "alternateName": ["HMS 솔루션", "HMS Solution Center"],
+      "url": "https://hms-eng-solution.vercel.app/",
+      "logo": "https://hms-eng-solution.vercel.app/logo.png",
+      "email": "72second@naver.com"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://hms-eng-solution.vercel.app/#website",
+      "name": "HMS Solution",
+      "alternateName": ["HMS 솔루션"],
+      "url": "https://hms-eng-solution.vercel.app/",
+      "inLanguage": "ko-KR",
+      "publisher": { "@id": "https://hms-eng-solution.vercel.app/#organization" }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://hms-eng-solution.vercel.app/#center",
+      "name": "HMS Solution Center",
+      "description": "솔루션을 하나씩 받지 않고 한자리에서 골라 쓰도록 만든 프로그램입니다. 설치와 갱신, 사용자 인증을 모두 여기서 합니다.",
+      "url": "https://hms-eng-solution.vercel.app/",
+      "downloadUrl": "https://github.com/72second72-bot/hms-solution/releases/latest/download/HMS-Solution-Center-Setup.exe",
+      "operatingSystem": "Windows 10, Windows 11",
+      "applicationCategory": "BusinessApplication",
+      "inLanguage": "ko",
+      "screenshot": "https://hms-eng-solution.vercel.app/shots/center.png",
+      "publisher": { "@id": "https://hms-eng-solution.vercel.app/#organization" }
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://hms-eng-solution.vercel.app/#solutions",
+      "name": "HMS Solution 의 솔루션",
+      "numberOfItems": 9,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "AutoCAD 좌표변환", "url": "https://hms-eng-solution.vercel.app/solutions/cad-coord-trans.html" },
+        { "@type": "ListItem", "position": 2, "name": "지적도·토지현황도·토지조서 만들기", "url": "https://hms-eng-solution.vercel.app/solutions/cadastral-map.html" },
+        { "@type": "ListItem", "position": 3, "name": "CAD 도면 병합", "url": "https://hms-eng-solution.vercel.app/solutions/dxf-merge.html" },
+        { "@type": "ListItem", "position": 4, "name": "건축물대장 조서 작성", "url": "https://hms-eng-solution.vercel.app/solutions/building-register.html" },
+        { "@type": "ListItem", "position": 5, "name": "부동산 공시가격 조회 · 수집", "url": "https://hms-eng-solution.vercel.app/solutions/realty-price.html" },
+        { "@type": "ListItem", "position": 6, "name": "주제도 SHP 속성 코드 입력", "url": "https://hms-eng-solution.vercel.app/solutions/thematic-attribute.html" },
+        { "@type": "ListItem", "position": 7, "name": "PPT 이미지 맞춰 넣기", "url": "https://hms-eng-solution.vercel.app/solutions/ppt-image.html" },
+        { "@type": "ListItem", "position": 8, "name": "브이월드 공간정보 내려받기", "url": "https://hms-eng-solution.vercel.app/solutions/vworld-download.html" },
+        { "@type": "ListItem", "position": 9, "name": "지오코딩 (PNU·주소·좌표 변환)", "url": "https://hms-eng-solution.vercel.app/solutions/geocoder.html" }
+      ]
+    }
+  ]
+}
+</script>
 <!--
   글꼴 · 색 · 모서리를 Solution Center · Manager 와 같은 것으로 쓴다.
 
@@ -294,6 +364,17 @@
   .flow .k { font-size: 12px; font-weight: 600; color: var(--muted); }
   .flow .v { margin-top: 2px; font-size: 14.5px; font-weight: 600; color: var(--ink); }
   .flow .arrow { color: var(--blue); font-size: 18px; font-weight: 700; }
+
+  /* 솔루션마다의 소개 페이지(solutions/)로 가는 길. 카드 높이와 모양을 바꾸지 않도록
+     S-0N 부호와 같은 줄의 오른쪽 끝에 작게 둔다. 화면 읽기 프로그램에는 aria-label 로
+     어느 솔루션인지 함께 읽힌다. */
+  .sheet .more {
+    position: absolute; top: 21px; right: 18px;
+    padding: 4px 8px; border-radius: var(--r-btn);
+    font-size: 13px; font-weight: 600; line-height: 1.4; color: var(--blue); text-decoration: none;
+  }
+  .sheet .more:hover { background: var(--soft); color: var(--soft-text); }
+  .sheet .more:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
   /* 준비 중 카드는 뜬 것처럼 보이지 않게 그림자와 움직임을 뺀다. */
   .sheet[style*="dashed"] { background: var(--surface-alt); box-shadow: none; }
@@ -611,6 +692,7 @@
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">좌표계가 바뀐 같은 도면</div></div>
           </div>
+          <a class="more" href="solutions/cad-coord-trans.html" aria-label="AutoCAD 좌표변환 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-02</div>
@@ -625,6 +707,7 @@
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">레이어가 나뉜 DXF · DWG, 편입토지조서 엑셀</div></div>
           </div>
+          <a class="more" href="solutions/cadastral-map.html" aria-label="지적도·토지현황도·토지조서 만들기 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-03</div>
@@ -639,6 +722,7 @@
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">하나로 합쳐진 DXF</div></div>
           </div>
+          <a class="more" href="solutions/dxf-merge.html" aria-label="CAD 도면 병합 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-04</div>
@@ -653,6 +737,7 @@
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">시트가 나뉜 엑셀 한 장</div></div>
           </div>
+          <a class="more" href="solutions/building-register.html" aria-label="건축물대장 조서 작성 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-05</div>
@@ -667,6 +752,7 @@
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">연도별 공시가격이 붙은 엑셀</div></div>
           </div>
+          <a class="more" href="solutions/realty-price.html" aria-label="부동산 공시가격 조회 · 수집 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-06</div>
@@ -681,6 +767,7 @@
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">코드가 채워진 SHP 세트</div></div>
           </div>
+          <a class="more" href="solutions/thematic-attribute.html" aria-label="주제도 SHP 속성 코드 입력 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-07</div>
@@ -695,6 +782,7 @@
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">열어 둔 파워포인트에 바로</div></div>
           </div>
+          <a class="more" href="solutions/ppt-image.html" aria-label="PPT 이미지 맞춰 넣기 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-08</div>
@@ -709,6 +797,7 @@
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">코드까지 채워진 SHP</div></div>
           </div>
+          <a class="more" href="solutions/vworld-download.html" aria-label="브이월드 공간정보 내려받기 자세히 보기">자세히 보기 →</a>
         </article>
 
         <article class="sheet">
@@ -724,6 +813,7 @@
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">채워진 엑셀, 위치점 · 필지 SHP, CAD 지적도 DXF</div></div>
           </div>
+          <a class="more" href="solutions/geocoder.html" aria-label="지오코딩 (PNU·주소·좌표 변환) 자세히 보기">자세히 보기 →</a>
         </article>
 
         <article class="sheet" style="border-style: dashed;">
@@ -903,14 +993,14 @@
         <div class="book">
           <h4>Solution Center 사용 안내서</h4>
           <p>설치부터 인증, 카드 읽는 법, 새 버전 받기까지. 회원가입 절차도 화면과 함께 담았습니다.</p>
-          <div class="pg">11쪽 · 2026-09-02</div>
+          <div class="pg">11쪽 · 2026-11-11</div>
           <a class="book-dl" href="guides/hms-center-guide.pdf" data-dl="guide-center">PDF 내려받기 (1.2MB)</a>
         </div>
         <div class="book">
           <h4>업무 효율화 솔루션 안내서</h4>
-          <p>여덟 솔루션을 한 권에. 무엇을 왜 만들었는지, 어떻게 쓰는지, 결과가 어떻게 나오는지까지.</p>
-          <div class="pg">24쪽 · 2026-09-02</div>
-          <a class="book-dl" href="guides/hms-solutions-guide.pdf" data-dl="guide-solutions">PDF 내려받기 (4.4MB)</a>
+          <p>아홉 솔루션을 한 권에. 무엇을 왜 만들었는지, 어떻게 쓰는지, 결과가 어떻게 나오는지까지.</p>
+          <div class="pg">30쪽 · 2026-11-11</div>
+          <a class="book-dl" href="guides/hms-solutions-guide.pdf" data-dl="guide-solutions">PDF 내려받기 (4.0MB)</a>
         </div>
         <div class="book book-full">
           <h4>솔루션별 안내서</h4>
@@ -950,7 +1040,7 @@
           <time datetime="2026-09-06">2026-09-06</time>
           <div>
             <h4>CAD 지적도·현황도·토지조서 제작 2.7 · 부동산 공시가격 4.12 · 브이월드 1.3</h4>
-            <p>지적도 제작은 구역계만 넣어 브이월드 연속지적도를 받고, 프롬 양식의 편입토지조서까지 만듭니다(이름도 바뀌었습니다).
+            <p>지적도 제작은 구역계만 넣어 브이월드 연속지적도를 받고, 편입토지조서 양식의 엑셀 조서까지 만듭니다(이름도 바뀌었습니다).
                공시가격은 최근 1 · 3 · 5 · 10년 중 고르고, 브이월드 내려받기는 토지 · 행정구역까지 45종을 받습니다.</p>
           </div>
         </div>
@@ -1029,7 +1119,7 @@
   <div class="wrap">
     <div class="row">
       <b>HMS Solution</b>
-      <span>업무 효율화 솔루션</span>
+      <span>HMS 솔루션 · 엔지니어링 업무 효율화</span>
       <!-- 이름 · 메일은 서버의 만든 사람 소개를 따라 바뀐다(아래 스크립트의 applyContact). -->
       <span>문의 — <button type="button" class="who" aria-haspopup="dialog" title="만든 사람 소개 보기">황민수</button>
         <span class="who-mail-wrap">(<a class="who-mail" href="mailto:72second@naver.com">72second@naver.com</a>)</span></span>
