@@ -1,0 +1,125 @@
+/*
+  방법 글(howto\*.html) 전용 스타일.
+
+  색 · 글꼴 · 머리띠 · 꼬리 · 카드 · 단추는 소개 페이지 공용 파일(../solutions/solution.css)을
+  그대로 쓰고, 여기에는 방법 글에만 있는 것(목차 카드 · 본문 글 · 비교표 · 방법 카드 · 주의 칸 ·
+  공식 문서 목록 · 글 목록)만 둔다. 색은 solution.css 의 토큰(--surface, --rule …)만 쓰므로
+  밝게 · 어둡게가 저절로 따라간다. 새 색을 여기서 정하지 않는다.
+
+  solution.css · solution.js 는 소개 페이지 아홉 장이 함께 쓰는 파일이라 고치지 않는다.
+  거기서 고칠 일이 보이면 고치지 말고 보고한다.
+*/
+
+/* ── 첫 화면: 오른쪽 목차 카드 ─────────────────────────────────
+   소개 페이지의 '무엇을 넣으면 무엇이 나오나'(.io) 자리에 같은 생김새로 글의 순서를 둔다. */
+.toc-list { margin: 14px 0 0; padding: 14px 0 0; border-top: 1px solid var(--rule); list-style: none; counter-reset: toc; display: grid; gap: 4px; }
+.toc-list li { counter-increment: toc; }
+.toc-list a {
+  display: grid; grid-template-columns: 30px minmax(0, 1fr); align-items: baseline;
+  padding: 7px 10px 7px 4px; border-radius: var(--r-btn);
+  color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 600; line-height: 1.45;
+  transition: background .15s ease, color .15s ease;
+}
+.toc-list a::before { content: counter(toc, decimal-leading-zero); font-size: 12.5px; font-weight: 700; color: var(--soft-text); letter-spacing: .03em; }
+.toc-list a:hover { background: var(--soft); color: var(--soft-text); }
+
+.meta-line { margin: 14px 0 0; font-size: 14px; color: var(--muted); }
+
+/* ── 마디 머리의 번호 ─────────────────────────────────────── */
+.head .sec-no { display: block; margin-bottom: 6px; font-size: 12.5px; font-weight: 700; color: var(--muted); letter-spacing: .05em; }
+
+/* ── 본문 글 ─────────────────────────────────────────────── */
+.prose { max-width: 760px; margin-top: 22px; }
+.prose p { margin: 0 0 14px; font-size: 16px; color: var(--ink-soft); }
+.prose p:last-child { margin-bottom: 0; }
+.prose b { color: var(--ink); }
+.prose .note { font-size: 14px; color: var(--muted); }
+
+/* 이름 · 뜻 두 칸 표(solution.css 의 .needs)를 본문 폭에 맞춰 쓴다 */
+.prose .needs { margin: 0 0 18px; }
+.prose .needs dt { white-space: nowrap; }
+
+/* ── 비교표 ─────────────────────────────────────────────── */
+.table-wrap { max-width: 760px; margin: 22px 0 18px; overflow-x: auto; }
+table.facts {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-card); overflow: hidden;
+  font-size: 15px;
+}
+.facts th, .facts td { padding: 12px 16px; text-align: left; vertical-align: top; border-top: 1px solid var(--rule); }
+.facts thead th { border-top: 0; background: var(--surface-alt); color: var(--ink); font-weight: 700; }
+.facts tbody th { color: var(--muted); font-weight: 600; background: var(--surface-alt); white-space: nowrap; }
+.facts td { color: var(--ink); }
+.facts caption { caption-side: bottom; padding: 8px 2px 0; text-align: left; font-size: 13.5px; color: var(--muted); }
+
+/* ── 방법 카드 ───────────────────────────────────────────── */
+.ways { margin-top: 28px; display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+.way {
+  padding: 22px 24px; background: var(--surface);
+  border: 1px solid var(--rule); border-radius: var(--r-card); box-shadow: var(--shadow);
+}
+.way .way-no { font-size: 12.5px; font-weight: 700; color: var(--muted); letter-spacing: .05em; }
+.way h3 { margin: 4px 0 0; font-size: 18px; font-weight: 700; line-height: 1.4; }
+.way .need { margin: 12px 0 0; padding: 10px 14px; background: var(--surface-alt); border-radius: var(--r-btn); font-size: 14.5px; color: var(--ink-soft); }
+.way .need b { color: var(--ink); }
+.way ol { margin: 16px 0 0; padding-left: 1.4em; display: grid; gap: 8px; }
+.way ol li { font-size: 15px; color: var(--ink-soft); padding-left: 2px; }
+.way ol li::marker { color: var(--soft-text); font-weight: 700; }
+.way code, .hms code { font-family: inherit; font-weight: 700; color: var(--ink); }
+
+/* 주의 칸 */
+.warn {
+  margin: 16px 0 0; padding: 12px 14px;
+  border: 1px solid var(--rule); border-left: 3px solid var(--warning); border-radius: var(--r-btn);
+  background: var(--surface-alt); font-size: 14.5px; color: var(--ink-soft);
+}
+.warn b { color: var(--ink); }
+
+/* 공식 문서 목록 — 바깥 링크는 여기에 모은다 */
+.refs { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--rule); }
+.refs .refs-k { font-size: 12.5px; font-weight: 600; color: var(--muted); }
+.refs ul { margin: 6px 0 0; padding-left: 1.1em; display: grid; gap: 4px; }
+.refs li { font-size: 14px; color: var(--ink-soft); }
+.refs a { text-decoration: none; }
+.refs a:hover { text-decoration: underline; }
+.refs .lang { font-size: 12.5px; color: var(--muted); }
+
+/* ── HMS 한 칸 ─────────────────────────────────────────────
+   글의 끝에 하나만 두는 칸. 소개 페이지의 .callout 과 같은 옅은 파랑 바탕이다. */
+.hms {
+  margin-top: 28px; padding: 24px 26px;
+  background: var(--soft); border: 1px solid var(--soft-border); border-radius: var(--r-card);
+}
+.hms > p { margin: 0; max-width: 760px; font-size: 16px; color: var(--ink-soft); }
+.hms > p + p { margin-top: 10px; }
+.hms .steps { margin-top: 18px; }
+.hms .needs { margin-top: 18px; }
+.hms .shot { margin-top: 18px; }
+.hms .dl-line { margin-top: 20px; }
+
+/* ── 글 목록(index.html) ──────────────────────────────────── */
+.posts { margin: 28px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; max-width: 860px; }
+.posts a {
+  display: block; padding: 20px 22px; border-radius: var(--r-card);
+  background: var(--surface); border: 1px solid var(--rule); box-shadow: var(--shadow); text-decoration: none;
+  transition: box-shadow .18s ease, border-color .18s ease, transform .18s ease;
+}
+.posts a:hover { box-shadow: var(--shadow-lift); border-color: var(--soft-border); transform: translateY(-2px); }
+.posts .p-no { display: block; font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .05em; }
+.posts .p-title { display: block; margin-top: 2px; font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.45; }
+.posts .p-sum { display: block; margin-top: 6px; font-size: 14.5px; color: var(--ink-soft); }
+.posts .p-date { display: block; margin-top: 8px; font-size: 13px; color: var(--muted); }
+
+/* ── 좁은 화면 ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .ways { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .way, .hms { padding: 18px 18px; }
+  .facts th, .facts td { padding: 10px 12px; font-size: 14px; }
+  .facts tbody th { white-space: normal; }
+  .prose .needs dt { white-space: normal; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toc-list a, .posts a { transition: none !important; }
+}

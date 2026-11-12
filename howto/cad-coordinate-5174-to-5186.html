@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>캐드 도면 좌표계 5174 를 5186 으로 바꾸는 법 | HMS Solution</title>
+<meta name="description" content="베셀 계열 EPSG:5174 캐드 도면을 세계측지계 EPSG:5186 으로 바꾸는 법입니다. 좌표 이동과 다른 점, 같은 점이 약 10만 m 옮겨지는 까닭, AutoCAD Map 3D · QGIS 로 바꾸는 순서와 바꾼 뒤 확인할 것을 정리했습니다.">
+<link rel="canonical" href="https://hms-eng-solution.vercel.app/howto/cad-coordinate-5174-to-5186.html">
+<link rel="icon" type="image/png" href="../favicon.png">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="HMS Solution">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="캐드 도면 좌표계 5174 를 5186 으로 바꾸는 법">
+<meta property="og:description" content="베셀 계열 EPSG:5174 캐드 도면을 세계측지계 EPSG:5186 으로 바꾸는 법입니다. 좌표 이동과 다른 점, 같은 점이 약 10만 m 옮겨지는 까닭, AutoCAD Map 3D · QGIS 로 바꾸는 순서와 바꾼 뒤 확인할 것을 정리했습니다.">
+<meta property="og:url" content="https://hms-eng-solution.vercel.app/howto/cad-coordinate-5174-to-5186.html">
+<meta property="og:image" content="https://hms-eng-solution.vercel.app/og.png">
+<meta property="og:image:alt" content="HMS Solution">
+<meta property="article:published_time" content="2026-11-12">
+<meta property="article:modified_time" content="2026-11-12">
+<meta name="twitter:card" content="summary_large_image">
+
+<script>try{var t=localStorage.getItem("hms-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../solutions/solution.css">
+<link rel="stylesheet" href="howto.css">
+<script src="../solutions/solution.js" defer></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://hms-eng-solution.vercel.app/howto/cad-coordinate-5174-to-5186.html#article",
+      "headline": "캐드 도면 좌표계 5174 를 5186 으로 바꾸는 법",
+      "description": "베셀 계열 EPSG:5174 캐드 도면을 세계측지계 EPSG:5186 으로 바꾸는 법입니다. 좌표 이동과 다른 점, 같은 점이 약 10만 m 옮겨지는 까닭, AutoCAD Map 3D · QGIS 로 바꾸는 순서와 바꾼 뒤 확인할 것을 정리했습니다.",
+      "url": "https://hms-eng-solution.vercel.app/howto/cad-coordinate-5174-to-5186.html",
+      "mainEntityOfPage": "https://hms-eng-solution.vercel.app/howto/cad-coordinate-5174-to-5186.html",
+      "inLanguage": "ko",
+      "datePublished": "2026-11-12",
+      "dateModified": "2026-11-12",
+      "image": [
+        "https://hms-eng-solution.vercel.app/og.png",
+        "https://hms-eng-solution.vercel.app/shots/coord.png"
+      ],
+      "author": {
+        "@type": "Organization",
+        "name": "HMS Solution",
+        "url": "https://hms-eng-solution.vercel.app/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "HMS Solution",
+        "url": "https://hms-eng-solution.vercel.app/",
+        "logo": { "@type": "ImageObject", "url": "https://hms-eng-solution.vercel.app/logo.png" }
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://hms-eng-solution.vercel.app/" },
+        { "@type": "ListItem", "position": 2, "name": "방법 글", "item": "https://hms-eng-solution.vercel.app/howto/" },
+        { "@type": "ListItem", "position": 3, "name": "캐드 도면 좌표계 5174 를 5186 으로 바꾸는 법", "item": "https://hms-eng-solution.vercel.app/howto/cad-coordinate-5174-to-5186.html" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body id="top">
+<header>
+  <div class="bar">
+    <a class="brand" href="../" aria-label="HMS Solution 홈으로">
+      <img src="../logo.png" alt="" width="30" height="30">
+      <span class="brand-name">HMS <b>Solution</b></span>
+    </a>
+    <nav aria-label="홈페이지 메뉴">
+      <a href="../#solutions">솔루션</a>
+      <a href="../#get">받는 법</a>
+      <a href="../#guides">사용 안내서</a>
+      <a href="../#ask">문의</a>
+      <div class="theme-pick" role="group" aria-label="화면 밝기">
+        <button type="button" data-theme-set="light" aria-pressed="false">밝게</button>
+        <button type="button" data-theme-set="dark" aria-pressed="false">어둡게</button>
+        <button type="button" data-theme-set="system" aria-pressed="true">시스템</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <canvas id="plots" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <nav class="crumbs" aria-label="현재 위치">
+      <ol>
+        <li><a href="../">홈</a></li>
+        <li><a href="./">방법 글</a></li>
+        <li><span aria-current="page">캐드 도면 좌표계 5174 를 5186 으로 바꾸는 법</span></li>
+      </ol>
+    </nav>
+
+    <div class="hero-text">
+      <div class="tag">H-01 · 방법 글</div>
+      <h1>캐드 도면 좌표계 5174&nbsp;를 5186&nbsp;으로 바꾸는 법</h1>
+      <p class="lead">흔히 동경측지계라 부르는 베셀 계열의 EPSG:5174 도면을 세계측지계(GRS80)인 EPSG:5186 도면과 겹치려면, 도면을 같은 거리만큼 옮기는 이동이 아니라 점마다 새로 계산하는 캐드 좌표계 변환이 필요합니다. 같은 점은 약 10만 m 옮겨집니다. AutoCAD Map 3D · QGIS 로 바꾸는 순서와 바꾼 뒤 확인할 것을 차례로 적었습니다.</p>
+      <p class="meta-line">2026-11-12 작성 · 예시 숫자는 모두 지어낸 가상 필지에서 뽑았습니다.</p>
+    </div>
+
+    <nav class="io toc" aria-labelledby="toc-title">
+      <div class="sheet-no">H-01</div>
+      <h2 id="toc-title">이 글의 순서</h2>
+      <ol class="toc-list">
+        <li><a href="#diff">좌표계 바꾸기와 좌표 이동은 다릅니다</a></li>
+        <li><a href="#crs">5174 와 5186 은 무엇이 다른가</a></li>
+        <li><a href="#ways">프로그램별로 바꾸는 두 가지 방법</a></li>
+        <li><a href="#hms">AutoCAD 안에서 바로 바꾸기</a></li>
+        <li><a href="#check">바꾼 뒤 확인할 것</a></li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<main>
+  <section id="diff">
+    <div class="wrap">
+      <div class="head">
+        <span class="sec-no">01</span>
+        <h2>좌표계 바꾸기와 좌표 이동은 다릅니다</h2>
+      </div>
+      <div class="prose">
+        <p>'오토캐드 좌표 변환' 을 찾으면 UCS 나 이동(MOVE) 안내도 함께 나오지만, 셋은 하는 일이 다릅니다.</p>
+        <dl class="needs">
+          <dt>UCS</dt>
+          <dd>그리는 기준 축만 옮기거나 돌립니다. 객체는 고정된 세계 좌표계(WCS)의 좌표로 정의되어 그대로입니다.</dd>
+          <dt>이동(MOVE)</dt>
+          <dd>모든 객체를 같은 방향 · 같은 거리만큼 옮깁니다.</dd>
+          <dt>좌표계 바꾸기</dt>
+          <dd>같은 점을 다른 원점 · 다른 타원체 기준의 숫자로 다시 적습니다. 점마다 따로 계산하므로 옮겨지는 양이 조금씩 다릅니다.</dd>
+        </dl>
+        <p>예시용 가상 필지의 일곱 점은 수백 m 안에 모여 있는데도, 5174 에서 5186 으로 옮겨진 거리가 100,304.821 m 에서 100,304.830 m 까지 달랐습니다. '좌표변환 리습' 을 구하신다면 좌표계를 계산해 바꾸는지, 같은 거리만 옮기는지 먼저 보십시오.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="crs">
+    <div class="wrap">
+      <div class="head">
+        <span class="sec-no">02</span>
+        <h2>5174 와 5186 은 무엇이 다른가</h2>
+        <p>둘 다 북위 38° 를 원점으로 하는 중부원점 계열의 TM 좌표입니다. 다른 것은 측지계와 원점 값입니다.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="facts">
+          <caption>두 좌표계 모두 원점의 축척계수는 1 입니다.</caption>
+          <thead>
+            <tr><th scope="col">구분</th><th scope="col">EPSG:5174</th><th scope="col">EPSG:5186</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">이름</th><td>한국 1985 수정 중부원점</td><td>한국 2000 중부원점 2010</td></tr>
+            <tr><th scope="row">측지계</th><td>한국 1985 (흔히 동경측지계라 부르는 베셀 계열)</td><td>한국 2000 (세계측지계)</td></tr>
+            <tr><th scope="row">타원체</th><td>Bessel 1841</td><td>GRS 1980</td></tr>
+            <tr><th scope="row">원점</th><td>북위 38° · 동경 127°00′10.405″</td><td>북위 38° · 동경 127°</td></tr>
+            <tr><th scope="row">원점에 더하는 값</th><td>동쪽 200,000 m · 북쪽 500,000 m</td><td>동쪽 200,000 m · 북쪽 600,000 m</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <p>같은 점이 약 10만 m 옮겨지는 것은 원점에 더하는 북쪽 값이 50만 m 에서 60만 m 로 커졌기 때문입니다. 여기에 원점 경도와 측지계 차이에서 오는 이동이 더해져, 예시 가상 필지의 한 점은 캐드 좌표로 X(동쪽) 약 69 m, Y(북쪽) 약 100,305 m 옮겨졌습니다.</p>
+        <p>베셀에서 GRS80 으로 타원체가 바뀌어 길이와 면적도 아주 조금 달라집니다. 예시 가상 필지 242개의 면적은 평균 0.0017%(1,000 m² 당 0.017 m²) 줄었습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="ways">
+    <div class="wrap">
+      <div class="head">
+        <span class="sec-no">03</span>
+        <h2>프로그램별로 바꾸는 두 가지 방법</h2>
+        <p>메뉴 이름은 공식 도움말의 영문판 이름입니다. 판마다 다를 수 있으니 쓰시는 판의 도움말도 함께 보십시오.</p>
+      </div>
+      <div class="ways">
+        <article class="way">
+          <div class="way-no">방법 1</div>
+          <h3>AutoCAD Map 3D 의 좌표계 기능</h3>
+          <p class="need"><b>준비물</b> · AutoCAD Map 3D. Civil 3D 도움말에도 좌표계 지정 명령(GEOCSASSIGN)은 있습니다.</p>
+          <ol>
+            <li>새 도면을 엽니다.</li>
+            <li>바꿀 5174 도면을 첨부합니다(Home 탭 › Data › Define Drawing Set › Attach, 또는 Map Explorer 로 끌어다 놓기).</li>
+            <li>새 도면에 <code>GEOCSASSIGN</code> 으로 EPSG:5186 을 지정합니다.</li>
+            <li>첨부 도면에 좌표계가 없으면 <code>ADESETCRDSYS</code> 로 EPSG:5174 를 지정합니다. 쿼리해 온 객체가 남아 있으면 지정되지 않으니 쿼리 전에 합니다.</li>
+            <li>경계 종류가 All 인 위치 조건으로 쿼리하면, 객체가 5186 으로 바뀌어 들어옵니다.</li>
+            <li>첨부를 풀고 저장합니다. 원본 도면은 그대로입니다.</li>
+          </ol>
+          <div class="refs">
+            <div class="refs-k">Autodesk 공식 도움말</div>
+            <ul>
+              <li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/MAP3D-Use/files/GUID-291991BF-31F1-46F0-A9E1-72A29B8E8C54.htm" target="_blank" rel="noopener">도면의 좌표계 바꾸기 (Map 3D)</a> <span class="lang">영문</span></li>
+              <li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/MAP3D-Use/files/GUID-0030A563-6544-45C2-8320-966CE698C3DE.htm" target="_blank" rel="noopener">도면 첨부하기 (Map 3D)</a> <span class="lang">영문</span></li>
+              <li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/MAP3D-Use/files/GUID-08E15B56-2BD2-44B8-9739-F4FC24768429.htm" target="_blank" rel="noopener">좌표계 지정 GEOCSASSIGN (Map 3D)</a> <span class="lang">영문</span></li>
+              <li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/MAP3D-Use/files/GUID-D6763C82-7281-4369-BE9D-6DB560519573.htm" target="_blank" rel="noopener">첨부 도면에 좌표계 지정 ADESETCRDSYS (Map 3D)</a> <span class="lang">영문</span></li>
+              <li><a href="https://help.autodesk.com/cloudhelp/2025/ENU/Civil3D-UserGuide/files/GUID-75B8A4F1-CB5E-4D11-9504-4F16690A5825.htm" target="_blank" rel="noopener">좌표계 지정 (Civil 3D)</a> <span class="lang">영문</span></li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="way">
+          <div class="way-no">방법 2</div>
+          <h3>QGIS 로 재투영해 DXF 로 내보내기</h3>
+          <p class="need"><b>준비물</b> · QGIS, DXF 로 저장한 도면.</p>
+          <ol>
+            <li>DXF 를 벡터 레이어로 불러옵니다(QGIS 는 GDAL 로 읽습니다).</li>
+            <li>레이어 좌표계를 EPSG:5174 로 지정합니다(Layer ► Set CRS of Layer(s)). 값을 바꾸지 않고 '5174 자료' 라고 알려 주는 일입니다.</li>
+            <li>Project ► Import/Export ► Export Project to DXF 에서 EPSG:5186 을 고르면, 레이어가 그 좌표계로 재투영되어 저장됩니다. Output layer attribute 로 Layer 필드를 고르면 원래 도면층 이름대로 나뉩니다.</li>
+            <li>결과 DXF 를 AutoCAD 에서 엽니다.</li>
+          </ol>
+          <p class="warn"><b>주의</b> · GDAL 의 DXF 안내에 따르면 읽을 때 블록은 풀리고, 해치는 무늬 없는 면이, 원 · 호는 짧은 선분이 됩니다. 문자 자리도 조금 다를 수 있어, 블록과 해치가 많은 도면은 다시 손보셔야 할 수 있습니다.</p>
+          <div class="refs">
+            <div class="refs-k">QGIS · GDAL 공식 문서</div>
+            <ul>
+              <li><a href="https://docs.qgis.org/latest/en/docs/user_manual/working_with_projections/working_with_projections.html" target="_blank" rel="noopener">좌표계 다루기 (QGIS)</a> <span class="lang">영문</span></li>
+              <li><a href="https://docs.qgis.org/latest/en/docs/user_manual/managing_data_source/create_layers.html#creating-new-dxf-files" target="_blank" rel="noopener">DXF 파일로 내보내기 (QGIS)</a> <span class="lang">영문</span></li>
+              <li><a href="https://gdal.org/en/latest/drivers/vector/dxf.html" target="_blank" rel="noopener">DXF 를 읽고 쓰는 방식 (GDAL)</a> <span class="lang">영문</span></li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="hms">
+    <div class="wrap">
+      <div class="head">
+        <span class="sec-no">04</span>
+        <h2>AutoCAD 안에서 바로 바꾸기</h2>
+      </div>
+      <div class="hms">
+        <p>도면을 다른 프로그램으로 내보냈다 다시 불러오지 않고 열어 둔 도면에서 바로 바꾸려면, AutoCAD 에 플러그인으로 올라가는 캐드 좌표 변환 프로그램인 HMS 좌표변환을 쓰실 수 있습니다.</p>
+        <ol class="steps">
+          <li class="step">
+            <span class="n">01</span>
+            <div>
+              <h3>명령창에 HMSCRS 를 입력합니다</h3>
+              <p>먼저 Solution Center 에서 설치하고 [로드]를 누릅니다.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="n">02</span>
+            <div>
+              <h3>원본 EPSG:5174 · 변환 EPSG:5186 을 고릅니다</h3>
+              <p>[지정점 좌표 미리보기]로 바뀔 좌표를 먼저 보실 수 있습니다.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="n">03</span>
+            <div>
+              <h3>옮길 대상과 원본을 남길지 정합니다</h3>
+            </div>
+          </li>
+          <li class="step">
+            <span class="n">04</span>
+            <div>
+              <h3>[좌표변환 실행]을 누릅니다</h3>
+              <p>무엇을 몇 개 옮겼는지 작업 로그에 남습니다.</p>
+            </div>
+          </li>
+        </ol>
+        <p>해치와 그리기 순서를 지키고, 잠긴 도면층은 옮기는 동안만 풀었다가 다시 잠급니다. 원과 호는 곡선 허용오차(기본 0.01 m)에 맞춰 잘게 나눈 폴리선으로 옮깁니다.</p>
+        <dl class="needs">
+          <dt>운영체제</dt>
+          <dd>Windows 10 · Windows 11</dd>
+          <dt>AutoCAD</dt>
+          <dd>AutoCAD 2016, 2018~2027 (2017 은 지원하지 않습니다)</dd>
+          <dt>받는 법</dt>
+          <dd>HMS Solution Center 를 설치하고 가입 · 승인을 받은 뒤, 그 안에서 설치합니다.</dd>
+          <dt>비용</dt>
+          <dd>무료</dd>
+        </dl>
+        <figure class="shot">
+          <img src="../shots/coord.png" width="760" height="489" loading="lazy" decoding="async"
+               alt="HMS 좌표변환 창. 원본 좌표계에 EPSG:5174 한국 1985 수정 중부원점, 변환 좌표계에 EPSG:5186 한국 2000 중부원점 2010 이 골라져 있고 오른쪽에 작업 로그 칸이 있습니다.">
+          <figcaption>가상의 사업지(성수2지구) 자료로 찍은 화면입니다.</figcaption>
+        </figure>
+        <div class="dl-line">
+          <a class="dl" href="../solutions/cad-coord-trans.html">AutoCAD 좌표변환 소개 보기</a>
+          <a class="ghost" href="../guides/solution-coord-trans.pdf" data-dl="guide-coord-trans">사용 안내서 PDF</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="check">
+    <div class="wrap">
+      <div class="head">
+        <span class="sec-no">05</span>
+        <h2>바꾼 뒤 확인할 것</h2>
+      </div>
+      <ul class="steps">
+        <li class="step">
+          <span class="n" aria-hidden="true"></span>
+          <div>
+            <h3>원본을 먼저 따로 저장해 둡니다</h3>
+            <p>원본을 직접 바꾸는 방식이면 실행 전에 사본을 꼭 따로 저장해 두십시오.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="n" aria-hidden="true"></span>
+          <div>
+            <h3>한 점의 좌표를 견줍니다</h3>
+            <p>도곽 모서리처럼 알아보기 쉬운 점을 바꾸기 전후로 ID 명령으로 잽니다. ID 는 UCS 기준 값을 보여 주므로 UCS 를 세계(WCS)로 둡니다. 캐드의 X 는 동쪽이라 측량 성과표의 X(북쪽)와 반대입니다. 예시 가상 필지의 한 점은 X 200,544.992 · Y 500,229.918 이 X 200,613.801 · Y 600,534.725 가 되었습니다.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="n" aria-hidden="true"></span>
+          <div>
+            <h3>5186 도면과 겹쳐 봅니다</h3>
+            <p>같은 자리의 5186 도면과 아직 약 10만 m 어긋나면, 바꾸기 전 도면을 겹쳤거나 이미 5186 이던 도면을 한 번 더 바꾼 것일 수 있습니다.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="n" aria-hidden="true"></span>
+          <div>
+            <h3>면적표를 다시 봅니다</h3>
+            <p>면적이 아주 조금 달라지므로, 면적표가 붙은 도면은 다시 재어 봅니다.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="n" aria-hidden="true"></span>
+          <div>
+            <h3>곡선을 살핍니다</h3>
+            <p>방법에 따라 원과 호가 폴리선이나 선분으로 바뀝니다. 곡선이 꼭 필요한 곳은 확인하십시오.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="more">
+    <div class="wrap">
+      <div class="head">
+        <h2>함께 보면 좋은 솔루션</h2>
+        <p>이 글에서 다룬 일과 이어지는 HMS 솔루션입니다. 공간정보를 처음부터 EPSG:5186 이나 5174 로 골라 받으실 수도 있습니다.</p>
+      </div>
+      <ul class="others">
+        <li><a href="../solutions/cad-coord-trans.html"><span class="o-no">S-01</span><span class="o-name">AutoCAD 좌표변환</span><span class="o-flow">AutoCAD 도면 → 좌표계가 바뀐 같은 도면</span></a></li>
+        <li><a href="../solutions/vworld-download.html"><span class="o-no">S-08</span><span class="o-name">브이월드 공간정보 내려받기</span><span class="o-flow">행정구역 또는 구역계 → 코드까지 채워진 SHP</span></a></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <b>HMS Solution</b>
+      <span>HMS 솔루션 · 엔지니어링 업무 효율화</span>
+      <span>문의 — <a class="who" href="../#ask">황민수</a> (<a href="mailto:72second@naver.com">72second@naver.com</a>)</span>
+      <span>카카오톡 오픈채팅 — <a href="https://open.kakao.com/o/gkkxMGLi" target="_blank" rel="noopener">바로 가기</a></span>
+      <span><a href="../privacy.html">개인정보처리방침</a></span>
+      <span><a href="../opensource.html">오픈소스 라이선스</a></span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
