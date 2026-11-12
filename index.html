@@ -116,9 +116,12 @@
     --rule: #DEE5EE;
     --ink: #172033;
     --ink-soft: #3C4759;
-    --muted: #6C778A;
+    --muted: #5F6A7D;
     --blue: #2F6FED;
     --blue-hover: #255ED0;
+    /* 흰 글자를 얹는 단추 바탕. 어두운 테마에서도 이 값을 쓴다 - 밝은 --blue 위의 흰 글자는 3:1 에 그친다. */
+    --btn-bg: #2F6FED;
+    --btn-bg-hover: #255ED0;
     --soft: #EAF1FF;
     --soft-border: #BFD2FF;
     --soft-text: #285FC8;
@@ -145,6 +148,8 @@
       --muted: #A6B1C2;
       --blue: #5B8FFF;
       --blue-hover: #76A2FF;
+      --btn-bg: #2F6FED;
+      --btn-bg-hover: #255ED0;
       --soft: #1C3155;
       --soft-border: #31558F;
       --soft-text: #9FBEFF;
@@ -166,6 +171,8 @@
     --muted: #A6B1C2;
     --blue: #5B8FFF;
     --blue-hover: #76A2FF;
+    --btn-bg: #2F6FED;
+    --btn-bg-hover: #255ED0;
     --soft: #1C3155;
     --soft-border: #31558F;
     --soft-text: #9FBEFF;
@@ -177,7 +184,10 @@
   }
 
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  /* 부드러운 스크롤은 페이지가 다 읽힌 뒤(load)에 켠다(접기 스크립트가 ready 를 붙인다).
+     처음부터 켜 두면 주소의 #자리로 미끄러지는 사이 화면 그림이 늦게 읽혀 위쪽 길이가 바뀌고,
+     제목이 머리 아래가 아니라 70px 쯤 아래에 멈췄다. */
+  html.ready { scroll-behavior: smooth; }
   body {
     margin: 0;
     background: var(--bg);
@@ -188,10 +198,24 @@
     line-height: 1.65;
     letter-spacing: -0.01em;
     -webkit-font-smoothing: antialiased;
+    /* 한글은 낱말 단위로만 줄을 바꾼다('승인됩니|다' 처럼 끊기지 않게). 메일 주소처럼
+       칸보다 긴 낱말만 어디서든 끊어 넘치지 않게 한다. */
+    word-break: keep-all; overflow-wrap: anywhere;
   }
   .wrap { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
   a { color: var(--blue); }
   h1, h2, h3, h4 { letter-spacing: -0.025em; text-wrap: balance; }
+  /*
+    접힌 글 감추기.
+    .item { display: grid } 처럼 따로 정한 display 가 브라우저의 [hidden] 기본 규칙을 이긴다.
+    그래서 hidden 을 붙이면 반드시 사라지도록 한 번 더 적는다.
+    hidden="until-found" 는 display:none 이 아니라 content-visibility 로 감춘다(브라우저 찾기로
+    걸리면 저절로 펼쳐진다). 그때는 여백 · 테두리가 남으므로 그것만 없앤다.
+  */
+  [hidden]:not([hidden="until-found"]) { display: none !important; }
+  @media not print {
+    [hidden="until-found"] { margin: 0 !important; padding: 0 !important; border: 0 !important; }
+  }
 
   /* ── 머리 ──────────────────────────────────────────────── */
   header {
@@ -230,11 +254,23 @@
   .brand-name b { color: var(--ink); font-weight: 700; }
   header nav { margin-left: auto; display: flex; gap: 4px; align-items: center; }
   header nav a {
+    position: relative;
     padding: 8px 14px; border-radius: var(--r-btn); white-space: nowrap;
     font-size: 14.5px; font-weight: 500; color: var(--ink-soft); text-decoration: none;
     transition: background .15s ease, color .15s ease;
   }
   header nav a:hover { background: var(--soft); color: var(--soft-text); }
+  /* 지금 보고 있는 마디. 긴 페이지에서 어디쯤인지 알려 준다(아래 접기 스크립트가 붙인다).
+     마우스를 올린 모양(옅은 파랑 바탕)과 겹치지 않게 넓은 화면에서는 글자 아래 파란 줄로 보인다.
+     굵기는 바꾸지 않는다 - 바꾸면 글자 폭이 달라져 메뉴 전체가 옆으로 움찔한다. */
+  header nav a[aria-current] { color: var(--soft-text); }
+  header nav a[aria-current]::after {
+    content: ""; position: absolute; left: 14px; right: 14px; bottom: 2px; height: 2px;
+    border-radius: 1px; background: var(--blue);
+  }
+  /* 좁은 화면에서 메뉴를 여는 단추. 넓은 화면에서는 쓰지 않는다. */
+  .menu-btn { display: none; }
+  .menu-btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
   /* 밝게 / 어둡게 고르는 자리. 프로그램의 설정 창과 같은 세 가지를 준다. */
   .theme-pick {
@@ -254,7 +290,7 @@
   .hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--rule); }
   /* 바탕의 필지 그림. 글을 읽는 데 방해되지 않을 만큼만 비친다. */
   #plots { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .38; }
-  .hero-in { position: relative; padding: 92px 0 84px; }
+  .hero-in { position: relative; padding: 80px 0 72px; }
   .hero h1 {
     margin: 20px 0 0; font-size: clamp(34px, 5vw, 52px); line-height: 1.24; font-weight: 700;
   }
@@ -273,11 +309,11 @@
   .dl {
     display: inline-flex; align-items: center; justify-content: center; gap: 9px;
     height: var(--h-ctl); padding: 0 22px; border: 0; border-radius: var(--r-btn);
-    background: var(--blue); color: #fff; box-shadow: var(--shadow);
+    background: var(--btn-bg); color: #fff; box-shadow: var(--shadow);
     font-size: 15.5px; font-weight: 600; text-decoration: none;
     transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
   }
-  .dl:hover { background: var(--blue-hover); box-shadow: var(--shadow-lift); transform: translateY(-1px); }
+  .dl:hover { background: var(--btn-bg-hover); box-shadow: var(--shadow-lift); transform: translateY(-1px); }
   .dl svg { flex: none; }
   .dl-line { margin-top: 30px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
   .dl-note {
@@ -285,20 +321,78 @@
     font-size: 14px; color: var(--muted);
   }
   .dl-sub { margin-top: 12px; font-size: 14.5px; color: var(--muted); }
+  .dl-sub b { color: var(--ink-soft); font-weight: 600; }
 
   /* ── 마디 ──────────────────────────────────────────────── */
-  section { padding: 84px 0; border-bottom: 1px solid var(--rule); }
+  section { padding: 68px 0; border-bottom: 1px solid var(--rule); }
   section:last-child { border-bottom: 0; }
   .head { max-width: 680px; }
   .head h2 { margin: 14px 0 0; font-size: clamp(26px, 3.2vw, 34px); font-weight: 700; }
   .head p { margin: 12px 0 0; color: var(--ink-soft); font-size: 16.5px; }
+  /* 머리말 오른쪽에 단추를 하나 둘 때. 폰에서는 단추가 머리말 아래 왼쪽으로 내려간다. */
+  .head-row {
+    display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px;
+  }
+  .head-row .head { flex: 1 1 520px; }
+  .head-act { flex: none; }
+
+  /* ── 접기 · 펼치기 ─────────────────────────────────────────
+     페이지가 길어 첫 판단에 필요 없는 글만 접는다. 접힌 글도 HTML 에 그대로 있다
+     (검색엔진이 읽고, 브라우저 찾기로도 걸린다). 접는 방법은 두 가지뿐이다.
+       <details class="fold-card">          설치 파일이 큰 까닭 · 영문 소개 · 솔루션별 안내서
+       .fold-btn + hidden="until-found"     솔루션 카드 · 지난 소식 (아래 접기 스크립트)
+     스크립트가 없으면 단추는 숨은 채로 있고 글은 모두 펼쳐 보인다. */
+  .chev { flex: none; transition: transform .2s ease; }
+  [aria-expanded="true"] .chev, details[open] > summary .chev { transform: rotate(180deg); }
+
+  .fold-btn {
+    display: inline-flex; align-items: center; gap: 8px; min-height: var(--h-ctl); padding: 0 14px;
+    border: 1px solid var(--soft-border); border-radius: var(--r-btn);
+    background: var(--soft); color: var(--soft-text);
+    font: inherit; font-size: 14px; font-weight: 600; line-height: 1.3; cursor: pointer;
+    transition: border-color .15s ease;
+  }
+  .fold-btn:hover { border-color: var(--blue); }
+  .fold-btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+  .fold-card { border: 1px solid var(--rule); border-radius: var(--r-card); background: var(--surface); box-shadow: var(--shadow); }
+  .fold-card > summary {
+    list-style: none; display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 20px;
+    cursor: pointer; border-radius: var(--r-card);
+    font-size: 15.5px; font-weight: 700; color: var(--ink);
+    transition: background .15s ease;
+  }
+  .fold-card > summary::-webkit-details-marker { display: none; }
+  /* 묶음 이름이 제목(h4)일 때. 문서 구조에는 제목으로 남고 모양은 다른 접는 상자와 같다. */
+  .fold-card > summary h4 { margin: 0; font: inherit; letter-spacing: inherit; }
+  .fold-card > summary:hover { background: var(--soft); }
+  .fold-card[open] > summary { border-radius: var(--r-card) var(--r-card) 0 0; }
+  .fold-card > summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .fold-hint {
+    margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; color: var(--soft-text);
+  }
+  .fold-card:not([open]) .h-open, .fold-card[open] .h-closed { display: none; }
+  .fold-body { padding: 4px 20px 20px; }
+  .fold-body > p { margin: 0; font-size: 15px; color: var(--ink-soft); }
+  /* 열고 닫을 때 높이가 부드럽게 바뀐다. 이를 모르는 브라우저는 그냥 바로 열린다. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (interpolate-size: allow-keywords) {
+      .fold-card { interpolate-size: allow-keywords; }
+      .fold-card::details-content {
+        block-size: 0; overflow-y: clip;
+        transition: block-size .22s ease, content-visibility .22s allow-discrete;
+      }
+      .fold-card[open]::details-content { block-size: auto; }
+    }
+  }
 
 
   /* ── 화면 미리보기 ─────────────────────────────────────── */
   /* 왼쪽 목록에서 솔루션을 고르면 오른쪽에 그 화면이 뜬다. 솔루션이 늘어도 길이가 늘지 않는다. */
   .viewer { margin-top: 32px; display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 20px; align-items: start; }
-  .picker { display: flex; flex-direction: column; gap: 4px; position: sticky; top: 84px; }
-  .picker button { text-align: left; padding: 10px 14px; border-radius: 10px; border: 1px solid transparent;
+  .picker { display: flex; flex-direction: column; gap: 2px; position: sticky; top: 84px; }
+  .picker button { text-align: left; padding: 8px 14px; border-radius: 10px; border: 1px solid transparent;
                    background: none; color: var(--ink-soft); font: inherit; font-size: 14.5px; cursor: pointer; }
   .picker button:hover { background: var(--soft); color: var(--ink); }
   .picker button.on { background: var(--surface); border-color: var(--rule); color: var(--ink); font-weight: 700; box-shadow: var(--shadow); }
@@ -306,7 +400,9 @@
   .stage { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-card);
            box-shadow: var(--shadow); overflow: hidden; }
   .stage .frame { position: relative; background: var(--soft); min-height: 200px; }
-  .stage .frame img { display: block; width: 100%; height: auto; cursor: zoom-in; border-bottom: 1px solid var(--rule); }
+  /* 세로로 긴 화면을 골라도 마디가 출렁이지 않게 높이에 상한만 둔다(고정이 아니다). */
+  .stage .frame img { display: block; width: 100%; height: auto; max-height: min(70vh, 640px); object-fit: contain;
+                      cursor: zoom-in; border-bottom: 1px solid var(--rule); }
   .stage .nav, .lightbox .nav { position: absolute; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 50%;
                border: 1px solid var(--rule); background: var(--surface); color: var(--ink);
                font-size: 28px; line-height: 1; cursor: pointer; box-shadow: var(--shadow); opacity: .92; }
@@ -338,9 +434,28 @@
   }
 
   /* ── 솔루션 카드 ───────────────────────────────────────── */
-  .sheets { margin-top: 44px; display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
+  /* 넓은 화면은 세 칸, 중간 폭은 두 칸, 폰은 한 칸. 쓰는 환경(need)은 '내 PC 에서 되나' 를 가르는
+     한 줄이라 카드 바닥에 둔다 - 같은 줄 카드끼리 바닥 줄이 맞아, 짧은 카드 아래가 비어 보이지 않는다.
+
+     솔루션이 늘어도 첫 화면이 길어지지 않게, 앞의 몇 장(세 장 이상을 채우는 줄까지)만 보이고
+     다음 줄은 윗부분만 비치다 바탕색으로 흐려진다. 아래 단추로 모두 편다(스크립트 ①).
+     스크립트가 없거나 인쇄할 때는 모두 보인다. 접힌 상자의 좌우 여백은 카드 그림자가 잘리지 않게
+     둔 것이다(음수 여백과 짝이라 카드 자리는 그대로다). */
+  .sheets-fold { position: relative; margin: 0 -12px; padding: 0 12px; }
+  .sheets-fold.is-folded { overflow: hidden; }
+  .fold-fade { display: none; }
+  .sheets-fold.is-folded .fold-fade {
+    display: block; position: absolute; left: 0; right: 0; bottom: 0; height: var(--peek, 120px); cursor: pointer;
+    background: linear-gradient(180deg, transparent 0%, var(--bg) 88%);
+  }
+  .fold-bar { display: flex; justify-content: center; margin-top: 6px; }
+  .sheets-fold:not(.is-folded) + .fold-bar { margin-top: 24px; }
+  .fold-bar .fold-btn { min-width: 200px; justify-content: center; }
+  .sheets { margin-top: 32px; display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (min-width: 1100px) { .sheets { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   .sheet {
-    position: relative; padding: 24px; background: var(--surface);
+    position: relative; display: flex; flex-direction: column;
+    padding: 22px 24px 24px; background: var(--surface);
     border: 1px solid var(--rule); border-radius: var(--r-card); box-shadow: var(--shadow);
     transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease;
   }
@@ -350,29 +465,37 @@
   /* 카드 이름도 소개 페이지로 가는 링크다(오른쪽 위 '자세히 보기' 와 같은 주소).
      검색엔진에 솔루션 이름이 링크 글로 전해진다. 제목 색은 그대로 두고 밑줄은 마우스를 올릴 때만 긋는다.
      링크를 h3 바깥에 두는 까닭: scripts/update-home-versions.py 가 '<h3>이름</h3>' 그대로를 찾아 판을 고친다. */
-  .sheet-name { display: block; width: fit-content; margin-top: 8px; color: inherit; text-decoration: none; border-radius: 4px; }
+  .sheet-title { margin-top: 6px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+  .sheet-title .ver { flex: none; }
+  .sheet-name { display: block; width: fit-content; margin-top: 0; color: inherit; text-decoration: none; border-radius: 4px; }
   .sheet-name h3 { margin: 0; }
   .sheet-name:hover h3 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
   .sheet-name:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
-  .sheet .why { margin: 12px 0 0; color: var(--ink-soft); font-size: 15px; }
+  .sheet .why { margin: 0 0 14px; font-size: 14.5px; color: var(--ink-soft); }
+  /* 바닥 줄. 점선 한 줄로 '카드의 꼬리' 임을 보인다. 위 표 · 설명과는 14px 이상 떨어진다. */
+  .sheet .need { margin: auto 0 0; padding-top: 10px; border-top: 1px dashed var(--rule); font-size: 13px; color: var(--muted); }
 
-  .meta { margin-top: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .ver {
+  /* 판 표기와 권수 캡슐. class="ver" 는 판 표기에만 쓴다(update-home-versions.py 가 찾는다). */
+  .ver, .count {
     display: inline-block; padding: 2px 10px; border-radius: var(--r-pill);
     background: var(--soft); border: 1px solid var(--soft-border);
     font-size: 12.5px; font-weight: 700; color: var(--soft-text);
   }
-  .need { font-size: 13.5px; color: var(--muted); }
 
-  /* 무엇을 넣으면 무엇이 나오는지. 이 카드에서 가장 중요한 한 줄이다. */
+  /* 무엇을 넣으면 무엇이 나오는지. 이 카드에서 가장 중요한 두 줄이다.
+     모든 폭에서 '이름표 | 값' 두 줄 표로 세우고, 나오는 것 이름표 앞에 화살표를 단다. */
   .flow {
-    margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--rule);
-    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    margin: 14px 0; padding-top: 12px; border-top: 1px solid var(--rule);
+    display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 14px; align-items: baseline;
   }
-  .flow .cell { min-width: 0; }
-  .flow .k { font-size: 12px; font-weight: 600; color: var(--muted); }
-  .flow .v { margin-top: 2px; font-size: 14.5px; font-weight: 600; color: var(--ink); }
-  .flow .arrow { color: var(--blue); font-size: 18px; font-weight: 700; }
+  .flow .cell { display: contents; }
+  .flow .arrow { display: none; }
+  .flow .k { font-size: 12.5px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+  .flow .v {
+    margin-top: 0; font-size: 14.5px; font-weight: 600; line-height: 1.5; color: var(--ink);
+    word-break: keep-all; overflow-wrap: anywhere;
+  }
+  .flow .cell:last-child .k::before { content: "→"; margin-right: 5px; color: var(--blue); font-weight: 700; }
 
   /* 솔루션마다의 소개 페이지(solutions/)로 가는 길. 카드 높이와 모양을 바꾸지 않도록
      S-0N 부호와 같은 줄의 오른쪽 끝에 작게 둔다. 화면 읽기 프로그램에는 aria-label 로
@@ -385,37 +508,50 @@
   .sheet .more:hover { background: var(--soft); color: var(--soft-text); }
   .sheet .more:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
-  /* 준비 중 카드는 뜬 것처럼 보이지 않게 그림자와 움직임을 뺀다. */
-  .sheet[style*="dashed"] { background: var(--surface-alt); box-shadow: none; }
-  .sheet[style*="dashed"]:hover { transform: none; box-shadow: none; border-color: var(--rule); }
+  /* 다음에 나올 것들. 카드 묶음 아래 전체 폭의 점선 띠다. 접혀 있어도 늘 보인다.
+     뜬 것처럼 보이지 않게 그림자와 움직임을 뺀다. */
+  .sheet.sheet-soon {
+    margin-top: 28px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+    padding: 16px 22px; background: var(--surface-alt); border: 1px dashed var(--rule); box-shadow: none;
+  }
+  .sheet.sheet-soon:hover { transform: none; box-shadow: none; border-color: var(--rule); }
+  .sheet-soon h3 { margin: 0; font-size: 16px; color: var(--ink-soft); }
+  .sheet-soon p { margin: 0; font-size: 14px; color: var(--muted); }
+  .soon-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+  .soon-list li {
+    padding: 2px 10px; border: 1px dashed var(--soft-border); border-radius: var(--r-pill);
+    font-size: 12.5px; font-weight: 600; color: var(--soft-text); white-space: nowrap;
+  }
 
   /* ── 받는 법 ───────────────────────────────────────────── */
-  .steps { margin-top: 44px; display: grid; gap: 12px; }
-  .step {
-    display: grid; grid-template-columns: 44px 1fr; gap: 18px; align-items: start;
-    padding: 22px 24px; background: var(--surface);
-    border: 1px solid var(--rule); border-radius: var(--r-card);
+  /* 받는 곳은 바탕을 한 단 밝게 해 눈에 띄게 한다. */
+  #get { background: var(--surface); }
+  /* 세 단계를 상자 대신 번호 원을 잇는 흐름으로 보인다. 폰에서는 세로로 잇는다. */
+  .steps { margin-top: 32px; display: grid; gap: 28px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .step { position: relative; display: block; padding: 0; background: none; border: 0; }
+  .step:not(:last-child)::after {
+    content: ""; position: absolute; top: 15px; left: 44px; right: -16px; height: 2px;
+    border-radius: 1px; background: var(--soft-border);
   }
   .step .n {
+    position: relative; margin-bottom: 14px;
     display: flex; align-items: center; justify-content: center;
     width: 32px; height: 32px; border-radius: 50%;
     background: var(--soft); color: var(--soft-text);
     font-size: 14px; font-weight: 700;
   }
-  .step h4 { margin: 4px 0 6px; font-size: 16.5px; font-weight: 600; }
+  .step h4 { margin: 0 0 6px; font-size: 16.5px; font-weight: 600; }
   .step p { margin: 0; color: var(--ink-soft); font-size: 15px; }
 
-  .callout {
-    margin-top: 26px; padding: 20px 24px;
-    background: var(--soft); border: 1px solid var(--soft-border); border-radius: var(--r-card);
+  /* 내려받기 아래의 접는 상자 둘(설치 파일이 큰 까닭 · 영문 소개). */
+  .get-more {
+    margin-top: 24px; display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start;
   }
-  .callout b { color: var(--soft-text); }
-  .callout p { margin: 0; font-size: 15px; color: var(--ink-soft); }
   /* 영어로 찾아오신 분께 드리는 한 단락. 프로그램 화면이 한국어라는 것을 미리 알린다. */
-  .en-note { margin: 24px 0 0; max-width: 860px; font-size: 14.5px; line-height: 1.6; color: var(--ink-soft); letter-spacing: 0; }
+  .en-note { margin: 0; max-width: 860px; font-size: 14.5px; line-height: 1.6; color: var(--ink-soft); letter-spacing: 0; }
 
   /* ── 안내서 ────────────────────────────────────────────── */
-  .books { margin-top: 44px; display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
+  .books { margin-top: 32px; display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
   .book {
     padding: 24px; background: var(--surface);
     border: 1px solid var(--rule); border-radius: var(--r-card); box-shadow: var(--shadow);
@@ -431,6 +567,12 @@
     transition: background .15s ease, border-color .15s ease;
   }
   .book-dl:hover { background: var(--soft); border-color: var(--soft-border); }
+  /* 쪽수 · 날짜는 왼쪽, PDF 단추는 오른쪽에 한 줄로 */
+  .book-foot {
+    margin-top: 14px; display: flex; align-items: center; justify-content: space-between;
+    gap: 10px 16px; flex-wrap: wrap;
+  }
+  .book-foot .pg, .book-foot .book-dl { margin-top: 0; }
   /* 잠시 내려 둔 안내서. 없는 것처럼 감추기보다 무슨 일인지 적어 두는 편이 낫다. */
   .book-soon {
     margin-top: 14px; display: inline-block; padding: 8px 14px; border-radius: var(--r-btn);
@@ -439,6 +581,7 @@
   }
   .book-soon-row { display: block; padding: 7px 12px; font-size: 14px; color: var(--muted); }
   .book-list { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+  .fold-body .book-list { margin-top: 12px; }
   /* 목록이 여덟이라 한 줄로 세우면 카드만 길어진다. 넓게 쓸 때는 두 칸으로 벌린다. */
   .book-full { grid-column: 1 / -1; }
   .book-full .book-list { grid-template-columns: repeat(2, 1fr); gap: 6px 16px; }
@@ -450,7 +593,8 @@
   .book-list a:hover { background: var(--soft); color: var(--soft-text); }
 
   /* ── 새 소식 ───────────────────────────────────────────── */
-  .news { margin-top: 44px; display: grid; gap: 0; }
+  .news { margin-top: 32px; display: grid; gap: 0; }
+  .news-foot { margin-top: 16px; }
   .item {
     display: grid; grid-template-columns: 132px 1fr; gap: 20px;
     padding: 20px 0; border-bottom: 1px solid var(--rule); align-items: start;
@@ -470,7 +614,7 @@
     QR 과 글을 나란히 둔다. 폰으로 보는 사람은 QR 을 찍을 수 없으니(자기 화면이다)
     바로 아래 링크가 함께 있어야 한다 — 둘 중 하나만 두면 절반은 못 쓴다.
   */
-  .ask { margin-top: 44px; display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: start; }
+  .ask { margin-top: 32px; display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 28px; align-items: start; }
   .ask-qr {
     /*
       QR 은 어두운 테마에서도 흰 바탕에 검은 무늬여야 한다. 색을 뒤집으면 사람 눈에는
@@ -481,17 +625,19 @@
     border: 1px solid var(--rule); box-shadow: var(--shadow);
     background: #FFFFFF; color: #000000;
   }
-  .ask-qr .cap { color: #6C778A; }
+  .ask-qr .cap { color: #5F6A7D; }
   .ask-qr svg { display: block; width: 100%; height: auto; }
   .ask-qr .cap { margin-top: 10px; text-align: center; font-size: 12.5px; }
-  .ask-ways { display: grid; gap: 18px; }
+  /* 연락 길 넷은 한 번에 보여야 한다. 넓은 화면은 2×2, 좁은 화면은 한 줄씩. */
+  .ask-ways { display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ask-way {
-    padding: 22px 24px; background: var(--surface);
+    padding: 18px 20px; background: var(--surface); display: flex; flex-direction: column;
     border: 1px solid var(--rule); border-radius: var(--r-card); box-shadow: var(--shadow);
   }
   .ask-way h4 { margin: 0 0 8px; font-size: 17px; font-weight: 700; }
-  .ask-way p { margin: 0; font-size: 14.5px; color: var(--ink-soft); }
+  .ask-way p { margin: 0; font-size: 14.5px; color: var(--ink-soft); flex: 1 0 auto; }
   .ask-way .go {
+    align-self: flex-start;
     display: inline-block; margin-top: 12px; padding: 8px 16px; border-radius: var(--r-btn);
     background: var(--soft); border: 1px solid var(--soft-border); color: var(--soft-text);
     font-size: 14px; font-weight: 600; text-decoration: none;
@@ -499,9 +645,16 @@
   .ask-way .go:hover { filter: brightness(0.97); }
   .ask-way button.go { font-family: inherit; line-height: inherit; cursor: pointer; }
   .ask-way .go:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  /* 주된 길(카카오톡 오픈채팅)은 파란 단추로 */
+  .ask-way .go-main { background: var(--btn-bg); border-color: var(--btn-bg); color: #fff; }
+  .ask-way .go-main:hover { background: var(--btn-bg-hover); border-color: var(--btn-bg-hover); filter: none; }
+  /* 폰에서는 QR 을 뺀다. 그 폰의 화면이라 찍을 수 없고, 바로 아래에 '오픈채팅방 열기' 가 있다. */
   @media (max-width: 720px) {
     .ask { grid-template-columns: 1fr; gap: 22px; }
-    .ask-qr { width: 100%; max-width: 220px; margin: 0 auto; }
+    .ask-qr { display: none; }
+    .ask-way { padding: 16px 18px; }
+    .ask-way h4 { font-size: 16px; }
+    .ask-way p { font-size: 14px; }
   }
 
   /* ── 꼬리 ──────────────────────────────────────────────── */
@@ -583,27 +736,61 @@
   }
 
   /* 머리가 붙어 있어 앵커로 뛰면 제목이 가린다. 그만큼 미리 띄운다. */
-  section[id] { scroll-margin-top: 76px; }
+  main [id] { scroll-margin-top: 76px; }
 
   @media (max-width: 900px) {
     .sheets, .books { grid-template-columns: 1fr; }
     .book-full .book-list { grid-template-columns: 1fr; }
     .item { grid-template-columns: 1fr; gap: 6px; }
     header nav a { padding: 8px 10px; font-size: 13.5px; }
-    .hero-in { padding: 64px 0 60px; }
-    section { padding: 64px 0; }
+    .hero-in { padding: 52px 0 48px; }
+    section { padding: 52px 0; }
     .wrap { width: calc(100% - 36px); }
+    .sheets, .steps, .books, .news, .ask { margin-top: 28px; }
+
+    .steps { grid-template-columns: 1fr; gap: 20px; }
+    .step { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 14px; }
+    .step .n { margin-bottom: 0; }
+    .step h4 { margin-top: 4px; }
+    .step:not(:last-child)::after { top: 40px; bottom: -14px; left: 15px; right: auto; width: 2px; height: auto; }
+    .get-more { grid-template-columns: 1fr; }
+    .ask-ways { grid-template-columns: 1fr; }
+
+    /* 메뉴는 단추로 연다. 이름 · 메뉴 · 밝기 셋이 한 줄에 들어가지 않아 밝기 고르기도 메뉴 패널
+       안으로 들어간다. menu-ready 는 머리 바로 뒤의 메뉴 스크립트가 제대로 돌았을 때만 붙는다 -
+       스크립트가 없거나 멈추면 예전처럼 링크가 줄에 서고(760 이하는 아래 규칙대로 숨긴다)
+       메뉴가 통째로 사라지는 일이 없다. */
+    html.menu-ready .menu-btn {
+      display: inline-flex; margin-left: auto; align-items: center; gap: 6px; height: 40px; padding: 0 12px;
+      border: 1px solid var(--rule); border-radius: var(--r-btn); background: var(--surface-alt); color: var(--ink);
+      font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    html.menu-ready header nav {
+      position: absolute; top: 100%; left: 0; right: 0; margin: 0;
+      display: none; flex-direction: column; align-items: stretch; gap: 2px;
+      padding: 8px 18px 16px; background: var(--surface);
+      border-bottom: 1px solid var(--rule); box-shadow: var(--shadow-lift);
+    }
+    html.menu-ready header nav.open { display: flex; }
+    html.menu-ready header nav a { display: block; padding: 11px 12px; font-size: 15.5px; }
+    /* 패널 안에서는 밑줄 대신 바탕으로 지금 마디를 표시한다(세로 목록이라 밑줄이 어색하다). */
+    html.menu-ready header nav a[aria-current] { background: var(--soft); }
+    html.menu-ready header nav a[aria-current]::after { display: none; }
+    html.menu-ready .theme-pick { margin: 10px 0 0; align-self: flex-start; }
+    html.menu-ready header nav .theme-pick button { min-height: 40px; padding: 0 14px; }
+  }
+  /* 태블릿 세로(641~900) 는 카드 두 칸. 접혀서 짧아진 카드를 한 칸으로 세우면 오른쪽이 텅 빈다. */
+  @media (min-width: 641px) and (max-width: 900px) {
+    .sheets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
   /*
     폰 세로 화면.
 
     머리에 이름 · 메뉴 넷 · 밝기 셋이 다 서면 자리가 모자라, 글자가 한 자씩
-    세로로 쪼개져 내려간다("새 소 식", "시 스 템"). 이 폭에서는 메뉴를 접는다 —
-    페이지가 길지 않아 굴려서 보면 되고, 이름을 누르면 맨 위로 돌아온다.
-
-    무엇을 넣으면 무엇이 나오는지도 가로로는 안 들어간다. 위아래로 세우고
-    화살표를 아래로 돌린다.
+    세로로 쪼개져 내려간다("새 소 식", "시 스 템"). 스크립트가 있으면 900 이하에서
+    메뉴 단추로 열고(위 규칙), 없으면 이 폭에서 링크를 숨긴다 — 굴려서 보면 되고,
+    이름을 누르면 맨 위로 돌아온다.
   */
   @media (max-width: 760px) {
     header .bar { gap: 12px; min-height: 56px; }
@@ -612,8 +799,10 @@
     .theme-pick { margin-left: auto; }
     .theme-pick button { padding: 5px 9px; font-size: 12.5px; }
 
-    .flow { display: grid; grid-template-columns: 1fr; gap: 10px; }
-    .flow .arrow { transform: rotate(90deg); width: 1em; line-height: 1; }
+    .sheet { padding: 20px 18px; }
+    /* '자세히 보기' 를 손가락으로 누를 자리를 44px 로 넓힌다. 글자가 보이는 자리는 그대로다. */
+    .sheet .more { padding: 13px 12px; margin: -9px -4px 0 0; }
+    .fold-btn { min-height: 44px; }
 
     .hero h1 { font-size: clamp(29px, 8vw, 38px); }
     .hero p.lead { font-size: 16px; }
@@ -622,11 +811,20 @@
     .dl-note { height: auto; }
   }
   @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
+    html, html.ready { scroll-behavior: auto; }
     * { animation: none !important; transition: none !important; }
   }
+  /* 인쇄. 인쇄 사건(beforeprint)을 보내지 않는 PDF 변환기 · 읽기 도구도 있어 CSS 로도 모두 편다.
+     누르는 단추는 종이에 쓸모가 없으니 뺀다. */
+  @media print {
+    .sheets-fold { max-height: none !important; overflow: visible !important; }
+    .fold-fade { display: none !important; }
+    #sheet-list > .sheet[hidden] { display: flex !important; content-visibility: visible !important; }
+    #news-list > .item[hidden] { display: grid !important; content-visibility: visible !important; }
+    .fold-card::details-content { content-visibility: visible; block-size: auto; }
+    .fold-btn, .menu-btn, .fold-hint { display: none !important; }
+  }
 </style>
-
 </head>
 <body id="top">
 <header>
@@ -635,7 +833,8 @@
       <img src="logo.png" alt="" width="30" height="30">
       <span class="brand-name">HMS <b>Solution</b></span>
     </a>
-    <nav>
+    <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="site-nav" hidden><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>메뉴</button>
+    <nav id="site-nav" aria-label="주 메뉴">
       <a href="#solutions">솔루션</a>
       <a href="#screens">화면</a>
       <a href="#get">받는 법</a>
@@ -651,6 +850,51 @@
     </nav>
   </div>
 </header>
+<script>
+  /* 폰 메뉴. 900px 이하에서 메뉴 단추로 연다.
+
+     머리 바로 뒤에 따로 둔다. 아래 접기 스크립트가 멈춰도 메뉴는 살아 있어야 하고,
+     첫 화면을 그리기 전에 menu-ready 가 붙어야 링크 줄이 잠깐 보였다 사라지지 않는다.
+     menu-ready 는 메뉴가 제대로 갖춰졌을 때만 붙인다(CSS 가 이 표시를 보고 패널로 바꾼다). */
+  (function () {
+    var mbtn = document.getElementById("menu-btn");
+    var nav = document.getElementById("site-nav");
+    var head = mbtn && mbtn.closest ? mbtn.closest("header") : null;
+    if (!mbtn || !nav || !head) return;
+    function setMenu(open) {
+      nav.classList.toggle("open", open);
+      mbtn.setAttribute("aria-expanded", String(open));
+    }
+    mbtn.addEventListener("click", function () { setMenu(!nav.classList.contains("open")); });
+    /* 링크를 누르면 닫는다. 밝기 고르기 단추는 닫지 않는다. */
+    nav.addEventListener("click", function (e) {
+      if (e.target && e.target.closest && e.target.closest("a")) setMenu(false);
+    });
+    /* 키보드로 메뉴 끝을 지나 초점이 머리 밖으로 나가면 닫는다. 열린 패널이 다음 단추
+       (첫 화면의 내려받기)를 덮어, 초점이 간 자리가 보이지 않았다.
+       초점이 갈 곳을 알 수 없을 때(누른 곳이 초점을 받지 않는 경우)는 아래 '바깥을 누르면 닫기' 에 맡긴다. */
+    nav.addEventListener("focusout", function (e) {
+      var to = e.relatedTarget;
+      if (to && nav.classList.contains("open") && !head.contains(to)) setMenu(false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if ((e.key === "Escape" || e.key === "Esc") && nav.classList.contains("open")) {
+        setMenu(false); mbtn.focus();
+      }
+    });
+    document.addEventListener("click", function (e) {
+      if (nav.classList.contains("open") && !head.contains(e.target)) setMenu(false);
+    });
+    if (window.matchMedia) {
+      var narrow = matchMedia("(max-width: 900px)");
+      var shut = function () { setMenu(false); };
+      if (narrow.addEventListener) narrow.addEventListener("change", shut);
+      else if (narrow.addListener) narrow.addListener(shut);
+    }
+    mbtn.hidden = false;
+    document.documentElement.classList.add("menu-ready");
+  })();
+</script>
 
 <div class="hero">
   <canvas id="plots" aria-hidden="true"></canvas>
@@ -672,7 +916,7 @@
       <span class="dl-note">v2.1.7 · 200MB · Windows 10 / 11</span>
     </div>
     <p class="dl-sub">
-      설치 후 회원가입 및 승인이 완료되면 아홉 솔루션을 모두 무료로 사용하실 수 있습니다.
+      설치 후 회원가입 및 승인이 완료되면 아홉 솔루션을 모두 <b>무료로</b> 사용하실 수 있습니다.
     </p>
 
   </div>
@@ -681,173 +925,158 @@
 <main>
   <section id="solutions">
     <div class="wrap">
-      <div class="head">
-        <div class="tag">Solutions</div>
-        <h2>아홉 가지가 준비되어 있습니다</h2>
-        <p>
-          모두 Solution Center 안에서 골라 설치합니다. 무엇을 넣으면 무엇이 나오는지,
-          그것만 보시면 됩니다.
-        </p>
+      <div class="head-row">
+        <div class="head">
+          <div class="tag">Solutions</div>
+          <h2>아홉 가지가 준비되어 있습니다</h2>
+          <p>
+            모두 Solution Center 안에서 골라 설치합니다. 무엇을 넣으면 무엇이 나오는지,
+            그것만 보시면 됩니다.
+          </p>
+        </div>
       </div>
 
-      <div class="sheets">
+      <div class="sheets-fold" id="sheet-fold">
+      <div class="sheets" id="sheet-list">
         <article class="sheet">
           <div class="sheet-no">S-01</div>
-          <a class="sheet-name" href="solutions/cad-coord-trans.html"><h3>AutoCAD 좌표변환</h3></a>
-          <p class="why">AutoCAD 도면에 그려진 객체의 좌표를 다른 좌표계로 바꿉니다. 해치와 그리기 순서를 유지하며, 잠긴 도면층의 객체도 함께 바꿉니다.</p>
-          <div class="meta">
-            <span class="ver">v6.2</span>
-            <span class="need">AutoCAD 2016, 2018~2027 · 명령어 HMSCRS</span>
-          </div>
+          <div class="sheet-title"><a class="sheet-name" href="solutions/cad-coord-trans.html"><h3>AutoCAD 좌표변환</h3></a><span class="ver">v6.2</span></div>
           <div class="flow">
             <div class="cell"><div class="k">넣는 것</div><div class="v">열려 있는 AutoCAD 도면</div></div>
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">좌표계가 바뀐 같은 도면</div></div>
           </div>
+          <p class="why">AutoCAD 도면에 그려진 객체의 좌표를 다른 좌표계로 바꿉니다. 해치와 그리기 순서를 유지하며, 잠긴 도면층의 객체도 함께 바꿉니다.</p>
+          <p class="need">AutoCAD 2016, 2018~2027 · 명령어 HMSCRS</p>
           <a class="more" href="solutions/cad-coord-trans.html" aria-label="AutoCAD 좌표변환 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-02</div>
-          <a class="sheet-name" href="solutions/cadastral-map.html"><h3>지적도·토지현황도·토지조서 만들기</h3></a>
-          <p class="why">지적 파일이나 구역계로 지적도 · 토지현황도 CAD 도면과 편입토지조서 엑셀을 만듭니다. 구역계만 넣으시면 필요한 연속지적도를 브이월드에서 받아 사용합니다.</p>
-          <div class="meta">
-            <span class="ver">v4.4</span>
-            <span class="need">AutoCAD (MPOLYGON 은 Map 3D) · 구역계로 받기는 인터넷</span>
-          </div>
+          <div class="sheet-title"><a class="sheet-name" href="solutions/cadastral-map.html"><h3>지적도·토지현황도·토지조서 만들기</h3></a><span class="ver">v4.4</span></div>
           <div class="flow">
             <div class="cell"><div class="k">넣는 것</div><div class="v">지적 SHP · ZIP 또는 구역계(SHP · ZIP · DXF)</div></div>
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">레이어가 나뉜 DXF · DWG, 편입토지조서 엑셀</div></div>
           </div>
+          <p class="why">지적 파일이나 구역계로 지적도 · 토지현황도 CAD 도면과 편입토지조서 엑셀을 만듭니다. 구역계만 넣으시면 필요한 연속지적도를 브이월드에서 받아 사용합니다.</p>
+          <p class="need">AutoCAD (MPOLYGON 은 Map 3D) · 구역계로 받기는 인터넷</p>
           <a class="more" href="solutions/cadastral-map.html" aria-label="지적도·토지현황도·토지조서 만들기 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-03</div>
-          <a class="sheet-name" href="solutions/dxf-merge.html"><h3>CAD 도면 병합</h3></a>
-          <p class="why">도곽별로 나뉜 수치지형도 등 여러 CAD 도면(DXF · DWG)을 DXF 파일 하나로 합칩니다. 도곽 경계에서 겹친 객체는 하나만 남깁니다.</p>
-          <div class="meta">
-            <span class="ver">v2.9</span>
-            <span class="need">DWG 를 합칠 때만 AutoCAD</span>
-          </div>
+          <div class="sheet-title"><a class="sheet-name" href="solutions/dxf-merge.html"><h3>CAD 도면 병합</h3></a><span class="ver">v2.9</span></div>
           <div class="flow">
             <div class="cell"><div class="k">넣는 것</div><div class="v">DXF · DWG (혼합 사용 가능)</div></div>
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">하나로 합쳐진 DXF</div></div>
           </div>
+          <p class="why">도곽별로 나뉜 수치지형도 등 여러 CAD 도면(DXF · DWG)을 DXF 파일 하나로 합칩니다. 도곽 경계에서 겹친 객체는 하나만 남깁니다.</p>
+          <p class="need">DWG 를 합칠 때만 AutoCAD</p>
           <a class="more" href="solutions/dxf-merge.html" aria-label="CAD 도면 병합 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-04</div>
-          <a class="sheet-name" href="solutions/building-register.html"><h3>건축물대장 조서 작성</h3></a>
-          <p class="why">여러 건의 건축물대장 PDF를 읽어 엑셀 파일 하나로 정리합니다. 대장 종류별로 시트가 나뉩니다.</p>
-          <div class="meta">
-            <span class="ver">v4.11</span>
-            <span class="need">개수 제한 없음</span>
-          </div>
+          <div class="sheet-title"><a class="sheet-name" href="solutions/building-register.html"><h3>건축물대장 조서 작성</h3></a><span class="ver">v4.11</span></div>
           <div class="flow">
             <div class="cell"><div class="k">넣는 것</div><div class="v">건축물대장 PDF</div></div>
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">시트가 나뉜 엑셀 한 장</div></div>
           </div>
+          <p class="why">여러 건의 건축물대장 PDF를 읽어 엑셀 파일 하나로 정리합니다. 대장 종류별로 시트가 나뉩니다.</p>
+          <p class="need">개수 제한 없음</p>
           <a class="more" href="solutions/building-register.html" aria-label="건축물대장 조서 작성 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-05</div>
-          <a class="sheet-name" href="solutions/realty-price.html"><h3>부동산 공시가격 조회 · 수집</h3></a>
-          <p class="why">개별공시지가와 공동주택가격을 지번 · 단지별로 찾아 엑셀로 정리합니다. 최근 1 · 3 · 5 · 10년 가운데 고르신 기간의 가격이 연도별로 담깁니다.</p>
-          <div class="meta">
-            <span class="ver">v4.17</span>
-            <span class="need">인터넷 연결 · Chrome</span>
-          </div>
+          <div class="sheet-title"><a class="sheet-name" href="solutions/realty-price.html"><h3>부동산 공시가격 조회 · 수집</h3></a><span class="ver">v4.17</span></div>
           <div class="flow">
             <div class="cell"><div class="k">넣는 것</div><div class="v">소재지 · 지번 또는 엑셀</div></div>
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">연도별 공시가격이 붙은 엑셀</div></div>
           </div>
+          <p class="why">개별공시지가와 공동주택가격을 지번 · 단지별로 찾아 엑셀로 정리합니다. 최근 1 · 3 · 5 · 10년 가운데 고르신 기간의 가격이 연도별로 담깁니다.</p>
+          <p class="need">인터넷 연결 · Chrome</p>
           <a class="more" href="solutions/realty-price.html" aria-label="부동산 공시가격 조회 · 수집 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-06</div>
-          <a class="sheet-name" href="solutions/thematic-attribute.html"><h3>주제도 SHP 속성 코드 입력</h3></a>
-          <p class="why">연속주제도 SHP · DBF · ZIP 파일에 표준분류코드와 코드명을 채워 SHP 세트로 저장합니다.</p>
-          <div class="meta">
-            <span class="ver">v6.9</span>
-            <span class="need">파일 개수 제한 없음</span>
-          </div>
+          <div class="sheet-title"><a class="sheet-name" href="solutions/thematic-attribute.html"><h3>주제도 SHP 속성 코드 입력</h3></a><span class="ver">v6.9</span></div>
           <div class="flow">
             <div class="cell"><div class="k">넣는 것</div><div class="v">연속주제도 DBF · SHP ZIP</div></div>
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">코드가 채워진 SHP 세트</div></div>
           </div>
+          <p class="why">연속주제도 SHP · DBF · ZIP 파일에 표준분류코드와 코드명을 채워 SHP 세트로 저장합니다.</p>
+          <p class="need">파일 개수 제한 없음</p>
           <a class="more" href="solutions/thematic-attribute.html" aria-label="주제도 SHP 속성 코드 입력 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-07</div>
-          <a class="sheet-name" href="solutions/ppt-image.html"><h3>PPT 이미지 맞춰 넣기</h3></a>
-          <p class="why">여러 그림을 기준 그림이나 도형과 같은 자리 · 같은 크기로 슬라이드에 넣습니다. 열어 두신 파워포인트 문서에 바로 넣습니다.</p>
-          <div class="meta">
-            <span class="ver">v1.12</span>
-            <span class="need">Microsoft PowerPoint · 12장에 4초</span>
-          </div>
+          <div class="sheet-title"><a class="sheet-name" href="solutions/ppt-image.html"><h3>PPT 이미지 맞춰 넣기</h3></a><span class="ver">v1.12</span></div>
           <div class="flow">
             <div class="cell"><div class="k">넣는 것</div><div class="v">이미지 파일 또는 PPT 안의 그림</div></div>
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">열어 둔 파워포인트에 바로</div></div>
           </div>
+          <p class="why">여러 그림을 기준 그림이나 도형과 같은 자리 · 같은 크기로 슬라이드에 넣습니다. 열어 두신 파워포인트 문서에 바로 넣습니다.</p>
+          <p class="need">Microsoft PowerPoint · 12장에 4초</p>
           <a class="more" href="solutions/ppt-image.html" aria-label="PPT 이미지 맞춰 넣기 자세히 보기">자세히 보기 →</a>
         </article>
         <article class="sheet">
           <div class="sheet-no">S-08</div>
-          <a class="sheet-name" href="solutions/vworld-download.html"><h3>브이월드 공간정보 내려받기</h3></a>
-          <p class="why">지역과 공간정보를 골라 SHP 파일로 내려받습니다. 용도지역 · 지구 · 구역, 도시계획시설 등의 연속주제도와 연속지적도 · 토지특성 · 토지소유, 행정구역 경계를 행정구역 단위나 대상지에 맞춰 한 번에 받습니다.</p>
-          <div class="meta">
-            <span class="ver">v3.3</span>
-            <span class="need">인터넷 연결 · 45종 · 시·군 하나에 20~30초</span>
-          </div>
+          <div class="sheet-title"><a class="sheet-name" href="solutions/vworld-download.html"><h3>브이월드 공간정보 내려받기</h3></a><span class="ver">v3.3</span></div>
           <div class="flow">
             <div class="cell"><div class="k">넣는 것</div><div class="v">행정구역 또는 구역계(SHP · ZIP · DXF)</div></div>
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">코드까지 채워진 SHP</div></div>
           </div>
+          <p class="why">지역과 공간정보를 골라 SHP 파일로 내려받습니다. 용도지역 · 지구 · 구역, 도시계획시설 등의 연속주제도와 연속지적도 · 토지특성 · 토지소유, 행정구역 경계를 행정구역 단위나 대상지에 맞춰 한 번에 받습니다.</p>
+          <p class="need">인터넷 연결 · 45종 · 시·군 하나에 20~30초</p>
           <a class="more" href="solutions/vworld-download.html" aria-label="브이월드 공간정보 내려받기 자세히 보기">자세히 보기 →</a>
         </article>
 
         <article class="sheet">
           <div class="sheet-no">S-09</div>
-          <a class="sheet-name" href="solutions/geocoder.html"><h3>지오코딩 (PNU·주소·좌표 변환)</h3></a>
-          <p class="why">엑셀이나 SHP에 담긴 주소 · PNU · 좌표 가운데 하나로 나머지 값을 채우고, 필지를 SHP와 CAD 도면으로도 저장합니다.</p>
-          <div class="meta">
-            <span class="ver">v1.8</span>
-            <span class="need">인터넷 연결 · 브이월드 지오코더 · 연속지적도</span>
-          </div>
+          <div class="sheet-title"><a class="sheet-name" href="solutions/geocoder.html"><h3>지오코딩 (PNU·주소·좌표 변환)</h3></a><span class="ver">v1.8</span></div>
           <div class="flow">
             <div class="cell"><div class="k">넣는 것</div><div class="v">주소·PNU·좌표가 든 엑셀 · CSV 또는 SHP · ZIP</div></div>
             <div class="arrow" aria-hidden="true">→</div>
             <div class="cell"><div class="k">나오는 것</div><div class="v">채워진 엑셀, 위치점 · 필지 SHP, CAD 지적도 DXF</div></div>
           </div>
+          <p class="why">엑셀이나 SHP에 담긴 주소 · PNU · 좌표 가운데 하나로 나머지 값을 채우고, 필지를 SHP와 CAD 도면으로도 저장합니다.</p>
+          <p class="need">인터넷 연결 · 브이월드 지오코더 · 연속지적도</p>
           <a class="more" href="solutions/geocoder.html" aria-label="지오코딩 (PNU·주소·좌표 변환) 자세히 보기">자세히 보기 →</a>
         </article>
-
-        <article class="sheet" style="border-style: dashed;">
-          <div class="sheet-no" style="color: var(--muted);">준비 중</div>
-          <h3 style="color: var(--ink-soft);">다음에 나올 것들</h3>
-          <p class="why" style="word-break: keep-all;">
-            지금 시험하고 있는 솔루션입니다. <span style="white-space: nowrap;">수치지형도·정사영상 받기</span> · <span style="white-space: nowrap;">도시·군관리계획도 만들기</span> · <span style="white-space: nowrap;">대지분석 다이어그램</span>
-          </p>
-        </article>
       </div>
+        <div class="fold-fade" aria-hidden="true"></div>
+      </div>
+      <div class="fold-bar">
+        <button type="button" class="fold-btn" id="sheet-more" aria-expanded="false" aria-controls="sheet-list" hidden><span class="label">솔루션 모두 보기</span><svg class="chev" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+
+      <article class="sheet sheet-soon">
+        <div class="sheet-no">준비 중</div>
+        <h3>다음에 나올 것들</h3>
+        <p>지금 시험하고 있는 솔루션입니다.</p>
+        <ul class="soon-list"><li>수치지형도·정사영상 받기</li><li>도시·군관리계획도 만들기</li><li>대지분석 다이어그램</li></ul>
+      </article>
     </div>
   </section>
 
   <section id="screens">
     <div class="wrap">
-      <h2>실제 사용화면입니다</h2>
-      <p class="sub">가상의 사업지(성수2지구 지구단위계획) 자료를 넣어 찍은 화면입니다. 어느 솔루션을 열어도 생김새와 쓰는 순서가 같아서, 하나만 익히면 나머지도 바로 쓰실 수 있습니다. 왼쪽에서 솔루션을 고르면 그 화면이 뜹니다. 그림을 누르면 크게 보이고, 화면이 여럿인 솔루션은 화살표로 넘겨 보실 수 있습니다.</p>
+      <div class="head">
+        <div class="tag">Screens</div>
+        <h2>실제 사용화면입니다</h2>
+        <p>가상의 사업지(성수2지구 지구단위계획) 자료를 넣어 찍은 화면입니다. 어느 솔루션을 열어도 생김새와 쓰는 순서가 같아서, 하나만 익히면 나머지도 바로 쓰실 수 있습니다. 목록에서 솔루션을 고르시면 그 화면이 뜨고, 그림을 누르시면 크게 보입니다.</p>
+      </div>
       <div class="viewer">
         <nav class="picker" id="picker" aria-label="솔루션 고르기"></nav>
         <figure class="stage">
           <div class="frame">
-            <img id="stage-img" alt="">
+            <!-- width · height 는 처음 뜨는 화면(center.png)의 크기다. 그림이 읽히기 전에도 자리를 잡아,
+                 아래 마디로 바로 들어올 때(../#get) 그림이 늦게 뜨며 자리가 밀리지 않게 한다. -->
+            <img id="stage-img" alt="" width="1600" height="1264">
             <button class="nav prev" type="button" aria-label="이전 화면" hidden>&#8249;</button>
             <button class="nav next" type="button" aria-label="다음 화면" hidden>&#8250;</button>
           </div>
@@ -939,6 +1168,9 @@
     })();
   </script>
 
+  <!-- 사용 후기(#reviews) 자리: 화면 다음, 받는 법 앞. 메뉴는 '화면' 다음에 '후기'. 만들 때는 최근 3건을 보이고 나머지는 새 소식과 같은 접기(.fold-btn + hidden=until-found)로 둔다.
+       메뉴가 여덟이 되면 901~960px 에서 이름과 메뉴가 붙는다. 그때 메뉴 단추로 바뀌는 폭을 900 에서 1000 쯤으로 올린다
+       (CSS 의 @media (max-width: 900px) 머리 · 메뉴 규칙과 메뉴 스크립트의 matchMedia 를 함께). -->
   <section id="get">
     <div class="wrap">
       <div class="head">
@@ -971,7 +1203,7 @@
         </div>
       </div>
 
-      <div class="dl-line" style="margin-top:34px">
+      <div class="dl-line" style="margin-top:28px">
         <a class="dl" href="https://github.com/72second72-bot/hms-solution/releases/latest/download/HMS-Solution-Center-Setup.exe" data-dl="center-setup">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
             <path d="M9 1.5v10M9 11.5 5 7.5M9 11.5l4-4M2 12.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5"
@@ -982,16 +1214,22 @@
         <span class="dl-note">v2.1.7 · 200MB · Windows 10 / 11</span>
       </div>
 
-      <div class="callout" style="margin-top:26px">
-        <p>
-          <b>설치 파일이 큰 까닭.</b>
-          파이썬 실행환경을 함께 담았기 때문입니다. 쓰시는 컴퓨터에 무엇을 따로 깔지
-          않아도 되도록 한 번에 넣었습니다. 처음 한 번만 받으시면 되고, 그 뒤로는
-          Solution Center 가 스스로 작은 업데이트(3MB 남짓)를 받아 갱신합니다.
-        </p>
+      <div class="get-more">
+        <details class="fold-card" id="get-size">
+          <summary><span class="fold-title">설치 파일이 큰 까닭</span><span class="fold-hint" aria-hidden="true"><span class="h-closed">펼쳐 보기</span><span class="h-open">접기</span><svg class="chev" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary>
+          <div class="fold-body">
+            <p>파이썬 실행환경을 함께 담았기 때문입니다. 쓰시는 컴퓨터에 무엇을 따로 깔지
+              않아도 되도록 한 번에 넣었습니다. 처음 한 번만 받으시면 되고, 그 뒤로는
+              Solution Center 가 스스로 작은 업데이트(3MB 남짓)를 받아 갱신합니다.</p>
+          </div>
+        </details>
+        <details class="fold-card" id="get-english">
+          <summary><span class="fold-title">영문 소개 (English)</span><span class="fold-hint" aria-hidden="true"><span class="h-closed">펼쳐 보기</span><span class="h-open">접기</span><svg class="chev" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary>
+          <div class="fold-body">
+            <p class="en-note" lang="en">HMS Solution Center is a free desktop program that brings together tools for automating repetitive CAD, cadastral and land-related tasks in urban planning work in Korea. After you sign up and your account is approved, you can install any of the nine solutions from it: HMS CAD Coordinate Transformer, HMS Cadastral and Land Status Map Builder, HMS CAD Drawing Merger, HMS Building Register Organizer, HMS Realty Price Collector, HMS Thematic Map Attribute Mapper, HMS PPT Image Placer, HMS V-World Downloader and HMS Geocoder. It runs on Windows 10 and 11, and its screens are in Korean.</p>
+          </div>
+        </details>
       </div>
-
-      <p class="en-note" lang="en">HMS Solution Center is a free desktop program that brings together tools for automating repetitive CAD, cadastral and land-related tasks in urban planning work in Korea. After you sign up and your account is approved, you can install any of the nine solutions from it: HMS CAD Coordinate Transformer, HMS Cadastral and Land Status Map Builder, HMS CAD Drawing Merger, HMS Building Register Organizer, HMS Realty Price Collector, HMS Thematic Map Attribute Mapper, HMS PPT Image Placer, HMS V-World Downloader and HMS Geocoder. It runs on Windows 10 and 11, and its screens are in Korean.</p>
     </div>
   </section>
 
@@ -1007,28 +1245,34 @@
         <div class="book">
           <h4>Solution Center 사용 안내서</h4>
           <p>설치부터 인증, 카드 읽는 법, 새 버전 받기까지. 회원가입 절차도 화면과 함께 담았습니다.</p>
-          <div class="pg">11쪽 · 2026-11-11</div>
-          <a class="book-dl" href="guides/hms-center-guide.pdf" data-dl="guide-center">PDF 내려받기 (1.2MB)</a>
+          <div class="book-foot">
+            <div class="pg">11쪽 · 2026-11-11</div>
+            <a class="book-dl" href="guides/hms-center-guide.pdf" data-dl="guide-center">PDF 내려받기 (1.2MB)</a>
+          </div>
         </div>
         <div class="book">
           <h4>업무 효율화 솔루션 안내서</h4>
           <p>아홉 솔루션을 한 권에. 무엇을 왜 만들었는지, 어떻게 쓰는지, 결과가 어떻게 나오는지까지.</p>
-          <div class="pg">30쪽 · 2026-11-11</div>
-          <a class="book-dl" href="guides/hms-solutions-guide.pdf" data-dl="guide-solutions">PDF 내려받기 (4.0MB)</a>
+          <div class="book-foot">
+            <div class="pg">30쪽 · 2026-11-11</div>
+            <a class="book-dl" href="guides/hms-solutions-guide.pdf" data-dl="guide-solutions">PDF 내려받기 (4.0MB)</a>
+          </div>
         </div>
-        <div class="book book-full">
-          <h4>솔루션별 안내서</h4>
-          <p>솔루션마다 따로 한 권씩. 그 솔루션만 쓰시는 분께는 이쪽이 짧고 편합니다.</p>
-          <ul class="book-list">
-            <li><a href="guides/solution-cad-cadastral.pdf" data-dl="guide-cad-cadastral">지적도·토지현황도·토지조서 만들기</a></li>
-            <li><a href="guides/solution-dxf-merge.pdf" data-dl="guide-dxf-merge">CAD 도면 병합</a></li>
-            <li><a href="guides/solution-coord-trans.pdf" data-dl="guide-coord-trans">AutoCAD 좌표변환</a></li>
-            <li><a href="guides/solution-building-register.pdf" data-dl="guide-building">건축물대장 조서 작성</a></li>
-            <li><a href="guides/solution-realty-price.pdf" data-dl="guide-realty">부동산 공시가격 조회 · 수집</a></li>
-            <li><a href="guides/solution-thematic-shp.pdf" data-dl="guide-thematic">주제도 SHP 속성 코드 입력</a></li>
-            <li><a href="guides/solution-ppt-image.pdf" data-dl="guide-ppt">PPT 이미지 맞춰 넣기</a></li>
-          </ul>
-        </div>
+        <details class="fold-card book-full" id="guides-each">
+          <summary><h4 class="fold-title">솔루션별 안내서</h4><span class="count">7권</span><span class="fold-hint" aria-hidden="true"><span class="h-closed">펼쳐 보기</span><span class="h-open">접기</span><svg class="chev" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary>
+          <div class="fold-body">
+            <p>솔루션마다 따로 한 권씩. 그 솔루션만 쓰시는 분께는 이쪽이 짧고 편합니다.</p>
+            <ul class="book-list">
+              <li><a href="guides/solution-cad-cadastral.pdf" data-dl="guide-cad-cadastral">지적도·토지현황도·토지조서 만들기</a></li>
+              <li><a href="guides/solution-dxf-merge.pdf" data-dl="guide-dxf-merge">CAD 도면 병합</a></li>
+              <li><a href="guides/solution-coord-trans.pdf" data-dl="guide-coord-trans">AutoCAD 좌표변환</a></li>
+              <li><a href="guides/solution-building-register.pdf" data-dl="guide-building">건축물대장 조서 작성</a></li>
+              <li><a href="guides/solution-realty-price.pdf" data-dl="guide-realty">부동산 공시가격 조회 · 수집</a></li>
+              <li><a href="guides/solution-thematic-shp.pdf" data-dl="guide-thematic">주제도 SHP 속성 코드 입력</a></li>
+              <li><a href="guides/solution-ppt-image.pdf" data-dl="guide-ppt">PPT 이미지 맞춰 넣기</a></li>
+            </ul>
+          </div>
+        </details>
       </div>
     </div>
   </section>
@@ -1041,7 +1285,7 @@
         <p>솔루션이 새로 나오거나 크게 달라진 날입니다. 홈페이지 소식도 함께 적습니다. 작은 개선은 프로그램 안에서 자동으로 갱신됩니다.</p>
       </div>
 
-      <div class="news">
+      <div class="news" id="news-list">
         <div class="item">
           <time datetime="2026-11-12">2026-11-12</time>
           <div>
@@ -1095,6 +1339,9 @@
           </div>
         </div>
       </div>
+      <div class="news-foot">
+        <button type="button" class="fold-btn" id="news-more" aria-expanded="false" aria-controls="news-list" hidden><span class="label">지난 소식 더 보기</span><svg class="chev" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
     </div>
   </section>
 
@@ -1117,7 +1364,7 @@
             <h4>카카오톡 오픈채팅 — 자세한 문의</h4>
             <p>화면을 캡처해 보내 주시면 가장 빠릅니다. 오류 창이 떴다면 그 창까지 함께 담아 주세요.
                쓰시는 솔루션 이름과 하려던 일을 적어 주시면 더 좋습니다.</p>
-            <a class="go" href="https://open.kakao.com/o/gkkxMGLi" target="_blank" rel="noopener"
+            <a class="go go-main" href="https://open.kakao.com/o/gkkxMGLi" target="_blank" rel="noopener"
                data-dl="ask-kakao">오픈채팅방 열기</a>
           </div>
 
@@ -1144,6 +1391,192 @@
     </div>
   </section>
 </main>
+
+<script>
+  /* 접기 · 펼치기 · 지금 마디 표시. (폰 메뉴는 머리 바로 뒤의 스크립트가 따로 맡는다.)
+
+     </main> 바로 뒤에 두는 까닭: 파싱 도중, 브라우저가 주소의 #자리로 스크롤하기 전에
+     접기가 끝나야 다른 페이지에서 ../#get 처럼 들어올 때 자리가 어긋나지 않는다.
+
+     접힌 글도 HTML 에 그대로 있다. 스크립트가 없으면 단추는 숨은 채로 있고 글은 모두 보인다.
+     hidden="until-found" 를 아는 브라우저(크롬 등)는 브라우저 찾기(Ctrl+F)로 걸리면 저절로 편다.
+     글자는 textContent 로만 넣는다(innerHTML 을 쓰지 않는다). */
+  (function () {
+    var root = document.documentElement;
+    var UNTIL = "onbeforematch" in root;
+    var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function each(list, fn) { Array.prototype.forEach.call(list, fn); }
+    function conceal(el) { el.setAttribute("hidden", UNTIL ? "until-found" : ""); }
+    function unveil(el) { el.removeAttribute("hidden"); }
+    function label(btn, t) { btn.querySelector(".label").textContent = t; }
+
+    /* ① 솔루션 카드. 앞의 몇 장만 보이고 다음 한 줄은 윗부분만 비치다 흐려진다. 단추로 모두 편다.
+       보이는 장수 = 세 장 이상을 채우는 줄 수 × 칸 수(넓은 화면 3장, 두 칸 4장, 폰 3장).
+       카드를 더하면 장수 · 단추 글자 · 접는 높이가 저절로 따라간다.
+       비치는 줄은 누를 수도, 탭으로 갈 수도 없게(inert) 하고, 그 아래 카드는 hidden="until-found" 로
+       숨긴다 - 브라우저 찾기(Ctrl+F)에 걸리면 모두 편다. */
+    var sheets = document.getElementById("sheet-list");
+    var fold = document.getElementById("sheet-fold");
+    var sbtn = document.getElementById("sheet-more");
+    var cards = [];
+    if (sheets) each(sheets.children, function (c) { if (c.classList.contains("sheet")) cards.push(c); });
+    var MIN_SHOW = 3, PEEK = 120;
+    var sheetsOpen = false, foldCols = 0;
+    function sheetCols() {
+      var t = getComputedStyle(sheets).gridTemplateColumns;
+      return t && t !== "none" ? Math.max(1, t.trim().split(/\s+/).length) : 1;
+    }
+    function setSheets(open) {
+      if (!sbtn || !fold || !cards.length) return;
+      var c = sheetCols(), show = c * Math.ceil(MIN_SHOW / c);
+      var none = show >= cards.length;            /* 다 보이면 접을 것이 없다 */
+      sheetsOpen = open || none;
+      foldCols = c;
+      each(cards, function (card, i) {
+        var peek = !sheetsOpen && i >= show && i < show + c, gone = !sheetsOpen && i >= show + c;
+        if (peek) card.setAttribute("inert", ""); else card.removeAttribute("inert");
+        if (gone) conceal(card); else unveil(card);
+      });
+      fold.classList.toggle("is-folded", !sheetsOpen);
+      fold.style.maxHeight = "";
+      if (!sheetsOpen) {
+        var top = cards[show].getBoundingClientRect().top - fold.getBoundingClientRect().top;
+        fold.style.setProperty("--peek", PEEK + "px");
+        fold.style.maxHeight = Math.round(top + PEEK) + "px";
+      }
+      sbtn.hidden = none;
+      sbtn.setAttribute("aria-expanded", String(sheetsOpen));
+      label(sbtn, sheetsOpen ? "솔루션 접기" : "솔루션 " + cards.length + "가지 모두 보기");
+    }
+    if (sbtn && fold && cards.length) {
+      setSheets(false);
+      sbtn.addEventListener("click", function () {
+        setSheets(!sheetsOpen);
+        /* 접으면 아래 카드가 한꺼번에 사라져 단추가 화면 밖으로 밀려난다. 단추가 보이는 자리로 돌아온다. */
+        if (!sheetsOpen && sbtn.scrollIntoView) sbtn.scrollIntoView({ block: "nearest" });
+      });
+      /* 흐려진 자리를 눌러도 편다(단추와 같은 일. 화면 읽기 프로그램에는 단추만 읽힌다). */
+      fold.querySelector(".fold-fade").addEventListener("click", function () { setSheets(true); });
+      each(cards, function (card) { card.addEventListener("beforematch", function () { setSheets(true); }); });
+      /* 칸 수나 글자 줄바꿈이 바뀌면 접는 높이를 다시 잰다. 글꼴이 늦게 와도 다시 잰다. */
+      var refold = function () { if (!sheetsOpen) setSheets(false); };
+      var queued = false;
+      window.addEventListener("resize", function () {
+        if (queued) return;
+        queued = true;
+        (window.requestAnimationFrame || setTimeout)(function () { queued = false; refold(); });
+      });
+      window.addEventListener("load", refold);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(refold);
+    }
+
+    /* ② 새 소식. 최근 두 건만 보이고 나머지는 접는다. 새 소식을 맨 위에 덧붙이면 경계가 저절로 밀린다. */
+    var SHOW = 2;
+    var news = document.getElementById("news-list");
+    var nbtn = document.getElementById("news-more");
+    var older = [];
+    if (news) {
+      var items = [];
+      each(news.children, function (c) { if (c.classList.contains("item")) items.push(c); });
+      older = items.slice(SHOW);
+    }
+    var newsOpen = false;
+    function setNews(open) {
+      if (!nbtn || !older.length) return;
+      newsOpen = open;
+      each(older, function (it) { if (open) unveil(it); else conceal(it); });
+      nbtn.setAttribute("aria-expanded", String(open));
+      label(nbtn, open ? "지난 소식 접기" : "지난 소식 " + older.length + "건 더 보기");
+    }
+    if (nbtn && older.length) {
+      nbtn.hidden = false;
+      setNews(false);
+      nbtn.addEventListener("click", function () {
+        setNews(!newsOpen);
+        /* 접으면 아래 글이 한꺼번에 사라져 단추가 화면 밖으로 밀려난다. 단추가 보이는 자리로 돌아온다. */
+        if (!newsOpen && nbtn.scrollIntoView) nbtn.scrollIntoView({ block: "nearest" });
+      });
+      each(older, function (it) { it.addEventListener("beforematch", function () { setNews(true); }); });
+    }
+
+    /* ③ 솔루션별 안내서 권수. 목록에 한 줄 더하면 숫자도 따라간다. */
+    var guides = document.getElementById("guides-each");
+    if (guides) {
+      var cnt = guides.querySelector(".count"), books = guides.querySelectorAll(".book-list li").length;
+      if (cnt && books) cnt.textContent = books + "권";
+    }
+
+    /* ④ 주소의 #자리가 접힌 곳 안이면 펴고 그리로 간다.
+       마디 맨 위의 id(#get 등)는 열 것이 없으므로 아무것도 하지 않고 브라우저에 맡긴다. */
+    function openTo(id, scroll) {
+      var t = id ? document.getElementById(id) : null;
+      if (!t) return false;
+      var opened = false;
+      for (var el = t; el && el !== document.body; el = el.parentElement) {
+        if (el.tagName === "DETAILS" && !el.open) { el.open = true; opened = true; }
+        if (el.hasAttribute("hidden") || el.hasAttribute("inert")) {
+          if (older.indexOf(el) >= 0) { setNews(true); opened = true; }
+          else if (sheets && sheets.contains(el)) { setSheets(true); opened = true; }
+        }
+      }
+      if (opened && scroll && window.requestAnimationFrame) {
+        /* 처음 열 때(ready 전)는 곧바로 간다. 미끄러지는 사이 위쪽 길이가 바뀌면 자리가 어긋난다. */
+        var smooth = !reduce && root.classList.contains("ready");
+        requestAnimationFrame(function () {
+          t.scrollIntoView({ block: "start", behavior: smooth ? "smooth" : "auto" });
+        });
+      }
+      return opened;
+    }
+    function hashId(h) {
+      try { return decodeURIComponent((h || "").replace(/^#/, "")); } catch (e) { return ""; }
+    }
+    if (location.hash) openTo(hashId(location.hash), true);
+    window.addEventListener("hashchange", function () { openTo(hashId(location.hash), true); });
+    /* 같은 링크를 다시 눌러도 동작하도록 누를 때 먼저 편다. 이동은 펴진 상태에서 브라우저가 한다. */
+    document.addEventListener("click", function (e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
+      if (a) openTo(hashId(a.getAttribute("href")), false);
+    });
+
+    /* ⑤ 지금 보고 있는 마디를 메뉴에 표시한다. 첫 화면(히어로)에서는 표시하지 않는다. */
+    var nav = document.getElementById("site-nav");
+    if ("IntersectionObserver" in window && nav) {
+      var links = nav.querySelectorAll('a[href^="#"]');
+      var byId = {}, targets = [];
+      each(links, function (a) {
+        var id = a.getAttribute("href").slice(1);
+        var sec = id ? document.getElementById(id) : null;
+        if (sec) { byId[id] = a; targets.push(sec); }
+      });
+      var hero = document.querySelector(".hero");
+      var markLink = function (on) {
+        each(links, function (l) {
+          if (l === on) l.setAttribute("aria-current", "location"); else l.removeAttribute("aria-current");
+        });
+      };
+      var spy = new IntersectionObserver(function (entries) {
+        each(entries, function (en) {
+          if (!en.isIntersecting) return;
+          if (en.target === hero) markLink(null);
+          else if (byId[en.target.id]) markLink(byId[en.target.id]);
+        });
+      }, { rootMargin: "-40% 0px -55% 0px" });
+      each(targets, function (s) { spy.observe(s); });
+      if (hero) spy.observe(hero);
+    }
+
+    /* ⑥ 인쇄할 때는 모두 편다(되돌리지 않는다). 인쇄 사건이 없는 도구를 위해 CSS(@media print)도 함께 편다. */
+    window.addEventListener("beforeprint", function () {
+      setSheets(true); setNews(true);
+      each(document.querySelectorAll("details"), function (d) { d.open = true; });
+    });
+
+    /* ⑦ 다 읽힌 뒤에 부드러운 스크롤을 켠다(CSS 의 html.ready). 처음 #자리로 가는 것은 곧바로 간다. */
+    if (document.readyState === "complete") root.classList.add("ready");
+    else window.addEventListener("load", function () { root.classList.add("ready"); });
+  })();
+</script>
 
 <footer>
   <div class="wrap">
