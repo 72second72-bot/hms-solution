@@ -339,7 +339,7 @@
   /* ── 접기 · 펼치기 ─────────────────────────────────────────
      페이지가 길어 첫 판단에 필요 없는 글만 접는다. 접힌 글도 HTML 에 그대로 있다
      (검색엔진이 읽고, 브라우저 찾기로도 걸린다). 접는 방법은 두 가지뿐이다.
-       <details class="fold-card">          설치 파일이 큰 까닭 · 영문 소개 · 솔루션별 안내서
+       <details class="fold-card">          영문 소개 · 솔루션별 안내서
        .fold-btn + hidden="until-found"     솔루션 카드 · 지난 소식 (아래 접기 스크립트)
      스크립트가 없으면 단추는 숨은 채로 있고 글은 모두 펼쳐 보인다. */
   .chev { flex: none; transition: transform .2s ease; }
@@ -543,9 +543,9 @@
   .step h4 { margin: 0 0 6px; font-size: 16.5px; font-weight: 600; }
   .step p { margin: 0; color: var(--ink-soft); font-size: 15px; }
 
-  /* 내려받기 아래의 접는 상자 둘(설치 파일이 큰 까닭 · 영문 소개). */
+  /* 내려받기 아래의 접는 상자(영문 소개). */
   .get-more {
-    margin-top: 24px; display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start;
+    margin-top: 24px; display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); align-items: start;
   }
   /* 영어로 찾아오신 분께 드리는 한 단락. 프로그램 화면이 한국어라는 것을 미리 알린다. */
   .en-note { margin: 0; max-width: 860px; font-size: 14.5px; line-height: 1.6; color: var(--ink-soft); letter-spacing: 0; }
@@ -753,7 +753,6 @@
     .step .n { margin-bottom: 0; }
     .step h4 { margin-top: 4px; }
     .step:not(:last-child)::after { top: 40px; bottom: -14px; left: 15px; right: auto; width: 2px; height: auto; }
-    .get-more { grid-template-columns: 1fr; }
     .ask-ways { grid-template-columns: 1fr; }
 
     /* 메뉴는 단추로 연다. 이름 · 메뉴 · 밝기 셋이 한 줄에 들어가지 않아 밝기 고르기도 메뉴 패널
@@ -1215,14 +1214,6 @@
       </div>
 
       <div class="get-more">
-        <details class="fold-card" id="get-size">
-          <summary><span class="fold-title">설치 파일이 큰 까닭</span><span class="fold-hint" aria-hidden="true"><span class="h-closed">펼쳐 보기</span><span class="h-open">접기</span><svg class="chev" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary>
-          <div class="fold-body">
-            <p>파이썬 실행환경을 함께 담았기 때문입니다. 쓰시는 컴퓨터에 무엇을 따로 깔지
-              않아도 되도록 한 번에 넣었습니다. 처음 한 번만 받으시면 되고, 그 뒤로는
-              Solution Center 가 스스로 작은 업데이트(3MB 남짓)를 받아 갱신합니다.</p>
-          </div>
-        </details>
         <details class="fold-card" id="get-english">
           <summary><span class="fold-title">영문 소개 (English)</span><span class="fold-hint" aria-hidden="true"><span class="h-closed">펼쳐 보기</span><span class="h-open">접기</span><svg class="chev" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary>
           <div class="fold-body">
